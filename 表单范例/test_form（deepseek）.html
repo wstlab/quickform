@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古诗词名句填空练习</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", "宋体", sans-serif;
+        }
+        
+        body {
+            background-color: #f8f3e6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4c4a8' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0d6c3;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d4c4a8;
+        }
+        
+        h1 {
+            color: #8c2318;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .student-info {
+            margin-bottom: 25px;
+        }
+        
+        .student-info label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #5a3921;
+        }
+        
+        .student-info input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d4c4a8;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f9f5eb;
+            border-radius: 8px;
+            border-left: 4px solid #8c2318;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #5a3921;
+        }
+        
+        .question-content {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        .answer-input {
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: center;
+            margin: 0 5px;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background-color: #8c2318;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 10px;
+        }
+        
+        .btn:hover {
+            background-color: #a82c1f;
+        }
+        
+        .btn-check {
+            background-color: #5a3921;
+        }
+        
+        .btn-check:hover {
+            background-color: #6d4a32;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f5eb;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #5a3921;
+        }
+        
+        .poem-author {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>古诗词名句填空练习</h1>
+            <p class="subtitle">检验你对古典诗词的掌握程度</p>
+        </header>
+        
+        <form id="poemForm">
+            <div class="student-info">
+                <label for="studentName">学生姓名：</label>
+                <input type="text" id="studentName" name="studentName" required>
+            </div>
+            
+            <div class="question" id="question1">
+                <div class="question-title">题目一</div>
+                <div class="question-content">
+                    海内存知己，<input type="text" class="answer-input" name="answer1" placeholder="填写答案">。
+                </div>
+                <div class="poem-author">—— 王勃《送杜少府之任蜀州》</div>
+            </div>
+            
+            <div class="question" id="question2">
+                <div class="question-title">题目二</div>
+                <div class="question-content">
+                    <input type="text" class="answer-input" name="answer2" placeholder="填写答案">，更上一层楼。
+                </div>
+                <div class="poem-author">—— 王之涣《登鹳雀楼》</div>
+            </div>
+            
+            <div class="question" id="question3">
+                <div class="question-title">题目三</div>
+                <div class="question-content">
+                    床前明月光，<input type="text" class="answer-input" name="answer3" placeholder="填写答案">。
+                </div>
+                <div class="poem-author">—— 李白《静夜思》</div>
+            </div>
+            
+            <div class="question" id="question4">
+                <div class="question-title">题目四</div>
+                <div class="question-content">
+                    <input type="text" class="answer-input" name="answer4" placeholder="填写答案">，春风吹又生。
+                </div>
+                <div class="poem-author">—— 白居易《赋得古原草送别》</div>
+            </div>
+            
+            <div class="question" id="question5">
+                <div class="question-title">题目五</div>
+                <div class="question-content">
+                    大漠孤烟直，<input type="text" class="answer-input" name="answer5" placeholder="填写答案">。
+                </div>
+                <div class="poem-author">—— 王维《使至塞上》</div>
+            </div>
+            
+            <div class="submit-section">
+                <button type="button" class="btn btn-check" id="checkBtn">检查答案</button>
+                <button type="submit" class="btn" id="submitBtn">提交答案</button>
+            </div>
+        </form>
+        
+        <div class="message" id="message"></div>
+        
+        <div class="result" id="result">
+            <div class="result-title">答题情况：</div>
+            <div id="resultContent"></div>
+        </div>
+        
+        <footer>
+            <p>© 2023 古诗词学习平台 | 弘扬中华传统文化</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('poemForm');
+            const checkBtn = document.getElementById('checkBtn');
+            const message = document.getElementById('message');
+            const result = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            // 正确答案
+            const correctAnswers = {
+                answer1: "天涯若比邻",
+                answer2: "欲穷千里目",
+                answer3: "疑是地上霜",
+                answer4: "野火烧不尽",
+                answer5: "长河落日圆"
+            };
+            
+            // 检查答案
+            checkBtn.addEventListener('click', function() {
+                const studentName = document.getElementById('studentName').value;
+                if (!studentName) {
+                    showMessage('请先填写您的姓名！', 'error');
+                    return;
+                }
+                
+                let allFilled = true;
+                let correctCount = 0;
+                let resultHTML = '';
+                
+                // 检查每个答案
+                for (let i = 1; i <= 5; i++) {
+                    const answerInput = document.querySelector(`input[name="answer${i}"]`);
+                    const userAnswer = answerInput.value.trim();
+                    
+                    if (!userAnswer) {
+                        allFilled = false;
+                        resultHTML += `<p>题目${i}: <span style="color: #c62828;">未填写</span></p>`;
+                    } else {
+                        const isCorrect = userAnswer === correctAnswers[`answer${i}`];
+                        if (isCorrect) {
+                            correctCount++;
+                            resultHTML += `<p>题目${i}: <span style="color: #2e7d32;">正确</span></p>`;
+                        } else {
+                            resultHTML += `<p>题目${i}: <span style="color: #c62828;">错误</span>，正确答案是：${correctAnswers[`answer${i}`]}</p>`;
+                        }
+                    }
+                }
+                
+                if (!allFilled) {
+                    showMessage('请完成所有题目后再检查！', 'error');
+                } else {
+                    showMessage(`您已完成所有题目，答对了 ${correctCount} 题！`, 'success');
+                }
+                
+                resultContent.innerHTML = resultHTML;
+                result.style.display = 'block';
+            });
+            
+            // 提交表单
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const studentName = document.getElementById('studentName').value;
+                if (!studentName) {
+                    showMessage('请先填写您的姓名！', 'error');
+                    return;
+                }
+                
+                // 检查是否所有题目都已填写
+                let allFilled = true;
+                for (let i = 1; i <= 5; i++) {
+                    const answerInput = document.querySelector(`input[name="answer${i}"]`);
+                    if (!answerInput.value.trim()) {
+                        allFilled = false;
+                        break;
+                    }
+                }
+                
+                if (!allFilled) {
+                    showMessage('请完成所有题目后再提交！', 'error');
+                    return;
+                }
+                
+                // 收集表单数据
+                const formData = new FormData(form);
+                const data = {
+                    studentName: formData.get('studentName'),
+                    answers: {
+                        answer1: formData.get('answer1'),
+                        answer2: formData.get('answer2'),
+                        answer3: formData.get('answer3'),
+                        answer4: formData.get('answer4'),
+                        answer5: formData.get('answer5')
+                    }
+                };
+                
+                // 尝试在线提交
+                fetch('http://127.0.0.1:5001/api/submit/c98b63ae-d2d6-4f63-a5a6-70bfa9ad41d6', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showMessage('数据回收成功！', 'success');
+                        // 同时保存到本地存储
+                        saveToLocalStorage(data);
+                    } else {
+                        throw new Error('网络响应错误');
+                    }
+                })
+                .catch(error => {
+                    console.log('在线提交失败，尝试本地存储: ', error);
+                    // 在线提交失败，保存到本地存储
+                    saveToLocalStorage(data);
+                    showMessage('数据回收成功！(已保存到本地)', 'success');
+                });
+            });
+            
+            // 显示消息
+            function showMessage(text, type) {
+                message.textContent = text;
+                message.className = 'message ' + type;
+                message.style.display = 'block';
+                
+                // 3秒后自动隐藏消息
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 3000);
+            }
+            
+            // 保存到本地存储
+            function saveToLocalStorage(data) {
+                let submissions = JSON.parse(localStorage.getItem('poemSubmissions') || '[]');
+                submissions.push({
+                    ...data,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('poemSubmissions', JSON.stringify(submissions));
+            }
+            
+            // 从本地存储加载数据（如果有）
+            function loadFromLocalStorage() {
+                const submissions = JSON.parse(localStorage.getItem('poemSubmissions') || '[]');
+                if (submissions.length > 0) {
+                    console.log('本地存储的提交记录:', submissions);
+                }
+            }
+            
+            // 页面加载时从本地存储加载数据
+            loadFromLocalStorage();
+        });
+    </script>
+</body>
+</html>
