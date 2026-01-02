@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preposition Practice: on, at, in</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        neutral: '#F5F7FA',
+                        success: '#00B42A',
+                        danger: '#F53F3F',
+                        dark: '#1D2129'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .hover-lift {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .hover-lift:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            }
+            .option-hover {
+                transition: all 0.2s ease;
+            }
+            .option-hover:hover:not(.selected) {
+                background-color: rgba(22, 93, 255, 0.05);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-dark min-h-screen">
+    <!-- 页面容器 -->
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- 标题区域 -->
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold text-primary mb-3">
+                Preposition Practice: <span class="text-secondary">on, at, in</span>
+            </h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Choose the correct preposition (on, at, in) for each sentence about time and dates.
+            </p>
+        </header>
+        
+        <!-- 主内容区 -->
+        <main class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-8">
+            <!-- 学生信息表单 -->
+            <div class="mb-8">
+                <label for="studentName" class="block text-gray-700 font-medium mb-2">
+                    <i class="fa fa-user-circle mr-2 text-primary"></i>Your Name
+                </label>
+                <input 
+                    type="text" 
+                    id="studentName" 
+                    name="studentName" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none"
+                    placeholder="Enter your full name"
+                >
+            </div>
+            
+            <!-- 题目区域 -->
+            <form id="quizForm" class="space-y-8">
+                <!-- 题目 1 -->
+                <div class="question p-5 border border-gray-100 rounded-lg hover-lift">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">1</span>
+                        <p class="text-gray-800">I was born ______ 1990.</p>
+                    </div>
+                    <div class="options ml-11 space-y-2">
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q1" value="on" class="mr-2"> on
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q1" value="at" class="mr-2"> at
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q1" value="in" class="mr-2"> in
+                        </label>
+                    </div>
+                    <div class="feedback mt-3 ml-11 hidden"></div>
+                </div>
+                
+                <!-- 题目 2 -->
+                <div class="question p-5 border border-gray-100 rounded-lg hover-lift">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">2</span>
+                        <p class="text-gray-800">We usually have dinner ______ 7 PM.</p>
+                    </div>
+                    <div class="options ml-11 space-y-2">
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q2" value="on" class="mr-2"> on
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q2" value="at" class="mr-2"> at
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q2" value="in" class="mr-2"> in
+                        </label>
+                    </div>
+                    <div class="feedback mt-3 ml-11 hidden"></div>
+                </div>
+                
+                <!-- 题目 3 -->
+                <div class="question p-5 border border-gray-100 rounded-lg hover-lift">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">3</span>
+                        <p class="text-gray-800">My birthday is ______ June 5th.</p>
+                    </div>
+                    <div class="options ml-11 space-y-2">
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q3" value="on" class="mr-2"> on
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q3" value="at" class="mr-2"> at
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q3" value="in" class="mr-2"> in
+                        </label>
+                    </div>
+                    <div class="feedback mt-3 ml-11 hidden"></div>
+                </div>
+                
+                <!-- 题目 4 -->
+                <div class="question p-5 border border-gray-100 rounded-lg hover-lift">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">4</span>
+                        <p class="text-gray-800">She likes to read ______ the evening.</p>
+                    </div>
+                    <div class="options ml-11 space-y-2">
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q4" value="on" class="mr-2"> on
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q4" value="at" class="mr-2"> at
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q4" value="in" class="mr-2"> in
+                        </label>
+                    </div>
+                    <div class="feedback mt-3 ml-11 hidden"></div>
+                </div>
+                
+                <!-- 题目 5 -->
+                <div class="question p-5 border border-gray-100 rounded-lg hover-lift">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">5</span>
+                        <p class="text-gray-800">We're having a party ______ New Year's Day.</p>
+                    </div>
+                    <div class="options ml-11 space-y-2">
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q5" value="on" class="mr-2"> on
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q5" value="at" class="mr-2"> at
+                        </label>
+                        <label class="option-hover block p-3 border border-gray-200 rounded-md cursor-pointer">
+                            <input type="radio" name="q5" value="in" class="mr-2"> in
+                        </label>
+                    </div>
+                    <div class="feedback mt-3 ml-11 hidden"></div>
+                </div>
+                
+                <!-- 提交按钮 -->
+                <div class="text-center pt-4">
+                    <button 
+                        type="button" 
+                        id="submitBtn" 
+                        class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+                    >
+                        <i class="fa fa-paper-plane mr-2"></i>Submit Answers
+                    </button>
+                </div>
+            </form>
+            
+            <!-- 结果反馈区域 -->
+            <div id="resultSection" class="mt-8 p-6 rounded-lg hidden">
+                <h2 class="text-xl font-bold mb-4 text-center" id="resultTitle"></h2>
+                <div class="text-center mb-6" id="scoreDisplay"></div>
+                <div id="detailedFeedback" class="space-y-4"></div>
+            </div>
+            
+            <!-- 提交状态提示 -->
+            <div id="submissionStatus" class="mt-6 p-4 rounded-lg text-center hidden"></div>
+        </main>
+        
+        <!-- 页脚 -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>English Preposition Practice &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // 正确答案
+        const correctAnswers = {
+            q1: "in",
+            q2: "at",
+            q3: "on",
+            q4: "in",
+            q5: "on"
+        };
+        
+        // 提交URL
+        const submissionUrl = "http://127.0.0.1:5001/api/submit/a832a005-4672-40c4-a3b9-fa003cb9927f";
+        
+        // DOM元素
+        const submitBtn = document.getElementById('submitBtn');
+        const quizForm = document.getElementById('quizForm');
+        const studentNameInput = document.getElementById('studentName');
+        const resultSection = document.getElementById('resultSection');
+        const resultTitle = document.getElementById('resultTitle');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const detailedFeedback = document.getElementById('detailedFeedback');
+        const submissionStatus = document.getElementById('submissionStatus');
+        
+        // 监听选项点击事件，添加选中样式
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // 移除同组中其他选项的选中样式
+                document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+                    r.closest('label').classList.remove('border-primary', 'bg-primary/5');
+                });
+                
+                // 为当前选中项添加样式
+                this.closest('label').classList.add('border-primary', 'bg-primary/5');
+            });
+        });
+        
+        // 提交按钮点击事件
+        submitBtn.addEventListener('click', function() {
+            // 重置之前的反馈和状态
+            resetFeedback();
+            
+            // 验证学生姓名
+            if (!studentNameInput.value.trim()) {
+                showError(studentNameInput, "Please enter your name");
+                return;
+            }
+            
+            // 检查是否所有题目都已回答
+            const unanswered = checkUnansweredQuestions();
+            if (unanswered.length > 0) {
+                showSubmissionStatus(`Please answer question(s): ${unanswered.join(', ')}`, 'error');
+                // 滚动到第一个未回答的问题
+                document.querySelector(`input[name="${unanswered[0]}"]`).closest('.question').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                return;
+            }
+            
+            // 检查答案并显示结果
+            const score = checkAnswers();
+            displayResults(score);
+            
+            // 提交表单数据
+            submitFormData(score);
+        });
+        
+        // 检查未回答的问题
+        function checkUnansweredQuestions() {
+            const unanswered = [];
+            for (let i = 1; i <= 5; i++) {
+                const questionName = `q${i}`;
+                const answered = document.querySelector(`input[name="${questionName}"]:checked`) !== null;
+                if (!answered) {
+                    unanswered.push(questionName.replace('q', ''));
+                }
+            }
+            return unanswered;
+        }
+        
+        // 检查答案并返回分数
+        function checkAnswers() {
+            let score = 0;
+            
+            for (let i = 1; i <= 5; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`).value;
+                const isCorrect = selectedOption === correctAnswers[questionName];
+                
+                if (isCorrect) {
+                    score++;
+                }
+                
+                // 显示每道题的反馈
+                showQuestionFeedback(questionName, isCorrect, selectedOption, correctAnswers[questionName]);
+            }
+            
+            return score;
+        }
+        
+        // 显示每道题的反馈
+        function showQuestionFeedback(questionName, isCorrect, selected, correct) {
+            const feedbackElement = document.querySelector(`input[name="${questionName}"]`).closest('.question').querySelector('.feedback');
+            
+            feedbackElement.classList.remove('hidden', 'text-success', 'text-danger');
+            feedbackElement.classList.add(isCorrect ? 'text-success' : 'text-danger');
+            
+            if (isCorrect) {
+                feedbackElement.innerHTML = `<i class="fa fa-check-circle mr-1"></i> Correct!`;
+            } else {
+                feedbackElement.innerHTML = `<i class="fa fa-times-circle mr-1"></i> Incorrect. You chose "${selected}", but the correct answer is "${correct}".`;
+            }
+        }
+        
+        // 显示总体结果
+        function displayResults(score) {
+            resultSection.classList.remove('hidden');
+            
+            // 计算百分比
+            const percentage = (score / 5) * 100;
+            
+            // 设置结果标题
+            let title, titleClass;
+            if (percentage === 100) {
+                title = "Perfect Score!";
+                titleClass = "text-success";
+            } else if (percentage >= 70) {
+                title = "Good Job!";
+                titleClass = "text-primary";
+            } else {
+                title = "Keep Practicing!";
+                titleClass = "text-secondary";
+            }
+            
+            resultTitle.textContent = title;
+            resultTitle.className = `text-xl font-bold mb-4 text-center ${titleClass}`;
+            
+            // 显示分数
+            scoreDisplay.innerHTML = `You scored ${score} out of 5 (${percentage}%)`;
+            scoreDisplay.className = `text-center mb-6 text-lg font-medium ${percentage >= 70 ? 'text-success' : 'text-danger'}`;
+            
+            // 滚动到结果区域
+            resultSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // 提交表单数据
+        function submitFormData(score) {
+            // 收集表单数据
+            const formData = new FormData();
+            formData.append('studentName', studentNameInput.value.trim());
+            formData.append('score', score);
+            
+            // 收集每个问题的答案
+            for (let i = 1; i <= 5; i++) {
+                const questionName = `q${i}`;
+                const answer = document.querySelector(`input[name="${questionName}"]:checked`).value;
+                formData.append(questionName, answer);
+                formData.append(`${questionName}_correct`, correctAnswers[questionName]);
+            }
+            
+            // 尝试在线提交
+            fetch(submissionUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                // 在线提交成功
+                showSubmissionStatus("数据回收成功！", 'success');
+            })
+            .catch(error => {
+                console.log('Online submission failed, trying local storage:', error);
+                
+                // 在线提交失败，尝试本地存储
+                try {
+                    const submissionData = {
+                        studentName: studentNameInput.value.trim(),
+                        score: score,
+                        answers: {},
+                        correctAnswers: correctAnswers,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // 收集答案
+                    for (let i = 1; i <= 5; i++) {
+                        const questionName = `q${i}`;
+                        submissionData.answers[questionName] = document.querySelector(`input[name="${questionName}"]:checked`).value;
+                    }
+                    
+                    // 保存到本地存储
+                    let savedSubmissions = JSON.parse(localStorage.getItem('prepositionQuizSubmissions') || '[]');
+                    savedSubmissions.push(submissionData);
+                    localStorage.setItem('prepositionQuizSubmissions', JSON.stringify(savedSubmissions));
+                    
+                    showSubmissionStatus("数据回收成功！(本地存储)", 'success');
+                } catch (localError) {
+                    console.error('Local storage submission failed:', localError);
+                    showSubmissionStatus("提交失败，请重试", 'error');
+                }
+            });
+        }
+        
+        // 显示提交状态
+        function showSubmissionStatus(message, type) {
+            submissionStatus.textContent = message;
+            submissionStatus.classList.remove('hidden', 'bg-success/10', 'text-success', 'bg-danger/10', 'text-danger');
+            
+            if (type === 'success') {
+                submissionStatus.classList.add('bg-success/10', 'text-success');
+            } else {
+                submissionStatus.classList.add('bg-danger/10', 'text-danger');
+            }
+            
+            // 滚动到状态提示
+            submissionStatus.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end'
+            });
+        }
+        
+        // 显示输入错误
+        function showError(input, message) {
+            // 添加错误样式
+            input.classList.add('border-danger', 'focus:ring-danger/50', 'focus:border-danger');
+            
+            // 创建并显示错误消息
+            let errorElement = input.nextElementSibling;
+            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'error-message text-danger text-sm mt-1';
+                input.parentNode.appendChild(errorElement);
+            }
+            
+            errorElement.textContent = message;
+            
+            // 移除焦点时清除错误样式
+            input.addEventListener('blur', function handleBlur() {
+                if (input.value.trim()) {
+                    input.classList.remove('border-danger', 'focus:ring-danger/50', 'focus:border-danger');
+                    errorElement.textContent = '';
+                }
+                input.removeEventListener('blur', handleBlur);
+            });
+        }
+        
+        // 重置反馈
+        function resetFeedback() {
+            // 隐藏结果和状态
+            resultSection.classList.add('hidden');
+            submissionStatus.classList.add('hidden');
+            
+            // 清除问题反馈
+            document.querySelectorAll('.feedback').forEach(feedback => {
+                feedback.classList.add('hidden');
+                feedback.textContent = '';
+            });
+            
+            // 清除输入错误
+            studentNameInput.classList.remove('border-danger', 'focus:ring-danger/50', 'focus:border-danger');
+            const errorElement = document.querySelector('.error-message');
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>
