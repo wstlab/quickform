@@ -1,0 +1,1430 @@
+# English translations for QuickForm
+msgid ""
+msgstr ""
+"Project-Id-Version: QuickForm\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Data Tasks"
+
+msgid "数据任务"
+msgstr "Data Tasks"
+
+msgid "API地址"
+msgstr "API Address"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Remember me"
+msgstr "Remember me"
+
+msgid "Login Button"
+msgstr "Login Button"
+
+msgid "Create Task"
+msgstr "Create Task"
+
+msgid "Task Title"
+msgstr "Task Title"
+
+msgid "Task Description"
+msgstr "Task Description"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "View Details"
+msgstr "View Details"
+
+msgid "API Address"
+msgstr "API Address"
+
+msgid "Copy"
+msgstr "Copy"
+
+msgid "Copied"
+msgstr "Copied"
+
+msgid "Submissions"
+msgstr "Submissions"
+
+msgid "No submissions yet"
+msgstr "No submissions yet"
+
+msgid "Analysis"
+msgstr "Analysis"
+
+msgid "Smart Analysis"
+msgstr "Smart Analysis"
+
+msgid "Generate Report"
+msgstr "Generate Report"
+
+msgid "AI Configuration"
+msgstr "AI Configuration"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "Test Connection"
+msgstr "Test Connection"
+
+msgid "System Init"
+msgstr "System Init"
+
+msgid "User Info"
+msgstr "User Info"
+
+msgid "Change Password"
+msgstr "Change Password"
+
+msgid "Change Username"
+msgstr "Change Username"
+
+msgid "QF Data Connection"
+msgstr "QF Data Connection"
+
+msgid "QFLink"
+msgstr "QFLink"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Back to Task List"
+msgstr "Back to Task List"
+
+msgid "Back to Task Detail"
+msgstr "Back to Task Detail"
+
+msgid "Upload File"
+msgstr "Upload File"
+
+msgid "Uploaded Files"
+msgstr "Uploaded Files"
+
+msgid "Generate QR Code"
+msgstr "Generate QR Code"
+
+msgid "Import Task"
+msgstr "Import Task"
+
+msgid "Import Specific Task"
+msgstr "Import Specific Task"
+
+msgid "Task ID or URL"
+msgstr "Task ID or URL"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Are you sure?"
+msgstr "Are you sure?"
+
+msgid "This action cannot be undone."
+msgstr "This action cannot be undone."
+
+msgid "QuickForm Teacher Edition"
+msgstr "QuickForm Teacher Edition"
+
+msgid "Welcome to QuickForm"
+msgstr "Welcome to QuickForm"
+
+msgid "Quick Start"
+msgstr "Quick Start"
+
+msgid "Simple and Easy to Use"
+msgstr "Simple and Easy to Use"
+
+msgid "Data Recovery"
+msgstr "Data Recovery"
+
+msgid "Seamlessly integrate data recovery into any webpage"
+msgstr "Seamlessly integrate data recovery into any webpage"
+
+msgid "Data Storage"
+msgstr "Data Storage"
+
+msgid "Supports unstructured data storage, available anytime"
+msgstr "Supports unstructured data storage, available anytime"
+
+msgid "Data Analysis"
+msgstr "Data Analysis"
+
+msgid "Provides data statistics and visualization"
+msgstr "Provides data statistics and visualization"
+
+msgid "Project Address"
+msgstr "Project Address"
+
+msgid "Visit GitHub Repository"
+msgstr "Visit GitHub Repository"
+
+msgid "Visit Project"
+msgstr "Visit Project"
+
+msgid "Open Source Tutorial"
+msgstr "Open Source Tutorial"
+
+msgid "View Tutorial"
+msgstr "View Tutorial"
+
+msgid "Project Community"
+msgstr "Project Community"
+
+msgid "Join Community"
+msgstr "Join Community"
+
+msgid "Official Documentation"
+msgstr "Official Documentation"
+
+msgid "Open Source Repository"
+msgstr "Open Source Repository"
+
+msgid "Enter Data Task"
+msgstr "Enter Data Task"
+
+msgid "Get Started"
+msgstr "Get Started"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "submissions"
+msgstr "submissions"
+
+msgid "Delete Attachment"
+msgstr "Delete Attachment"
+
+msgid "View Real-time Data"
+msgstr "View Real-time Data"
+
+msgid "Start Analysis"
+msgstr "Start Analysis"
+
+msgid "Last Report Time"
+msgstr "Last Report Time"
+
+msgid "Current Analysis Report"
+msgstr "Current Analysis Report"
+
+msgid "No report generated yet"
+msgstr "No report generated yet"
+
+msgid "Analysis in progress, please wait..."
+msgstr "Analysis in progress, please wait..."
+
+msgid "Analysis failed"
+msgstr "Analysis failed"
+
+msgid "Please enter task title"
+msgstr "Please enter task title"
+
+msgid "Task created successfully"
+msgstr "Task created successfully"
+
+msgid "Task updated successfully"
+msgstr "Task updated successfully"
+
+msgid "Task deleted successfully"
+msgstr "Task deleted successfully"
+
+msgid "File uploaded successfully"
+msgstr "File uploaded successfully"
+
+msgid "File deleted successfully"
+msgstr "File deleted successfully"
+
+msgid "Invalid file type"
+msgstr "Invalid file type"
+
+msgid "File size too large"
+msgstr "File size too large"
+
+msgid "Connection successful"
+msgstr "Connection successful"
+
+msgid "Connection failed"
+msgstr "Connection failed"
+
+msgid "Invalid username or password"
+msgstr "Invalid username or password"
+
+msgid "Password changed successfully"
+msgstr "Password changed successfully"
+
+msgid "Username changed successfully"
+msgstr "Username changed successfully"
+
+msgid "System initialized successfully"
+msgstr "System initialized successfully"
+
+msgid "API Key tested successfully"
+msgstr "API Key tested successfully"
+
+msgid "API Key test failed"
+msgstr "API Key test failed"
+
+msgid "首页"
+msgstr "Home"
+
+msgid "开源教程"
+msgstr "Open Source Tutorial"
+
+msgid "繁体中文"
+msgstr "Traditional Chinese"
+
+msgid "简体中文"
+msgstr "Simplified Chinese"
+
+msgid "关闭"
+msgstr "Close"
+
+msgid "用户登录"
+msgstr "User Login"
+
+msgid "请输入您的用户名"
+msgstr "Please enter your username"
+
+msgid "请输入您的密码"
+msgstr "Please enter your password"
+
+msgid "默认用户名和密码请查看README.md文件"
+msgstr "Please check README.md for default username and password"
+
+msgid "我的数据任务"
+msgstr "My Data Tasks"
+
+msgid "创建新任务"
+msgstr "Create New Task"
+
+msgid "查看详情"
+msgstr "View Details"
+
+msgid "卡片视图"
+msgstr "Card View"
+
+msgid "列表视图"
+msgstr "List View"
+
+msgid "组织共享"
+msgstr "Organization Share"
+
+msgid "已共享"
+msgstr "Shared"
+
+msgid "公开"
+msgstr "Public"
+
+msgid "暂无描述"
+msgstr "No description"
+
+msgid "创建时间"
+msgstr "Created At"
+
+msgid "提交数量"
+msgstr "Submissions"
+
+msgid "提交URL"
+msgstr "API Address"
+
+msgid "复制"
+msgstr "Copy"
+
+msgid "导出"
+msgstr "Export"
+
+msgid "分析"
+msgstr "Analysis"
+
+msgid "实时数据"
+msgstr "Real-time Data"
+
+msgid "删除"
+msgstr "Delete"
+
+msgid "确认删除"
+msgstr "Confirm Delete"
+
+msgid "确定要删除任务"
+msgstr "Are you sure you want to delete task"
+
+msgid "吗？此操作无法撤销，相关的所有提交数据也将被删除。"
+msgstr "? This action cannot be undone. All related submission data will also be deleted."
+
+msgid "取消"
+msgstr "Cancel"
+
+msgid "确认删除"
+msgstr "Confirm Delete"
+
+msgid "还没有创建任何数据任务"
+msgstr "No data tasks have been created yet"
+
+msgid "点击下方按钮创建您的第一个数据任务"
+msgstr "Click the button below to create your first data task"
+
+msgid "导入任务"
+msgstr "Import Task"
+
+msgid "已复制！"
+msgstr "Copied!"
+
+msgid "欢迎使用 QuickForm"
+msgstr "Welcome to QuickForm"
+
+msgid "简易高效的数据回收系统，专为大模型生成的交互网页设计"
+msgstr "Simple and efficient data collection system, designed for AI-generated interactive web pages"
+
+msgid "快速开始"
+msgstr "Quick Start"
+
+msgid "1. 登录系统，创建新的数据任务，获取API地址（URL）"
+msgstr "1. Log in, create a new data task, and get the API address (URL)"
+
+msgid "2. 修改您的网页，将数据提交指定的API地址"
+msgstr "2. Modify your webpage to submit data to the specified API address"
+
+msgid "3. 在数据任务中查看并借助AI分析收集的数据"
+msgstr "3. View collected data in data tasks and analyze with AI"
+
+msgid "进入数据任务"
+msgstr "Enter Data Task"
+
+msgid "简单易用"
+msgstr "Simple and Easy to Use"
+
+msgid "数据回收功能无缝集成到任何网页"
+msgstr "Seamlessly integrate data collection into any webpage"
+
+msgid "数据存储"
+msgstr "Data Storage"
+
+msgid "支持非结构化数据存储，随时可查"
+msgstr "Supports unstructured data storage, available anytime"
+
+msgid "数据分析"
+msgstr "Data Analysis"
+
+msgid "提供数据统计和可视化功能"
+msgstr "Provides data statistics and visualization"
+
+msgid "项目地址"
+msgstr "Project Address"
+
+msgid "访问GitHub仓库了解源码"
+msgstr "Visit GitHub Repository"
+
+msgid "访问项目"
+msgstr "Visit Project"
+
+msgid "查看使用教程和案例"
+msgstr "View tutorials and examples"
+
+msgid "查看教程"
+msgstr "View Tutorial"
+
+msgid "项目交流"
+msgstr "Project Community"
+
+msgid "加入社区分享经验"
+msgstr "Join community to share experiences"
+
+msgid "加入社区"
+msgstr "Join Community"
+
+msgid "创建任务"
+msgstr "Create Task"
+
+msgid "返回任务列表"
+msgstr "Back to Task List"
+
+msgid "创建数据任务"
+msgstr "Create Data Task"
+
+msgid "任务标题"
+msgstr "Task Title"
+
+msgid "请输入任务标题"
+msgstr "Please enter task title"
+
+msgid "请为您的数据回收任务设置一个描述性的标题"
+msgstr "Please set a descriptive title for your data collection task"
+
+msgid "任务描述（可选）"
+msgstr "Task Description (Optional)"
+
+msgid "请输入任务描述"
+msgstr "Please enter task description"
+
+msgid "添加描述可以帮助您更好地管理和识别不同的任务"
+msgstr "Adding a description helps you better manage and identify different tasks"
+
+msgid "创建任务后，您将获得："
+msgstr "After creating a task, you will get:"
+
+msgid "安全警示"
+msgstr "Security Warning"
+
+msgid "请勿在 QuickForm 中存储姓名、身份证号等敏感数据，详情查看"
+msgstr "Do not store sensitive data such as names or ID numbers in QuickForm. See "
+
+msgid "一个唯一的提交URL，用于接收表单数据"
+msgstr "A unique submission URL for receiving form data"
+
+msgid "数据管理和分析工具"
+msgstr "Data management and analysis tools"
+
+msgid "导出数据功能"
+msgstr "Data export functionality"
+
+msgid "取消"
+msgstr "Cancel"
+
+msgid "使用指南"
+msgstr "Usage Guide"
+
+msgid "如何在您的网页中使用API地址："
+msgstr "How to use the API address in your webpage:"
+
+msgid "HTML表单示例"
+msgstr "HTML Form Example"
+
+msgid "您的提交URL"
+msgstr "Your Submission URL"
+
+msgid "表单字段"
+msgstr "Form Fields"
+
+msgid "姓名"
+msgstr "Name"
+
+msgid "邮箱"
+msgstr "Email"
+
+msgid "提交"
+msgstr "Submit"
+
+msgid "JavaScript提交示例："
+msgstr "JavaScript Submission Example:"
+
+msgid "使用fetch API提交数据"
+msgstr "Use fetch API to submit data"
+
+msgid "用户名"
+msgstr "Username"
+
+msgid "其他字段"
+msgstr "Other Fields"
+
+msgid "提交成功"
+msgstr "Submission Successful"
+
+msgid "提交失败"
+msgstr "Submission Failed"
+
+msgid "Python提交示例："
+msgstr "Python Submission Example:"
+
+msgid "设置"
+msgstr "Settings"
+
+msgid "AI配置"
+msgstr "AI Configuration"
+
+msgid "QFLink"
+msgstr "QFLink"
+
+msgid "用户信息修改"
+msgstr "User Info Modification"
+
+msgid "系统初始化"
+msgstr "System Init"
+
+msgid "选择AI模型"
+msgstr "Select AI Model"
+
+msgid "DeepSeek 配置"
+msgstr "DeepSeek Configuration"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "请输入您的DeepSeek API密钥"
+msgstr "Please enter your DeepSeek API key"
+
+msgid "测试API密钥"
+msgstr "Test API Key"
+
+msgid "豆包 配置"
+msgstr "Doubao Configuration"
+
+msgid "阿里云百炼 配置"
+msgstr "Alibaba Cloud Bailian Configuration"
+
+msgid "请输入您的阿里云百炼 API密钥"
+msgstr "Please enter your Alibaba Cloud Bailian API key"
+
+msgid "智谱清言(GLM) 配置"
+msgstr "Zhipu AI (GLM) Configuration"
+
+msgid "请输入您的智谱清言 API密钥"
+msgstr "Please enter your Zhipu AI API key"
+
+msgid "硅基流动 配置"
+msgstr "SiliconFlow Configuration"
+
+msgid "请输入您的硅基流动 API密钥"
+msgstr "Please enter your SiliconFlow API key"
+
+msgid "模型名称"
+msgstr "Model Name"
+
+msgid "请输入要使用的模型名称，如：Qwen/Qwen2.5-72B-Instruct、Qwen/QwQ-32B 等"
+msgstr "Please enter the model name, e.g.: Qwen/Qwen2.5-72B-Instruct, Qwen/QwQ-32B, etc."
+
+msgid "Ollama (本地) 配置"
+msgstr "Ollama (Local) Configuration"
+
+msgid "Ollama API 地址"
+msgstr "Ollama API Address"
+
+msgid "请输入您的Ollama服务地址（默认：http://localhost:11434）"
+msgstr "Please enter your Ollama service address (default: http://localhost:11434)"
+
+msgid "请输入要使用的模型名称，如：llama3、qwen3-coder:30b、deepseek-r1:7b 等"
+msgstr "Please enter the model name, e.g.: llama3, qwen3-coder:30b, deepseek-r1:7b, etc."
+
+msgid "测试连接"
+msgstr "Test Connection"
+
+msgid "保存配置"
+msgstr "Save Configuration"
+
+msgid "说明："
+msgstr "Note:"
+
+msgid "配置完成AI模型后，您可以在任务分析页面使用智能分析功能。智能分析将根据您的表单数据和附件内容，生成详细的分析报告。请注意保护您的API密钥安全，避免泄露。"
+msgstr "After configuring the AI model, you can use the Smart Analysis feature on the task analysis page. Smart Analysis generates detailed reports based on your form data and attachments. Please keep your API key secure."
+
+msgid "QF在线版的用户名"
+msgstr "QF Online Username"
+
+msgid "QF在线版的密码"
+msgstr "QF Online Password"
+
+msgid "保存"
+msgstr "Save"
+
+msgid "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
+msgstr "Debugging data tasks on <a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm Online</a> (quickform.cn) tends to be easier, especially for the \"Data Dashboard\" feature. We recommend creating a new data task on the online version, then importing it to the Campus or Teacher edition."
+
+msgid "修改用户名"
+msgstr "Change Username"
+
+msgid "用户名"
+msgstr "Username"
+
+msgid "保存用户名"
+msgstr "Save Username"
+
+msgid "修改密码"
+msgstr "Change Password"
+
+msgid "当前密码"
+msgstr "Current Password"
+
+msgid "新密码"
+msgstr "New Password"
+
+msgid "密码长度至少为6个字符"
+msgstr "Password must be at least 6 characters"
+
+msgid "确认新密码"
+msgstr "Confirm New Password"
+
+msgid "保存密码"
+msgstr "Save Password"
+
+msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
+msgstr "If the password is incorrect, use the startup page to reset username to 'wst' and password to 'quickform'."
+
+msgid "警告："
+msgstr "Warning:"
+
+msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"、重置SECRET_KEY安全密钥，并删除前3个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！"
+msgstr "This will clear all AI configs (except Ollama), clear QFLink config, reset username to \\'wst\\', password to \\'quickform\\', and reset SECRET_KEY. All users will need to re-login after reset. All data and attachments except the first 3 tasks will be deleted. This cannot be undone!"
+
+msgid "执行系统初始化"
+msgstr "Execute System Init"
+
+msgid "导出数据"
+msgstr "Export Data"
+
+msgid "导出任务"
+msgstr "Export Task"
+
+msgid "导出内容包含："
+msgstr "Export content includes:"
+
+msgid "必选：任务名称、简介和相关网页文件"
+msgstr "Required: Task name, description and related web page files"
+
+msgid "可选：学习数据"
+msgstr "Optional: Learning data"
+
+msgid "可选：通过API上传的附件"
+msgstr "Optional: Attachments uploaded via API"
+
+msgid "确认导出"
+msgstr "Confirm Export"
+
+msgid "数据分析"
+msgstr "Data Analysis"
+
+msgid "编辑任务"
+msgstr "Edit Task"
+
+msgid "返回列表"
+msgstr "Back to List"
+
+msgid "任务信息"
+msgstr "Task Information"
+
+msgid "创建时间："
+msgstr "Created At:"
+
+msgid "提交数量："
+msgstr "Submissions:"
+
+msgid "API地址："
+msgstr "API Address:"
+
+msgid "复制"
+msgstr "Copy"
+
+msgid "任务描述："
+msgstr "Task Description:"
+
+msgid "已上传文件"
+msgstr "Uploaded Files"
+
+msgid "个）："
+msgstr "):"
+
+msgid "生成二维码"
+msgstr "Generate QR Code"
+
+msgid "上传文件"
+msgstr "Upload File"
+
+msgid "数据提交说明"
+msgstr "Data Submission Guide"
+
+msgid "参考提示词（点击复制）："
+msgstr "Reference Prompt (click to copy):"
+
+msgid "💡 数据接口（API）说明："
+msgstr "💡 API Info:"
+
+msgid "访问下方 URL，即GET方式即可查看已收集的数据；制作实时统计页面时可向大模型提供该 URL 及数据样例。点击这里"
+msgstr "Access the URL below via GET to view collected data; provide this URL and data samples to the AI model when creating real-time dashboards. Click here"
+
+msgid "可以看到全部已经回收的数据。"
+msgstr "to view all collected data."
+
+msgid "提交数据列表"
+msgstr "Submission List"
+
+msgid "查看实时数据"
+msgstr "View Real-time Data"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "提交时间"
+msgstr "Submitted At"
+
+msgid "数据内容"
+msgstr "Data Content"
+
+msgid "操作"
+msgstr "Actions"
+
+msgid "QuickForm：打通AI赋能教育的\"最后一公里\""
+msgstr "QuickForm: Bridging the \"Last Mile\" of AI-Powered Education"
+
+msgid "QF项目简介"
+msgstr "QF Project Introduction"
+
+msgid "访问QF在线版"
+msgstr "Visit QF Online"
+
+msgid "本地部署"
+msgstr "Local Deployment"
+
+msgid "免责声明"
+msgstr "Disclaimer"
+
+msgid "联系我们："
+msgstr "Contact Us:"
+
+msgid "QuickForm小助手"
+msgstr "QuickForm Assistant"
+
+msgid "投稿邮箱"
+msgstr "Contact Email"
+
+msgid "提交数据"
+msgstr "Submit Data"
+
+msgid "每 30 秒自动刷新"
+msgstr "Auto-refresh every 30s"
+
+msgid "提交列表"
+msgstr "Submission List"
+
+msgid "共"
+msgstr "Total"
+
+msgid "条"
+msgstr "records"
+
+msgid "删除全部"
+msgstr "Delete All"
+
+msgid "提交时间"
+msgstr "Submitted At"
+
+msgid "数据内容"
+msgstr "Data Content"
+
+msgid "分页"
+msgstr "Pagination"
+
+msgid "上一页"
+msgstr "Previous"
+
+msgid "下一页"
+msgstr "Next"
+
+msgid "第"
+msgstr "Page"
+
+msgid "页"
+msgstr ""
+
+msgid "暂无提交数据"
+msgstr "No submission data"
+
+msgid "确定要删除这条提交记录吗？"
+msgstr "Are you sure you want to delete this submission?"
+
+msgid "确定要清空该任务的全部提交数据吗？此操作不可恢复。"
+msgstr "Are you sure you want to clear all submission data for this task? This cannot be undone."
+
+msgid "清空失败"
+msgstr "Clear failed"
+
+msgid "分析报告"
+msgstr "Analysis Report"
+
+msgid "任务"
+msgstr "Task"
+
+msgid "任务标题："
+msgstr "Task Title:"
+
+msgid "未知任务"
+msgstr "Unknown Task"
+
+msgid "暂无分析报告"
+msgstr "No analysis report"
+
+msgid "此任务尚未生成分析报告或报告文件丢失。"
+msgstr "This task has not generated an analysis report or the report file is missing."
+
+msgid "请点击\"智能分析\"按钮生成新的分析报告。"
+msgstr "Please click the 'Smart Analysis' button to generate a new analysis report."
+
+msgid "数据分析报告"
+msgstr "Data Analysis Report"
+
+msgid "报告生成"
+msgstr "Report Generation"
+
+msgid "加载中..."
+msgstr "Loading..."
+
+msgid "生成报告失败"
+msgstr "Failed to generate report"
+
+msgid "前往配置页面"
+msgstr "Go to Configuration Page"
+
+msgid "关闭窗口"
+msgstr "Close Window"
+
+msgid "下载分析报告"
+msgstr "Download Analysis Report"
+
+msgid "完成并返回"
+msgstr "Done & Return"
+
+msgid "报告生成时间："
+msgstr "Report Generated At:"
+
+msgid "正在生成分析报告..."
+msgstr "Generating analysis report..."
+
+msgid "这可能需要几分钟时间，请耐心等待..."
+msgstr "This may take a few minutes, please be patient..."
+
+msgid "数据分析"
+msgstr "Data Analysis"
+
+msgid "返回详情"
+msgstr "Back to Details"
+
+msgid "数据概览"
+msgstr "Data Overview"
+
+msgid "总提交数量"
+msgstr "Total Submissions"
+
+msgid "最早提交时间"
+msgstr "Earliest Submission"
+
+msgid "最新提交时间"
+msgstr "Latest Submission"
+
+msgid "暂无数据"
+msgstr "No Data"
+
+msgid "每日提交统计"
+msgstr "Daily Submission Statistics"
+
+msgid "日期"
+msgstr "Date"
+
+msgid "暂无足够数据进行统计"
+msgstr "Not enough data for statistics"
+
+msgid "当有更多提交数据时，将显示每日提交统计信息"
+msgstr "Daily statistics will be shown when more submission data is available"
+
+msgid "数据导出"
+msgstr "Data Export"
+
+msgid "导出数据以进行更详细的分析或存档："
+msgstr "Export data for detailed analysis or archiving:"
+
+msgid "导出为CSV文件"
+msgstr "Export as CSV"
+
+msgid "CSV文件可以用Excel、Google Sheets或其他电子表格软件打开"
+msgstr "CSV files can be opened with Excel, Google Sheets or other spreadsheet software"
+
+msgid "查看数据"
+msgstr "View Data"
+
+msgid "导入"
+msgstr "Import"
+
+msgid "删除"
+msgstr "Delete"
+
+msgid "提交数据详情"
+msgstr "Submission Details"
+
+msgid "关闭"
+msgstr "Close"
+
+msgid "批量删除选中项"
+msgstr "Batch Delete Selected"
+
+msgid "共"
+msgstr "Total"
+
+msgid "条记录"
+msgstr "records"
+
+msgid "暂无提交数据"
+msgstr "No submission data"
+
+msgid "当用户通过表单提交数据后，将在这里显示"
+msgstr "Submissions will appear here after users submit data via forms"
+
+msgid "扫描二维码"
+msgstr "Scan QR Code"
+
+msgid "确定要删除这条提交数据吗？此操作不可撤销！"
+msgstr "Are you sure you want to delete this submission? This cannot be undone!"
+
+msgid "请至少选择一条要删除的提交数据"
+msgstr "Please select at least one submission to delete"
+
+msgid "确定要删除选中的"
+msgstr "Are you sure you want to delete the selected"
+
+msgid "条提交数据吗？此操作不可撤销！"
+msgstr " submissions? This cannot be undone!"
+
+msgid "已复制"
+msgstr "Copied"
+
+msgid "返回任务详情"
+msgstr "Back to Task Detail"
+
+msgid "智能分析"
+msgstr "Smart Analysis"
+
+msgid "错误"
+msgstr "Error"
+
+msgid "前往配置页面"
+msgstr "Go to Configuration Page"
+
+msgid "已回收数据条数"
+msgstr "Collected Data Count"
+
+msgid "您可以选择多种方式进行分析："
+msgstr "You can choose multiple ways to analyze:"
+
+msgid "制作实时数据大屏"
+msgstr "Create Real-time Dashboard"
+
+msgid "制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。具体做法参考\"在线版\"。"
+msgstr "Create a real-time data dashboard. Provide appropriate prompts for the AI model. Coze is recommended. See the Online Version for details."
+
+msgid "手动分析数据"
+msgstr "Manual Data Analysis"
+
+msgid "将回收的数据导出为CSV或者JSON格式，使用你熟悉的AI工具（deepseek、豆包、扣子编程等）进行分析。"
+msgstr "Export collected data as CSV or JSON, and use your preferred AI tools (DeepSeek, Doubao, Coze, etc.) for analysis."
+
+msgid "导出CSV格式数据"
+msgstr "Export CSV Data"
+
+msgid "导出JSON格式数据"
+msgstr "Export JSON Data"
+
+msgid "自动生成分析报告"
+msgstr "Auto-generate Analysis Report"
+
+msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
+msgstr "To use QuickForm\u2019s built-in AI analysis, fill in your APIKEY in Personal Settings (purchased from AI model providers)."
+
+msgid "你还没有填写APIKEY，"
+msgstr "You haven't filled in your API key yet,"
+
+msgid "点击这里填写"
+msgstr "click here to fill in"
+
+msgid "参考提示词："
+msgstr "Reference Prompt:"
+
+msgid "暂无数据，无法分析"
+msgstr "No data available for analysis"
+
+msgid "开始分析"
+msgstr "Start Analysis"
+
+msgid "请先收集数据后再进行分析"
+msgstr "Please collect data first before analyzing"
+
+msgid "当前分析报告"
+msgstr "Current Analysis Report"
+
+msgid "生成时间："
+msgstr "Generated At:"
+
+msgid "下载报告"
+msgstr "Download Report"
+
+msgid "编辑任务"
+msgstr "Edit Task"
+
+msgid "编辑数据任务"
+msgstr "Edit Data Task"
+
+msgid "返回任务详情"
+msgstr "Back to Task Detail"
+
+msgid "任务标题"
+msgstr "Task Title"
+
+msgid "任务描述（可选）"
+msgstr "Task Description (Optional)"
+
+msgid "已有附件"
+msgstr "Existing Attachments"
+
+msgid "个"
+msgstr ""
+
+msgid "删除附件"
+msgstr "Delete Attachment"
+
+msgid "添加新附件（可选）"
+msgstr "Add New Attachments (Optional)"
+
+msgid "支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。"
+msgstr "Supports PDF, HTML, HTM, JPG and ZIP files, max 16MB. Multiple files can be uploaded at once."
+
+msgid "取消"
+msgstr "Cancel"
+
+msgid "保存修改"
+msgstr "Save Changes"
+
+msgid "确定要删除这个附件吗？"
+msgstr "Are you sure you want to delete this attachment?"
+
+msgid "删除失败"
+msgstr "Delete Failed"
+
+msgid "删除出错"
+msgstr "Delete Error"
+
+msgid "导入任务"
+msgstr "Import Task"
+
+msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
+msgstr "This feature imports task list from quickform.cn. Please ensure QFLink is configured in Settings."
+
+msgid "QuickForm接口文档说明："
+msgstr "QuickForm API Documentation:"
+
+msgid "获取全部任务"
+msgstr "Get All Tasks"
+
+msgid "导入指定任务"
+msgstr "Import Specific Task"
+
+msgid "从文件（zip格式）导入数据任务"
+msgstr "Import data task from file (zip format)"
+
+msgid "输入数据任务的API地址"
+msgstr "Enter data task API address"
+
+msgid "格式如："
+msgstr "Format example:"
+
+msgid "从文件导入任务"
+msgstr "Import Task from File"
+
+msgid "请上传从quickform.cn中导出的输入任务文件，压缩包格式。"
+msgstr "Please upload the task file exported from quickform.cn in zip format."
+
+msgid "从quickform.cn获取的任务列表"
+msgstr "Task list from quickform.cn"
+
+msgid "任务名称"
+msgstr "Task Name"
+
+msgid "任务描述"
+msgstr "Task Description"
+
+msgid "API ID"
+msgstr "API ID"
+
+msgid "操作"
+msgstr "Actions"
+
+msgid "API上传文件设置"
+msgstr "API File Upload Settings"
+
+msgid "QuickForm.cn 密码"
+msgstr "QuickForm.cn Password"
+
+msgid "QuickForm.cn 用户名"
+msgstr "QuickForm.cn Username"
+
+msgid "QuickForm：打通AI赋能教育的\"最后一公里\""
+msgstr "QuickForm: Bridging the \"Last Mile\" of AI-Powered Education"
+
+msgid "一个唯一的API地址，用于接收表单数据"
+msgstr "A unique API address for receiving form data"
+
+msgid "上传文件设置"
+msgstr "File Upload Settings"
+
+msgid "使用 QuickForm.cn 登录"
+msgstr "Login with QuickForm.cn"
+
+msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
+msgstr "To use QuickForm\\'s built-in AI analysis, please fill in your APIKEY in Personal Settings (purchased from AI model providers)."
+
+msgid "保存中..."
+msgstr "Saving..."
+
+msgid "保存出错"
+msgstr "Save Error"
+
+msgid "保存失败"
+msgstr "Save Failed"
+
+msgid "保存并关闭"
+msgstr "Save & Close"
+
+msgid "允许上传的文件扩展名，以英文逗号分隔，如：jpg,jpeg,png,gif,pdf"
+msgstr "Allowed file extensions, separated by commas, e.g.: jpg,jpeg,png,gif,pdf"
+
+msgid "允许扩展名"
+msgstr "Allowed Extensions"
+
+msgid "制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。"
+msgstr "Create a real-time data dashboard. You need to provide appropriate prompts for the AI model. Coze is recommended."
+
+msgid "加载文件失败"
+msgstr "Failed to load file"
+
+msgid "参考提示词（可直接复制使用）："
+msgstr "Reference prompt (can be copied directly):"
+
+msgid "否"
+msgstr "No"
+
+msgid "复制失败，请手动复制"
+msgstr "Copy failed, please copy manually"
+
+msgid "复制提示词"
+msgstr "Copy Prompt"
+
+msgid "如何在您的网页中使用提交URL："
+msgstr "How to use the API address in your webpage:"
+
+msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
+msgstr "If the password is incorrect, use the startup page to reset username to \\'wst\\' and password to \\'quickform\\'."
+
+msgid "密码"
+msgstr "Password"
+
+msgid "导入数据"
+msgstr "Import Data"
+
+msgid "已保存 ✓"
+msgstr "Saved ✓"
+
+msgid "已加载"
+msgstr "Loaded"
+
+msgid "已复制到剪贴板"
+msgstr "Copied to clipboard"
+
+msgid "您的API地址"
+msgstr "Your API Address"
+
+msgid "我要制作数据大屏"
+msgstr "Create Data Dashboard"
+
+msgid "或使用 QuickForm.cn 账号登录"
+msgstr "Or login with QuickForm.cn account"
+
+msgid "文件大小"
+msgstr "File Size"
+
+msgid "是"
+msgstr "Yes"
+
+msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
+msgstr "This feature imports task list from quickform.cn. Please ensure QFLink is configured in Settings."
+
+msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"、重置SECRET_KEY安全密钥，并删除前3个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！"
+msgstr "This will clear all AI configs (except Ollama), clear QFLink config, reset username to \\'wst\\', password to \\'quickform\\', and reset SECRET_KEY. All users will need to re-login after reset. All data and attachments except the first 3 tasks will be deleted. This cannot be undone!"
+
+msgid "登录"
+msgstr "Login"
+
+msgid "快速登录"
+msgstr "Quick Login"
+
+msgid "本地登录"
+msgstr "Local Login"
+
+msgid "QuickForm.cn 登录"
+msgstr "QuickForm.cn Login"
+
+msgid "请输入 QuickForm.cn 用户名"
+msgstr "Enter your QuickForm.cn username"
+
+msgid "请输入 QuickForm.cn 密码"
+msgstr "Enter your QuickForm.cn password"
+
+msgid "确定"
+msgstr "OK"
+
+msgid "确定要关闭编辑器吗？未保存的修改将丢失。"
+msgstr "Are you sure you want to close the editor? Unsaved changes will be lost."
+
+msgid "编辑代码"
+msgstr "Edit Code"
+
+msgid "表单示例"
+msgstr "Form Example"
+
+msgid "记住我"
+msgstr "Remember me"
+
+msgid "请点击\"智能分析\"按钮生成新的分析报告。"
+msgstr "Please click the \\'Smart Analysis\\' button to generate a new analysis report."
+
+msgid "退出登录"
+msgstr "Logout"
+
+msgid "API接口是否开启文件上传"
+msgstr "Enable API File Upload"
+
+msgid "关闭后，API接口将禁止上传文件，仅允许提交表单数据"
+msgstr "When disabled, API will reject file uploads and only accept form data"
+
+msgid "QuickForm.cn 登录成功，已同步账号信息"
+msgstr "QuickForm.cn login successful, account info synced"
+
+msgid "文件上传功能已关闭，文件未保存"
+msgstr "File upload feature is disabled, files not saved"
+
+msgid "部分文件超过大小限制，未保存"
+msgstr "Some files exceeded size limit, not saved"
+
+msgid "部分文件类型不支持，未保存"
+msgstr "Some file types are not supported, not saved"
+
+msgid "查找替换"
+msgstr "Find & Replace"
+
+msgid "智能替换API地址"
+msgstr "Smart Replace API URL"
+
+msgid "查找内容"
+msgstr "Find"
+
+msgid "替换为"
+msgstr "Replace with"
+
+msgid "查找下一个"
+msgstr "Find Next"
+
+msgid "全部替换"
+msgstr "Replace All"
+
+msgid "未找到"
+msgstr "Not found"
+
+msgid "已替换"
+msgstr "Replaced"
+
+msgid "处"
+msgstr "occurrence(s)"
+
+msgid "未找到需要替换的API地址"
+msgstr "No API URLs found to replace"
+
+msgid "找到以下API地址，将转换为相对路径："
+msgstr "Found the following API URLs, will convert to relative paths:"
+
+msgid "共"
+msgstr "Total"
+
+msgid "个地址，"
+msgstr "URL(s),"
+
+msgid "处替换。确认替换？"
+msgstr " occurrence(s). Confirm replace?"
+
+msgid "处API地址"
+msgstr "API URL(s)"
+
+msgid "数据备份"
+msgstr "Data Backup"
+
+msgid "备份数据库和所有上传文件，生成一个可下载的ZIP压缩包。"
+msgstr "Backup database and all uploaded files, generating a downloadable ZIP package."
+
+msgid "备份数据"
+msgstr "Backup Data"
+
+msgid "测试中..."
+msgstr "Testing..."
+
+msgid "连接成功！找到"
+msgstr "Connection successful! Found"
+
+msgid "个任务"
+msgstr "task(s)"
+
+msgid "是否保存此配置？"
+msgstr "Save this configuration?"
+
+msgid "连接失败："
+msgstr "Connection failed: "
+
+msgid "测试失败："
+msgstr "Test failed: "
+
+msgid "备份中..."
+msgstr "Backing up..."
+
+msgid "备份失败"
+msgstr "Backup failed"
+
+msgid "备份成功！"
+msgstr "Backup successful!"
+
+msgid "备份文件："
+msgstr "Backup file: "
+
+msgid "文件大小："
+msgstr "File size: "
+
+msgid "点击下载"
+msgstr "Click to download"
+
+msgid "文件已保存在服务器 backups 目录下，不下载也不会丢失。"
+msgstr "The file is saved in the server's backups directory. It will not be lost even if you don't download it."
+
+msgid "备份失败："
+msgstr "Backup failed: "
+
+msgid "删除失败："
+msgstr "Delete failed: "

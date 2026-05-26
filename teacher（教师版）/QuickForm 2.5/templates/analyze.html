@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('数据分析') }} - {{ task.title }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4" style="flex-wrap: wrap; gap: 10px;">
+            <h2 style="font-weight: 600; margin: 0;">{{ _('数据分析') }} - {{ task.title }}</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{{ url_for('smart_analyze', task_id=task.id) }}" class="btn" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                    {{ _('智能分析') }}
+                </a>
+                <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                    {{ _('返回详情') }}
+                </a>
+            </div>
+        </div>
+        
+        <!-- 数据概览卡片 -->
+        <div class="card mb-6 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('数据概览') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="p-4 rounded-4 text-center" style="background-color: rgba(184, 149, 106, 0.1);">
+                            <h6 class="text-primary mb-3" style="font-weight: 500;">{{ _('总提交数量') }}</h6>
+                            <p class="h3 fw-bold mb-0">{{ submission_count }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="p-4 rounded-4 text-center" style="background-color: rgba(22, 163, 74, 0.1);">
+                            <h6 class="text-success mb-3" style="font-weight: 500;">{{ _('最早提交时间') }}</h6>
+                            <p class="h6 mb-0">{% if earliest_submission %}{{ earliest_submission.strftime('%Y-%m-%d %H:%M:%S') }}{% else %}{{ _('暂无数据') }}{% endif %}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="p-4 rounded-4 text-center" style="background-color: rgba(6, 182, 212, 0.1);">
+                            <h6 class="text-info mb-3" style="font-weight: 500;">{{ _('最新提交时间') }}</h6>
+                            <p class="h6 mb-0">{% if latest_submission %}{{ latest_submission.strftime('%Y-%m-%d %H:%M:%S') }}{% else %}{{ _('暂无数据') }}{% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 简化的数据可视化 - 使用静态表格替代动态图表 -->
+        <div class="card mb-6 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('每日提交统计') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                {% if graph_data %}
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border-radius: 8px; overflow: hidden;">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #f3f4f6; font-weight: 600; color: #374151;">{{ _('日期') }}</th>
+                                <th style="background-color: #f3f4f6; font-weight: 600; color: #374151;">{{ _('提交数量') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for date, count in graph_data.items() %}
+                            <tr>
+                                <td>{{ date }}</td>
+                                <td>{{ count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-4" style="width: 48px; height: 48px; margin: 0 auto;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#6b7280" class="bi bi-bar-chart2" viewBox="0 0 16 16">
+                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm5 2v8h2V5H6zm4 0v8h2V5h-2zm4 0v8h2V5h-2z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-muted mb-3">{{ _('暂无足够数据进行统计') }}</h4>
+                    <p class="text-muted mb-0">{{ _('当有更多提交数据时，将显示每日提交统计信息') }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- 数据导出选项 -->
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('数据导出') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <p class="mb-4" style="font-weight: 500;">{{ _('导出数据以进行更详细的分析或存档：') }}</p>
+                <a href="{{ url_for('export_data', task_id=task.id) }}" class="btn" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-excel" viewBox="0 0 16 16">
+                        <path d="M5.884 6.68a.5.5 0 0 0-.768 0L1 10.172V12h5.5a.5.5 0 0 0 .416-.777L3.708 6.68H5.884z"/>
+                        <path d="M7.5 12a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5v-1H7.5v1zm4-6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V6.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                    </svg>
+                    {{ _('导出为CSV文件') }}
+                </a>
+                <div class="mt-3 text-muted" style="font-size: 0.875em;">
+                    <small>{{ _('CSV文件可以用Excel、Google Sheets或其他电子表格软件打开') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

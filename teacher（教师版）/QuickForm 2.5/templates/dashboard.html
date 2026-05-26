@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('数据任务') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0" style="color: #111827; font-weight: 700;">{{ _('我的数据任务') }}</h2>
+            <div class="d-flex align-items-center gap-2">
+                {% if tasks %}
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-view active" id="btnCardView" onclick="switchView('card')" title="{{ _('卡片视图') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-view" id="btnListView" onclick="switchView('list')" title="{{ _('列表视图') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
+                </div>
+                {% endif %}
+                <a href="{{ url_for('create_task') }}" class="btn btn-primary" style="font-weight: 500;">
+                    {{ _('创建新任务') }}
+                </a>
+            </div>
+        </div>
+
+        {% if tasks %}
+        <div id="cardView">
+            <div class="row g-3">
+                {% for task in tasks %}
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100">
+                        <a href="{{ url_for('task_detail', task_id=task.id) }}" class="text-decoration-none">
+                            <div class="card-header" style="padding-bottom: 0.75rem;">
+                                <h5 class="card-title mb-0" style="color: white; font-weight: 600;">{{ task.title }}</h5>
+                            </div>
+                            <div class="card-body" style="padding-bottom: 0.25rem;">
+                                {% if task.description %}
+                                <p class="card-text mb-3 card-description" title="{{ task.description }}">{{ task.description[:60] }}{% if task.description|length > 60 %}...{% endif %}</p>
+                                {% else %}
+                                <p class="card-text mb-3 text-muted">{{ _('暂无描述') }}</p>
+                                {% endif %}
+                                <div class="mb-3">
+                                    <small class="text-muted">{{ _('创建时间') }}: {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted">{{ _('提交数量') }}: {{ task.submission|length }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-muted">{{ _('API地址') }}:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm" readonly value="{{ request.host_url }}api/{{ task.task_id }}" id="card-url-{{ task.id }}">
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); copyToClipboard('card-url-{{ task.id }}')" style="font-weight: 500; background-color: #6b7280; color: white; border: none;">
+                                            {{ _('复制') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-footer" style="background-color: #fef9ef; border-top: 1px solid #e5e7eb; padding: 1rem;">
+                            <div class="d-flex flex-wrap align-items-center gap-2" style="min-width: 0;">
+                                <a href="{{ url_for('task_data_view', task_id=task.id) }}" class="btn btn-sm" style="font-weight: 500; background-color: white; color: #10b981; border: 1px solid #10b981; height: 36px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; flex-shrink: 0;">
+                                    {{ _('数据') }}
+                                </a>
+                                <a href="{{ url_for('smart_analyze', task_id=task.id) }}" class="btn btn-sm" style="font-weight: 500; background-color: white; color: #c9ab84; border: 1px solid #c9ab84; height: 36px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; flex-shrink: 0;">
+                                    {{ _('分析') }}
+                                </a>
+                                <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ task.id }}" style="font-weight: 500; background-color: white; color: #ef4444; border: 1px solid #ef4444; height: 36px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; flex-shrink: 0;">
+                                    {{ _('删除') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="listView" style="display: none;">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <thead style="background-color: #b8956a; color: white;">
+                        <tr>
+                            <th style="font-weight: 600; min-width: 240px;">{{ _('任务名称') }}</th>
+                            <th style="font-weight: 600;">{{ _('创建时间') }}</th>
+                            <th style="font-weight: 600;">{{ _('提交数量') }}</th>
+                            <th style="font-weight: 600;">{{ _('API地址') }}</th>
+                            <th style="font-weight: 600; text-align: center;">{{ _('操作') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ task.description }}">
+                                <a href="{{ url_for('task_detail', task_id=task.id) }}" style="color: #b8956a; font-weight: 600; text-decoration: none;">
+                                    {{ task.title }}
+                                </a>
+                            </td>
+                            <td style="font-size: 0.875rem; color: #6b7280;">
+                                {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="badge" style="background-color: #b8956a; font-size: 0.85rem;">{{ task.submission|length }}</span>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm" style="max-width: 220px;">
+                                    <input type="text" class="form-control form-control-sm" readonly value="{{ request.host_url }}api/{{ task.task_id }}" id="list-url-{{ task.id }}" style="font-size: 0.75rem;">
+                                    <button type="button" class="btn btn-sm" onclick="event.preventDefault(); event.stopPropagation(); copyToClipboard('list-url-{{ task.id }}')" style="background-color: #6b7280; color: white; border: none; font-size: 0.75rem;">
+                                        {{ _('复制') }}
+                                    </button>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn btn-sm" style="color: #b8956a; border: 1px solid #b8956a; background: white; white-space: nowrap;">
+                                        {{ _('查看详情') }}
+                                    </a>
+                                    <a href="{{ url_for('smart_analyze', task_id=task.id) }}" class="btn btn-sm" style="color: #c9ab84; border: 1px solid #c9ab84; background: white; white-space: nowrap;">
+                                        {{ _('分析') }}
+                                    </a>
+                                    <a href="{{ url_for('task_detail', task_id=task.id) }}/data" class="btn btn-sm" style="color: #10b981; border: 1px solid #10b981; background: white; white-space: nowrap;">
+                                        {{ _('实时数据') }}
+                                    </a>
+                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ task.id }}" style="color: #ef4444; border: 1px solid #ef4444; background: white; white-space: nowrap;">
+                                        {{ _('删除') }}
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% for task in tasks %}
+        <div class="modal fade" id="deleteModal-{{ task.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ task.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel-{{ task.id }}">{{ _('确认删除') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ _('确定要删除任务') }} "{{ task.title }}" {{ _('吗？此操作无法撤销，相关的所有提交数据也将被删除。') }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('取消') }}</button>
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
+                            <button type="submit" class="btn btn-danger">{{ _('确认删除') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <div class="mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#6c757d" class="bi bi-inbox" viewBox="0 0 16 16">
+                        <path d="M4.98 4a.5.5 0 0 0-.39.188L1.54 8H6a.5.5 0 0 1 .5.5 1.5 1.5 0 1 0 3 0A.5.5 0 0 1 10 8h4.46l-3.05-3.812A.5.5 0 0 0 11.02 4H4.98zm-1.17-.437A1.5 1.5 0 0 1 4.98 3h6.04a1.5 1.5 0 0 1 1.17.563l3.7 4.625a.5.5 0 0 1 .106.374l-.39 3.124A1.5 1.5 0 0 1 14.117 13H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .106-.374L3.8 3.563zM3.8 6.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5H3.8z"/>
+                    </svg>
+                </div>
+                <h4>{{ _('还没有创建任何数据任务') }}</h4>
+                <p class="text-muted mb-4">{{ _('点击下方按钮创建您的第一个数据任务') }}</p>
+                <a href="{{ url_for('import_task') }}" class="btn btn-primary">{{ _('导入任务') }}</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<span id="copied-text" class="d-none">{{ _('已复制！') }}</span>
+
+<style>
+    .btn-view {
+        background-color: white;
+        color: #6b7280;
+        border: 1px solid #d1d5db;
+        padding: 6px 10px;
+        transition: all 0.2s;
+    }
+    .btn-view:hover {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+    .btn-view.active {
+        background-color: #b8956a;
+        color: white;
+        border-color: #b8956a;
+    }
+    .card-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+        max-height: 3em;
+    }
+</style>
+{% block scripts %}
+<script>
+    function switchView(view) {
+        var cardView = document.getElementById('cardView');
+        var listView = document.getElementById('listView');
+        var btnCard = document.getElementById('btnCardView');
+        var btnList = document.getElementById('btnListView');
+        if (view === 'card') {
+            cardView.style.display = 'block';
+            listView.style.display = 'none';
+            btnCard.classList.add('active');
+            btnList.classList.remove('active');
+        } else {
+            cardView.style.display = 'none';
+            listView.style.display = 'block';
+            btnCard.classList.remove('active');
+            btnList.classList.add('active');
+        }
+        localStorage.setItem('dashboardView', view);
+    }
+
+    function copyToClipboard(elementId) {
+        var element = document.getElementById(elementId);
+        element.select();
+        element.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        var btn = element.nextElementSibling;
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<span>' + document.getElementById('copied-text').textContent + '</span>';
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+        }, 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var saved = localStorage.getItem('dashboardView');
+        if (saved === 'list') {
+            switchView('list');
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

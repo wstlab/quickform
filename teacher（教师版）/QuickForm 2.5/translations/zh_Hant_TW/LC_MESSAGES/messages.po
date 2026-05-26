@@ -1,0 +1,1301 @@
+# Chinese (Traditional) translations for QuickForm
+msgid ""
+msgstr ""
+"Project-Id-Version: QuickForm\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "數據任務"
+
+msgid "数据任务"
+msgstr "數據任務"
+
+msgid "API地址"
+msgstr "API地址"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Profile"
+msgstr "個人設定"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Username"
+msgstr "使用者名稱"
+
+msgid "Password"
+msgstr "密碼"
+
+msgid "Remember me"
+msgstr "記住我"
+
+msgid "Login Button"
+msgstr "登入"
+
+msgid "Create Task"
+msgstr "創建任務"
+
+msgid "Task Title"
+msgstr "任務標題"
+
+msgid "Task Description"
+msgstr "任務描述"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Edit"
+msgstr "編輯"
+
+msgid "View Details"
+msgstr "查看詳情"
+
+msgid "API Address"
+msgstr "API位址"
+
+msgid "Copy"
+msgstr "複製"
+
+msgid "Copied"
+msgstr "已複製"
+
+msgid "Submissions"
+msgstr "提交記錄"
+
+msgid "No submissions yet"
+msgstr "暫無提交記錄"
+
+msgid "Analysis"
+msgstr "數據分析"
+
+msgid "Smart Analysis"
+msgstr "智慧分析"
+
+msgid "Generate Report"
+msgstr "生成報告"
+
+msgid "AI Configuration"
+msgstr "AI設定"
+
+msgid "API Key"
+msgstr "API密鑰"
+
+msgid "Test Connection"
+msgstr "測試連線"
+
+msgid "System Init"
+msgstr "系統初始化"
+
+msgid "User Info"
+msgstr "使用者資訊"
+
+msgid "Change Password"
+msgstr "修改密碼"
+
+msgid "Change Username"
+msgstr "修改使用者名稱"
+
+msgid "QF Data Connection"
+msgstr "QF資料互聯"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Back to Task List"
+msgstr "返回任務列表"
+
+msgid "Back to Task Detail"
+msgstr "返回任務詳情"
+
+msgid "Upload File"
+msgstr "上傳檔案"
+
+msgid "Uploaded Files"
+msgstr "已上傳檔案"
+
+msgid "Generate QR Code"
+msgstr "生成二維碼"
+
+msgid "Import Task"
+msgstr "匯入任務"
+
+msgid "Import Specific Task"
+msgstr "匯入指定任務"
+
+msgid "Task ID or URL"
+msgstr "任務ID或URL"
+
+msgid "Import"
+msgstr "匯入"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Confirm"
+msgstr "確認"
+
+msgid "Are you sure?"
+msgstr "確定要刪除嗎？"
+
+msgid "This action cannot be undone."
+msgstr "此操作不可恢復！"
+
+msgid "QuickForm Teacher Edition"
+msgstr "QuickForm教師版"
+
+msgid "Welcome to QuickForm"
+msgstr "歡迎使用QuickForm"
+
+msgid "Quick Start"
+msgstr "快速開始"
+
+msgid "Simple and Easy to Use"
+msgstr "簡單易用"
+
+msgid "Data Recovery"
+msgstr "資料回收"
+
+msgid "Seamlessly integrate data recovery into any webpage"
+msgstr "資料回收功能無縫整合到任何網頁"
+
+msgid "Data Storage"
+msgstr "資料儲存"
+
+msgid "Supports unstructured data storage, available anytime"
+msgstr "支援非結構化資料儲存，隨時可查"
+
+msgid "Data Analysis"
+msgstr "資料分析"
+
+msgid "Provides data statistics and visualization"
+msgstr "提供資料統計和視覺化功能"
+
+msgid "Project Address"
+msgstr "專案位址"
+
+msgid "Visit GitHub Repository"
+msgstr "訪問GitHub倉庫了解源碼"
+
+msgid "Visit Project"
+msgstr "訪問專案"
+
+msgid "Open Source Tutorial"
+msgstr "開源教程"
+
+msgid "View Tutorial"
+msgstr "查看教程"
+
+msgid "Project Community"
+msgstr "專案交流"
+
+msgid "Join Community"
+msgstr "加入社區"
+
+msgid "Official Documentation"
+msgstr "官方文檔"
+
+msgid "Open Source Repository"
+msgstr "開源倉庫位址"
+
+msgid "Enter Data Task"
+msgstr "進入數據任務"
+
+msgid "Get Started"
+msgstr "立即登入"
+
+msgid "Total"
+msgstr "共"
+
+msgid "submissions"
+msgstr "條提交記錄"
+
+msgid "Delete Attachment"
+msgstr "刪除附件"
+
+msgid "View Real-time Data"
+msgstr "查看即時資料"
+
+msgid "Start Analysis"
+msgstr "開始分析"
+
+msgid "Last Report Time"
+msgstr "上次報告生成時間"
+
+msgid "Current Analysis Report"
+msgstr "目前分析報告"
+
+msgid "No report generated yet"
+msgstr "暫無報告"
+
+msgid "Analysis in progress, please wait..."
+msgstr "分析中，請稍候..."
+
+msgid "Analysis failed"
+msgstr "分析失敗"
+
+msgid "Please enter task title"
+msgstr "請輸入任務標題"
+
+msgid "Task created successfully"
+msgstr "任務創建成功"
+
+msgid "Task updated successfully"
+msgstr "任務更新成功"
+
+msgid "Task deleted successfully"
+msgstr "任務刪除成功"
+
+msgid "File uploaded successfully"
+msgstr "檔案上傳成功"
+
+msgid "File deleted successfully"
+msgstr "檔案刪除成功"
+
+msgid "Invalid file type"
+msgstr "無效的檔案類型"
+
+msgid "File size too large"
+msgstr "檔案大小超出限制"
+
+msgid "Connection successful"
+msgstr "連線成功"
+
+msgid "Connection failed"
+msgstr "連線失敗"
+
+msgid "Invalid username or password"
+msgstr "使用者名稱或密碼錯誤"
+
+msgid "Password changed successfully"
+msgstr "密碼修改成功"
+
+msgid "Username changed successfully"
+msgstr "使用者名稱修改成功"
+
+msgid "System initialized successfully"
+msgstr "系統初始化成功"
+
+msgid "API Key tested successfully"
+msgstr "API密鑰測試成功"
+
+msgid "API Key test failed"
+msgstr "API密鑰測試失敗"
+
+msgid "首页"
+msgstr "首頁"
+
+msgid "开源教程"
+msgstr "開源教程"
+
+msgid "繁体中文"
+msgstr "繁體中文"
+
+msgid "简体中文"
+msgstr "簡體中文"
+
+msgid "关闭"
+msgstr "關閉"
+
+msgid "用户登录"
+msgstr "用戶登錄"
+
+msgid "请输入您的用户名"
+msgstr "請輸入您的用戶名"
+
+msgid "请输入您的密码"
+msgstr "請輸入您的密碼"
+
+msgid "默认用户名和密码请查看README.md文件"
+msgstr "默認用戶名和密碼請查看README.md文件"
+
+msgid "我的数据任务"
+msgstr "我的數據任務"
+
+msgid "创建新任务"
+msgstr "創建新任務"
+
+msgid "查看详情"
+msgstr "查看詳情"
+
+msgid "卡片视图"
+msgstr "卡片視圖"
+
+msgid "列表视图"
+msgstr "列表視圖"
+
+msgid "组织共享"
+msgstr "組織共享"
+
+msgid "已共享"
+msgstr "已共享"
+
+msgid "公开"
+msgstr "公開"
+
+msgid "暂无描述"
+msgstr "暫無描述"
+
+msgid "创建时间"
+msgstr "創建時間"
+
+msgid "提交数量"
+msgstr "提交數量"
+
+msgid "提交URL"
+msgstr "提交URL"
+
+msgid "复制"
+msgstr "複製"
+
+msgid "导出"
+msgstr "導出"
+
+msgid "分析"
+msgstr "分析"
+
+msgid "实时数据"
+msgstr "實時數據"
+
+msgid "删除"
+msgstr "刪除"
+
+msgid "确认删除"
+msgstr "確認刪除"
+
+msgid "确定要删除任务"
+msgstr "確定要刪除任務"
+
+msgid "吗？此操作无法撤销，相关的所有提交数据也将被删除。"
+msgstr "嗎？此操作無法撤銷，相關的所有提交數據也將被刪除。"
+
+msgid "取消"
+msgstr "取消"
+
+msgid "确认删除"
+msgstr "確認刪除"
+
+msgid "还没有创建任何数据任务"
+msgstr "還沒有創建任何數據任務"
+
+msgid "点击下方按钮创建您的第一个数据任务"
+msgstr "點擊下方按鈕創建您的第一個數據任務"
+
+msgid "导入任务"
+msgstr "導入任務"
+
+msgid "已复制！"
+msgstr "已複製！"
+
+msgid "欢迎使用 QuickForm"
+msgstr "歡迎使用 QuickForm"
+
+msgid "简易高效的数据回收系统，专为大模型生成的交互网页设计"
+msgstr "簡易高效的數據回收系統，專為大模型生成的交互網頁設計"
+
+msgid "快速开始"
+msgstr "快速開始"
+
+msgid "1. 登录系统，创建新的数据任务，获取API地址（URL）"
+msgstr "1. 登錄系統，創建新的數據任務，獲取API地址（URL）"
+
+msgid "2. 修改您的网页，将数据提交指定的API地址"
+msgstr "2. 修改您的網頁，將數據提交指定的API地址"
+
+msgid "3. 在数据任务中查看并借助AI分析收集的数据"
+msgstr "3. 在數據任務中查看並借助AI分析收集的數據"
+
+msgid "进入数据任务"
+msgstr "進入數據任務"
+
+msgid "简单易用"
+msgstr "簡單易用"
+
+msgid "数据回收功能无缝集成到任何网页"
+msgstr "數據回收功能無縫集成到任何網頁"
+
+msgid "数据存储"
+msgstr "數據存儲"
+
+msgid "支持非结构化数据存储，随时可查"
+msgstr "支持非結構化數據存儲，隨時可查"
+
+msgid "数据分析"
+msgstr "數據分析"
+
+msgid "提供数据统计和可视化功能"
+msgstr "提供數據統計和可視化功能"
+
+msgid "项目地址"
+msgstr "項目地址"
+
+msgid "访问GitHub仓库了解源码"
+msgstr "訪問GitHub倉庫了解源碼"
+
+msgid "访问项目"
+msgstr "訪問項目"
+
+msgid "查看使用教程和案例"
+msgstr "查看使用教程和案例"
+
+msgid "查看教程"
+msgstr "查看教程"
+
+msgid "项目交流"
+msgstr "項目交流"
+
+msgid "加入社区分享经验"
+msgstr "加入社區分享經驗"
+
+msgid "加入社区"
+msgstr "加入社區"
+
+msgid "创建任务"
+msgstr "創建任務"
+
+msgid "返回任务列表"
+msgstr "返回任務列表"
+
+msgid "创建数据任务"
+msgstr "創建數據任務"
+
+msgid "任务标题"
+msgstr "任務標題"
+
+msgid "请输入任务标题"
+msgstr "請輸入任務標題"
+
+msgid "请为您的数据回收任务设置一个描述性的标题"
+msgstr "請為您的數據回收任務設置一個描述性的標題"
+
+msgid "任务描述（可选）"
+msgstr "任務描述（可選）"
+
+msgid "请输入任务描述"
+msgstr "請輸入任務描述"
+
+msgid "添加描述可以帮助您更好地管理和识别不同的任务"
+msgstr "添加描述可以幫助您更好地管理和識別不同的任務"
+
+msgid "创建任务后，您将获得："
+msgstr "創建任務後，您將獲得："
+
+msgid "安全警示"
+msgstr "安全警示"
+
+msgid "请勿在 QuickForm 中存储姓名、身份证号等敏感数据，详情查看"
+msgstr "請勿在 QuickForm 中儲存姓名、身分證號等敏感數據，詳情查看"
+
+msgid "一个唯一的提交URL，用于接收表单数据"
+msgstr "一個唯一的提交URL，用於接收表單數據"
+
+msgid "数据管理和分析工具"
+msgstr "數據管理和分析工具"
+
+msgid "导出数据功能"
+msgstr "導出數據功能"
+
+msgid "取消"
+msgstr "取消"
+
+msgid "使用指南"
+msgstr "使用指南"
+
+msgid "如何在您的网页中使用API地址："
+msgstr "如何在您的網頁中使用API地址："
+
+msgid "HTML表单示例"
+msgstr "HTML表單示例"
+
+msgid "您的提交URL"
+msgstr "您的提交URL"
+
+msgid "表单字段"
+msgstr "表單欄位"
+
+msgid "姓名"
+msgstr "姓名"
+
+msgid "邮箱"
+msgstr "郵箱"
+
+msgid "提交"
+msgstr "提交"
+
+msgid "JavaScript提交示例："
+msgstr "JavaScript提交示例："
+
+msgid "使用fetch API提交数据"
+msgstr "使用fetch API提交數據"
+
+msgid "用户名"
+msgstr "用戶名"
+
+msgid "其他字段"
+msgstr "其他欄位"
+
+msgid "提交成功"
+msgstr "提交成功"
+
+msgid "提交失败"
+msgstr "提交失敗"
+
+msgid "Python提交示例："
+msgstr "Python提交示例："
+
+msgid "设置"
+msgstr "設置"
+
+msgid "AI配置"
+msgstr "AI配置"
+
+msgid "QFLink"
+msgstr "QFLink"
+
+msgid "用户信息修改"
+msgstr "用戶信息修改"
+
+msgid "系统初始化"
+msgstr "系統初始化"
+
+msgid "选择AI模型"
+msgstr "選擇AI模型"
+
+msgid "DeepSeek 配置"
+msgstr "DeepSeek 配置"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "请输入您的DeepSeek API密钥"
+msgstr "請輸入您的DeepSeek API密鑰"
+
+msgid "测试API密钥"
+msgstr "測試API密鑰"
+
+msgid "豆包 配置"
+msgstr "豆包 配置"
+
+msgid "阿里云百炼 配置"
+msgstr "阿里雲百煉 配置"
+
+msgid "请输入您的阿里云百炼 API密钥"
+msgstr "請輸入您的阿里雲百煉 API密鑰"
+
+msgid "智谱清言(GLM) 配置"
+msgstr "智譜清言(GLM) 配置"
+
+msgid "请输入您的智谱清言 API密钥"
+msgstr "請輸入您的智譜清言 API密鑰"
+
+msgid "硅基流动 配置"
+msgstr "矽基流動 配置"
+
+msgid "请输入您的硅基流动 API密钥"
+msgstr "請輸入您的矽基流動 API密鑰"
+
+msgid "模型名称"
+msgstr "模型名稱"
+
+msgid "请输入要使用的模型名称，如：Qwen/Qwen2.5-72B-Instruct、Qwen/QwQ-32B 等"
+msgstr "請輸入要使用的模型名稱，如：Qwen/Qwen2.5-72B-Instruct、Qwen/QwQ-32B 等"
+
+msgid "Ollama (本地) 配置"
+msgstr "Ollama (本地) 配置"
+
+msgid "Ollama API 地址"
+msgstr "Ollama API 地址"
+
+msgid "请输入您的Ollama服务地址（默认：http://localhost:11434）"
+msgstr "請輸入您的Ollama服務地址（默認：http://localhost:11434）"
+
+msgid "请输入要使用的模型名称，如：llama3、qwen3-coder:30b、deepseek-r1:7b 等"
+msgstr "請輸入要使用的模型名稱，如：llama3、qwen3-coder:30b、deepseek-r1:7b 等"
+
+msgid "测试连接"
+msgstr "測試連接"
+
+msgid "保存配置"
+msgstr "保存配置"
+
+msgid "说明："
+msgstr "說明："
+
+msgid "配置完成AI模型后，您可以在任务分析页面使用智能分析功能。智能分析将根据您的表单数据和附件内容，生成详细的分析报告。请注意保护您的API密钥安全，避免泄露。"
+msgstr "配置完成AI模型後，您可以在任務分析頁面使用智能分析功能。智能分析將根據您的表單數據和附件內容，生成詳細的分析報告。請注意保護您的API密鑰安全，避免洩露。"
+
+msgid "QF在线版的用户名"
+msgstr "QF線上版的用戶名"
+
+msgid "QF在线版的密码"
+msgstr "QF線上版的密碼"
+
+msgid "保存"
+msgstr "保存"
+
+msgid "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
+msgstr "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm線上版</a>\"（quickform.cn）中調試數據任務容易成功，尤其是\"數據大屏\"功能。我們推薦用線上版新建數據任務，再導入到校園版或者教師版。"
+
+msgid "修改用户名"
+msgstr "修改用戶名"
+
+msgid "用户名"
+msgstr "用戶名"
+
+msgid "保存用户名"
+msgstr "保存用戶名"
+
+msgid "修改密码"
+msgstr "修改密碼"
+
+msgid "当前密码"
+msgstr "當前密碼"
+
+msgid "新密码"
+msgstr "新密碼"
+
+msgid "密码长度至少为6个字符"
+msgstr "密碼長度至少為6個字符"
+
+msgid "确认新密码"
+msgstr "確認新密碼"
+
+msgid "保存密码"
+msgstr "保存密碼"
+
+msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
+msgstr "如果發現密碼錯誤，可以使用啟動頁面來初始化用戶名為\"wst\"、密碼為\"quickform\"。"
+
+msgid "警告："
+msgstr "警告："
+
+msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"、重置SECRET_KEY安全密钥，并删除前3个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！"
+msgstr "此操作將清除所有AI配置（保留Ollama）、清除QFLink配置、用戶名初始化為\"wst\"、密碼初始化為\"quickform\"、重置SECRET_KEY安全密鑰，並刪除前3個任務外的所有數據和附件。重置後所有用戶需重新登入。此操作不可恢復！"
+
+msgid "执行系统初始化"
+msgstr "執行系統初始化"
+
+msgid "导出数据"
+msgstr "導出數據"
+
+msgid "导出任务"
+msgstr "導出任務"
+
+msgid "导出内容包含："
+msgstr "導出內容包含："
+
+msgid "必选：任务名称、简介和相关网页文件"
+msgstr "必選：任務名稱、簡介和相關網頁檔案"
+
+msgid "可选：学习数据"
+msgstr "可選：學習數據"
+
+msgid "可选：通过API上传的附件"
+msgstr "可選：透過API上傳的附件"
+
+msgid "确认导出"
+msgstr "確認導出"
+
+msgid "数据分析"
+msgstr "數據分析"
+
+msgid "编辑任务"
+msgstr "編輯任務"
+
+msgid "返回列表"
+msgstr "返回列表"
+
+msgid "任务信息"
+msgstr "任務信息"
+
+msgid "创建时间："
+msgstr "創建時間："
+
+msgid "提交数量："
+msgstr "提交數量："
+
+msgid "提交URL："
+msgstr "提交URL："
+
+msgid "复制"
+msgstr "複製"
+
+msgid "任务描述："
+msgstr "任務描述："
+
+msgid "已上传文件"
+msgstr "已上傳文件"
+
+msgid "个）："
+msgstr "個）："
+
+msgid "生成二维码"
+msgstr "生成二維碼"
+
+msgid "上传文件"
+msgstr "上傳文件"
+
+msgid "数据提交说明"
+msgstr "數據提交說明"
+
+msgid "参考提示词（点击复制）："
+msgstr "參考提示詞（點擊複製）："
+
+msgid "💡 数据接口（API）说明："
+msgstr "💡 數據接口（API）說明："
+
+msgid "访问下方 URL，即GET方式即可查看已收集的数据；制作实时统计页面时可向大模型提供该 URL 及数据样例。点击这里"
+msgstr "訪問下方 URL，即GET方式即可查看已收集的數據；製作即時統計頁面時可向大模型提供該 URL 及數據樣例。點擊這裡"
+
+msgid "可以看到全部已经回收的数据。"
+msgstr "可以看到全部已經回收的數據。"
+
+msgid "提交数据列表"
+msgstr "提交數據列表"
+
+msgid "查看实时数据"
+msgstr "查看即時數據"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "提交时间"
+msgstr "提交時間"
+
+msgid "数据内容"
+msgstr "數據內容"
+
+msgid "操作"
+msgstr "操作"
+
+msgid "数据备份"
+msgstr "資料備份"
+
+msgid "备份数据库和所有上传文件，生成一个可下载的ZIP压缩包。"
+msgstr "備份資料庫和所有上傳檔案，生成一個可下載的ZIP壓縮包。"
+
+msgid "备份数据"
+msgstr "備份資料"
+
+msgid "测试中..."
+msgstr "測試中..."
+
+msgid "连接成功！找到"
+msgstr "連接成功！找到"
+
+msgid "个任务"
+msgstr "個任務"
+
+msgid "是否保存此配置？"
+msgstr "是否儲存此配置？"
+
+msgid "连接失败："
+msgstr "連接失敗："
+
+msgid "测试失败："
+msgstr "測試失敗："
+
+msgid "备份中..."
+msgstr "備份中..."
+
+msgid "备份失败"
+msgstr "備份失敗"
+
+msgid "备份成功！"
+msgstr "備份成功！"
+
+msgid "备份文件："
+msgstr "備份檔案："
+
+msgid "文件大小："
+msgstr "檔案大小："
+
+msgid "点击下载"
+msgstr "點擊下載"
+
+msgid "文件已保存在服务器 backups 目录下，不下载也不会丢失。"
+msgstr "檔案已儲存在伺服器 backups 目錄下，不下載也不會遺失。"
+
+msgid "备份失败："
+msgstr "備份失敗："
+
+msgid "删除失败："
+msgstr "刪除失敗："
+
+msgid "查找替换"
+msgstr "查找替換"
+
+msgid "智能替换API地址"
+msgstr "智慧替換API地址"
+
+msgid "查找内容"
+msgstr "查找內容"
+
+msgid "替换为"
+msgstr "替換為"
+
+msgid "查找下一个"
+msgstr "查找下一個"
+
+msgid "全部替换"
+msgstr "全部替換"
+
+msgid "未找到"
+msgstr "未找到"
+
+msgid "已替换"
+msgstr "已替換"
+
+msgid "处"
+msgstr "處"
+
+msgid "未找到需要替换的API地址"
+msgstr "未找到需要替換的API地址"
+
+msgid "找到以下API地址，将转换为相对路径："
+msgstr "找到以下API地址，將轉換為相對路徑："
+
+msgid "共"
+msgstr "共"
+
+msgid "个地址，"
+msgstr "個地址，"
+
+msgid "处替换。确认替换？"
+msgstr "處替換。確認替換？"
+
+msgid "处API地址"
+msgstr "處API地址"
+
+msgid "API接口是否开启文件上传"
+msgstr "API介面是否開啟檔案上傳"
+
+msgid "关闭后，API接口将禁止上传文件，仅允许提交表单数据"
+msgstr "關閉後，API介面將禁止上傳檔案，僅允許提交表單數據"
+
+msgid "QuickForm.cn 登录成功，已同步账号信息"
+msgstr "QuickForm.cn 登入成功，已同步帳號資訊"
+
+msgid "本地登录"
+msgstr "本地登入"
+
+msgid "快速登录"
+msgstr "快速登入"
+
+msgid "QuickForm.cn 登录"
+msgstr "QuickForm.cn 登入"
+
+msgid "请输入 QuickForm.cn 用户名"
+msgstr "請輸入 QuickForm.cn 用戶名"
+
+msgid "请输入 QuickForm.cn 密码"
+msgstr "請輸入 QuickForm.cn 密碼"
+
+msgid "文件上传功能已关闭，文件未保存"
+msgstr "檔案上傳功能已關閉，檔案未儲存"
+
+msgid "部分文件超过大小限制，未保存"
+msgstr "部分檔案超過大小限制，未儲存"
+
+msgid "部分文件类型不支持，未保存"
+msgstr "部分檔案類型不支援，未儲存"
+
+msgid "QuickForm：打通AI赋能教育的\"最后一公里\""
+msgstr "QuickForm：打通AI賦能教育的\"最後一公里\""
+
+msgid "QF项目简介"
+msgstr "QF項目簡介"
+
+msgid "访问QF在线版"
+msgstr "訪問QF線上版"
+
+msgid "本地部署"
+msgstr "本地部署"
+
+msgid "免责声明"
+msgstr "免責聲明"
+
+msgid "联系我们："
+msgstr "聯繫我們："
+
+msgid "QuickForm小助手"
+msgstr "QuickForm小助手"
+
+msgid "投稿邮箱"
+msgstr "投稿郵箱"
+
+msgid "提交数据"
+msgstr "提交數據"
+
+msgid "每 30 秒自动刷新"
+msgstr "每 30 秒自動刷新"
+
+msgid "提交列表"
+msgstr "提交列表"
+
+msgid "共"
+msgstr "共"
+
+msgid "条"
+msgstr "條"
+
+msgid "删除全部"
+msgstr "刪除全部"
+
+msgid "提交时间"
+msgstr "提交時間"
+
+msgid "数据内容"
+msgstr "數據內容"
+
+msgid "分页"
+msgstr "分頁"
+
+msgid "上一页"
+msgstr "上一頁"
+
+msgid "下一页"
+msgstr "下一頁"
+
+msgid "第"
+msgstr "第"
+
+msgid "页"
+msgstr "頁"
+
+msgid "暂无提交数据"
+msgstr "暫無提交數據"
+
+msgid "确定要删除这条提交记录吗？"
+msgstr "確定要刪除這條提交記錄嗎？"
+
+msgid "确定要清空该任务的全部提交数据吗？此操作不可恢复。"
+msgstr "確定要清空該任務的全部提交數據嗎？此操作不可恢復。"
+
+msgid "清空失败"
+msgstr "清空失敗"
+
+msgid "分析报告"
+msgstr "分析報告"
+
+msgid "任务"
+msgstr "任務"
+
+msgid "任务标题："
+msgstr "任務標題："
+
+msgid "未知任务"
+msgstr "未知任務"
+
+msgid "暂无分析报告"
+msgstr "暫無分析報告"
+
+msgid "此任务尚未生成分析报告或报告文件丢失。"
+msgstr "此任務尚未生成分析報告或報告檔案丟失。"
+
+msgid "请点击\"智能分析\"按钮生成新的分析报告。"
+msgstr "請點擊\"智能分析\"按鈕生成新的分析報告。"
+
+msgid "数据分析报告"
+msgstr "數據分析報告"
+
+msgid "报告生成"
+msgstr "報告生成"
+
+msgid "加载中..."
+msgstr "載入中..."
+
+msgid "生成报告失败"
+msgstr "生成報告失敗"
+
+msgid "前往配置页面"
+msgstr "前往配置頁面"
+
+msgid "关闭窗口"
+msgstr "關閉視窗"
+
+msgid "下载分析报告"
+msgstr "下載分析報告"
+
+msgid "完成并返回"
+msgstr "完成並返回"
+
+msgid "报告生成时间："
+msgstr "報告生成時間："
+
+msgid "正在生成分析报告..."
+msgstr "正在生成分析報告..."
+
+msgid "这可能需要几分钟时间，请耐心等待..."
+msgstr "這可能需要幾分鐘時間，請耐心等待..."
+
+msgid "数据分析"
+msgstr "數據分析"
+
+msgid "返回详情"
+msgstr "返回詳情"
+
+msgid "数据概览"
+msgstr "數據概覽"
+
+msgid "总提交数量"
+msgstr "總提交數量"
+
+msgid "最早提交时间"
+msgstr "最早提交時間"
+
+msgid "最新提交时间"
+msgstr "最新提交時間"
+
+msgid "暂无数据"
+msgstr "暫無數據"
+
+msgid "每日提交统计"
+msgstr "每日提交統計"
+
+msgid "日期"
+msgstr "日期"
+
+msgid "暂无足够数据进行统计"
+msgstr "暫無足夠數據進行統計"
+
+msgid "当有更多提交数据时，将显示每日提交统计信息"
+msgstr "當有更多提交數據時，將顯示每日提交統計信息"
+
+msgid "数据导出"
+msgstr "數據導出"
+
+msgid "导出数据以进行更详细的分析或存档："
+msgstr "導出數據以進行更詳細的分析或存檔："
+
+msgid "导出为CSV文件"
+msgstr "導出為CSV文件"
+
+msgid "CSV文件可以用Excel、Google Sheets或其他电子表格软件打开"
+msgstr "CSV文件可以用Excel、Google Sheets或其他電子表格軟件打開"
+
+msgid "查看数据"
+msgstr "查看數據"
+
+msgid "导入"
+msgstr "匯入"
+
+msgid "删除"
+msgstr "刪除"
+
+msgid "提交数据详情"
+msgstr "提交數據詳情"
+
+msgid "关闭"
+msgstr "關閉"
+
+msgid "批量删除选中项"
+msgstr "批量刪除選中項"
+
+msgid "共"
+msgstr "共"
+
+msgid "条记录"
+msgstr "條記錄"
+
+msgid "暂无提交数据"
+msgstr "暫無提交數據"
+
+msgid "当用户通过表单提交数据后，将在这里显示"
+msgstr "當用戶通過表單提交數據後，將在這裡顯示"
+
+msgid "扫描二维码"
+msgstr "掃描二維碼"
+
+msgid "确定要删除这条提交数据吗？此操作不可撤销！"
+msgstr "確定要刪除這條提交數據嗎？此操作不可撤銷！"
+
+msgid "请至少选择一条要删除的提交数据"
+msgstr "請至少選擇一條要刪除的提交數據"
+
+msgid "确定要删除选中的"
+msgstr "確定要刪除選中的"
+
+msgid "条提交数据吗？此操作不可撤销！"
+msgstr "條提交數據嗎？此操作不可撤銷！"
+
+msgid "已复制"
+msgstr "已複製"
+
+msgid "返回任务详情"
+msgstr "返回任務詳情"
+
+msgid "智能分析"
+msgstr "智能分析"
+
+msgid "错误"
+msgstr "錯誤"
+
+msgid "前往配置页面"
+msgstr "前往配置頁面"
+
+msgid "已回收数据条数"
+msgstr "已回收數據條數"
+
+msgid "您可以选择多种方式进行分析："
+msgstr "您可以選擇多種方式進行分析："
+
+msgid "制作实时数据大屏"
+msgstr "製作即時數據大屏"
+
+msgid "制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。具体做法参考\"在线版\"。"
+msgstr "製作一個可以即時分析統計的數據大屏，你需要提供合適的提示詞給AI大模型，推薦扣子編程。具體做法參考\"線上版\"。"
+
+msgid "手动分析数据"
+msgstr "手動分析數據"
+
+msgid "将回收的数据导出为CSV或者JSON格式，使用你熟悉的AI工具（deepseek、豆包、扣子编程等）进行分析。"
+msgstr "將回收的數據導出為CSV或者JSON格式，使用你熟悉的AI工具（deepseek、豆包、扣子編程等）進行分析。"
+
+msgid "导出CSV格式数据"
+msgstr "導出CSV格式數據"
+
+msgid "导出JSON格式数据"
+msgstr "導出JSON格式數據"
+
+msgid "自动生成分析报告"
+msgstr "自動生成分析報告"
+
+msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
+msgstr "使用QuickForm內置的AI分析功能，需要在\"個人設置\"中填寫APIKEY（向大模型企業購買）。"
+
+msgid "你还没有填写APIKEY，"
+msgstr "你還沒有填寫APIKEY，"
+
+msgid "点击这里填写"
+msgstr "點擊這裡填寫"
+
+msgid "参考提示词："
+msgstr "參考提示詞："
+
+msgid "暂无数据，无法分析"
+msgstr "暫無數據，無法分析"
+
+msgid "开始分析"
+msgstr "開始分析"
+
+msgid "请先收集数据后再进行分析"
+msgstr "請先收集數據後再進行分析"
+
+msgid "当前分析报告"
+msgstr "當前分析報告"
+
+msgid "生成时间："
+msgstr "生成時間："
+
+msgid "下载报告"
+msgstr "下載報告"
+
+msgid "编辑任务"
+msgstr "編輯任務"
+
+msgid "编辑数据任务"
+msgstr "編輯數據任務"
+
+msgid "返回任务详情"
+msgstr "返回任務詳情"
+
+msgid "任务标题"
+msgstr "任務標題"
+
+msgid "任务描述（可选）"
+msgstr "任務描述（可選）"
+
+msgid "已有附件"
+msgstr "已有附件"
+
+msgid "个"
+msgstr "個"
+
+msgid "删除附件"
+msgstr "刪除附件"
+
+msgid "添加新附件（可选）"
+msgstr "添加新附件（可選）"
+
+msgid "支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。"
+msgstr "支援上傳PDF、HTML、HTM、JPG和ZIP格式的檔案，最大16MB。可以同時上傳多個檔案。"
+
+msgid "取消"
+msgstr "取消"
+
+msgid "保存修改"
+msgstr "保存修改"
+
+msgid "确定要删除这个附件吗？"
+msgstr "確定要刪除這個附件嗎？"
+
+msgid "删除失败"
+msgstr "刪除失敗"
+
+msgid "删除出错"
+msgstr "刪除出錯"
+
+msgid "导入任务"
+msgstr "匯入任務"
+
+msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
+msgstr "本功能可以匯入quickform.cn的任務列表，請確保已在\"設置\"中配置QFLink。"
+
+msgid "QuickForm接口文档说明："
+msgstr "QuickForm接口文檔說明："
+
+msgid "获取全部任务"
+msgstr "獲取全部任務"
+
+msgid "导入指定任务"
+msgstr "匯入指定任務"
+
+msgid "从文件（zip格式）导入数据任务"
+msgstr "從檔案（zip格式）匯入數據任務"
+
+msgid "输入数据任务的API地址"
+msgstr "輸入數據任務的API地址"
+
+msgid "格式如："
+msgstr "格式如："
+
+msgid "从文件导入任务"
+msgstr "從檔案匯入任務"
+
+msgid "请上传从quickform.cn中导出的输入任务文件，压缩包格式。"
+msgstr "請上傳從quickform.cn中導出的輸入任務檔案，壓縮包格式。"
+
+msgid "从quickform.cn获取的任务列表"
+msgstr "從quickform.cn獲取的任務列表"
+
+msgid "任务名称"
+msgstr "任務名稱"
+
+msgid "任务描述"
+msgstr "任務描述"
+
+msgid "API ID"
+msgstr "API ID"
+
+msgid "操作"
+msgstr "操作"

@@ -1,0 +1,354 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('智能分析') }} - {{ task.title }} - {{ get_app_name() }}{% endblock %}
+
+{% block styles %}
+<!-- 引入marked.js用于markdown渲染 -->
+<script src="{{ url_for('static', filename='vendor/marked/marked.min.js') }}"></script>
+<!-- 引入highlight.js用于代码高亮 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/highlight.js/styles/github.min.css') }}">
+<script src="{{ url_for('static', filename='vendor/highlight.js/highlight.min.js') }}"></script>
+<style>
+    .analysis-option {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+    }
+    .analysis-option:hover {
+        border-color: #b8956a;
+        box-shadow: 0 4px 12px rgba(184, 149, 106, 0.15);
+    }
+    .option-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background-color: #b8956a;
+        color: white;
+        border-radius: 50%;
+        font-weight: 600;
+        margin-right: 12px;
+    }
+    .data-count {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #b8956a;
+    }
+    .data-count-label {
+        color: #6b7280;
+        font-size: 1rem;
+    }
+    .apikey-alert {
+        background-color: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+    }
+    .reference-prompt {
+        background-color: #f3f4f6;
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: 14px;
+        color: #374151;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .btn-analyze {
+        background-color: #b8956a;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-analyze:hover:not(:disabled) {
+        background-color: #8b7355;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(184, 149, 106, 0.3);
+    }
+    .btn-analyze:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+    .markdown-body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #24292e;
+    }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    .markdown-body h1 { font-size: 2em; }
+    .markdown-body h2 { font-size: 1.5em; }
+    .markdown-body h3 { font-size: 1.25em; }
+    .markdown-body p { margin-top: 0; margin-bottom: 16px; }
+    .markdown-body a { color: #0366d6; text-decoration: none; }
+    .markdown-body a:hover { text-decoration: underline; }
+    .markdown-body code {
+        padding: 0.2em 0.4em;
+        margin: 0;
+        font-size: 85%;
+        background-color: rgba(27, 31, 35, 0.05);
+        border-radius: 3px;
+    }
+    .markdown-body pre {
+        padding: 16px;
+        overflow: auto;
+        font-size: 85%;
+        line-height: 1.45;
+        background-color: #f6f8fa;
+        border-radius: 3px;
+    }
+    .markdown-body pre code {
+        padding: 0;
+        margin: 0;
+        font-size: 100%;
+        word-break: normal;
+        white-space: pre;
+        background: transparent;
+        border: 0;
+    }
+    .report-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        line-height: 1.6;
+        max-height: 600px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- 返回按钮 -->
+        <div class="mb-3 d-flex justify-content-end">
+            <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> {{ _('返回任务详情') }}
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="bi bi-robot"></i> {{ _('智能分析') }} - {{ task.title }}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                {% if error %}
+                    <div class="alert alert-danger">
+                        <h5><i class="bi bi-exclamation-circle"></i> {{ _('错误') }}</h5>
+                        <p>{{ error }}</p>
+                        <a href="{{ url_for('profile') }}" class="btn btn-primary">{{ _('前往配置页面') }}</a>
+                    </div>
+                {% else %}
+                    <!-- 数据统计 -->
+                    <div class="text-center mb-4 p-4" style="background-color: #eff6ff; border-radius: 12px;">
+                        <div class="data-count">{{ submission_count }}</div>
+                        <div class="data-count-label">{{ _('已回收数据条数') }}</div>
+                    </div>
+
+                    <!-- 分析方式选项 -->
+                    <h5 class="mb-3" style="font-weight: 600; color: #374151;">
+                        <i class="bi bi-lightbulb" style="color: #f59e0b;"></i> 
+                        {{ _('您可以选择多种方式进行分析：') }}
+                    </h5>
+
+                    <div class="analysis-option">
+                        <div class="d-flex align-items-start">
+                            <span class="option-number">1</span>
+                            <div class="w-100">
+                                <h6 class="mb-2" style="font-weight: 600;">{{ _('制作实时数据大屏') }}</h6>
+                                <p class="mb-2 text-muted">{{ _('制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。') }}</p>
+                                <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="toggleDashboardPrompt()">
+                                    <i class="bi bi-lightning"></i> {{ _('我要制作数据大屏') }}
+                                </button>
+                                <div id="dashboardPromptSection" style="display: none;">
+                                    <label class="form-label" style="font-weight: 500; color: #374151;">{{ _('参考提示词（可直接复制使用）：') }}</label>
+                                    <div class="reference-prompt" id="dashboardPromptText"></div>
+                                    <button type="button" class="btn btn-sm mt-2" style="background-color: #b8956a; color: white;" onclick="copyDashboardPrompt()">
+                                        <i class="bi bi-clipboard"></i> {{ _('复制提示词') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-option">
+                        <div class="d-flex align-items-start">
+                            <span class="option-number">2</span>
+                            <div>
+                                <h6 class="mb-2" style="font-weight: 600;">{{ _('手动分析数据') }}</h6>
+                                <p class="mb-2 text-muted">{{ _('将回收的数据导出为CSV或者JSON格式，使用你熟悉的AI工具（deepseek、豆包、扣子编程等）进行分析。') }}</p>
+                                <a href="{{ url_for('export_data', task_id=task.id) }}" class="btn btn-outline-primary btn-sm me-2">
+                                    <i class="bi bi-download"></i> {{ _('导出CSV格式数据') }}
+                                </a>
+                                <a href="{{ url_for('export_json', task_id=task.id) }}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-download"></i> {{ _('导出JSON格式数据') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-option">
+                        <div class="d-flex align-items-start">
+                            <span class="option-number">3</span>
+                            <div class="w-100">
+                                <h6 class="mb-2" style="font-weight: 600;">{{ _('自动生成分析报告') }}</h6>
+                                <p class="mb-3 text-muted">{{ _('使用QuickForm内置的AI分析功能，需要在"个人设置"中填写APIKEY（向大模型企业购买）。') }}</p>
+                                
+                                {% if not has_api_key %}
+                                <div class="apikey-alert mb-3">
+                                    <i class="bi bi-exclamation-triangle-fill" style="color: #f59e0b;"></i>
+                                    <span style="color: #92400e;">{{ _('你还没有填写APIKEY，') }}</span>
+                                    <a href="{{ url_for('profile') }}" style="color: #b8956a; font-weight: 500;">{{ _('点击这里填写') }}</a>
+                                </div>
+                                {% endif %}
+
+                                <!-- 参考提示词 -->
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500; color: #374151;">{{ _('参考提示词：') }}</label>
+                                    <div class="reference-prompt">{{ preview_prompt }}</div>
+                                </div>
+
+                                <!-- 开始分析按钮 -->
+                                <form id="promptForm" action="{{ url_for('generate_report', task_id=task.id) }}" method="POST" target="_blank">
+                                    <input type="hidden" name="custom_prompt" value="{{ preview_prompt }}">
+                                    <button type="submit" class="btn btn-analyze w-100" {% if submission_count == 0 %}disabled{% endif %}>
+                                        <i class="bi bi-robot"></i> 
+                                        {% if submission_count == 0 %}{{ _('暂无数据，无法分析') }}{% else %}{{ _('开始分析') }}{% endif %}
+                                    </button>
+                                </form>
+                                {% if submission_count == 0 %}
+                                <p class="text-center text-muted mt-2" style="font-size: 0.9rem;">
+                                    <i class="bi bi-info-circle"></i> {{ _('请先收集数据后再进行分析') }}
+                                </p>
+                                {% endif %}
+
+                                {% if report %}
+                                <div class="analysis-option mb-3 mt-4">
+                                    <div class="d-flex align-items-start justify-content-between">
+                                        <div class="d-flex align-items-start">
+                                            <i class="bi bi-file-earmark-text" style="font-size: 24px; color: #b8956a; margin-right: 12px;"></i>
+                                            <div>
+                                                <h5 class="mb-2" style="font-weight: 600; color: #374151;">{{ _('当前分析报告') }}</h5>
+                                                {% if task and task.report_generated_at %}
+                                                <p class="mb-0 text-muted" style="font-size: 0.85rem;">{{ _('生成时间：') }}{{ task.report_generated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <a href="{{ url_for('download_report', task_id=task.id) }}" class="btn btn-outline-primary btn-sm" style="white-space: nowrap;">
+                                            <i class="bi bi-download"></i> {{ _('下载报告') }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="report-content">
+                                            <div id="markdown-content" class="markdown-body"></div>
+                                            <div id="report-content" style="display: none;">{{ report }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var dashboardPromptGenerated = false;
+
+    function toggleDashboardPrompt() {
+        var section = document.getElementById('dashboardPromptSection');
+        if (section.style.display === 'none') {
+            section.style.display = 'block';
+            if (!dashboardPromptGenerated) {
+                generateDashboardPrompt();
+                dashboardPromptGenerated = true;
+            }
+        } else {
+            section.style.display = 'none';
+        }
+    }
+
+    function generateDashboardPrompt() {
+        var apiUrl = {{ api_url|tojson }};
+        var sampleData = {{ sample_data_json|tojson }};
+        var sampleText = JSON.stringify(sampleData, null, 2);
+        var prompt = '我需要做一个数据大屏（数据看板），HTML网页格式。以GET方式访问API地址（' + apiUrl + '）可获得全部数据，数据格式示例：\n' + sampleText;
+        document.getElementById('dashboardPromptText').textContent = prompt;
+    }
+
+    function copyDashboardPrompt() {
+        var text = document.getElementById('dashboardPromptText').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('{{ _("已复制到剪贴板") }}');
+            }).catch(function() {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            alert('{{ _("已复制到剪贴板") }}');
+        } catch (e) {
+            alert('{{ _("复制失败，请手动复制") }}');
+        }
+        document.body.removeChild(textarea);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var reportContent = document.getElementById('report-content');
+        var markdownContainer = document.getElementById('markdown-content');
+        
+        if (reportContent && markdownContainer) {
+            marked.setOptions({
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        try {
+                            return hljs.highlight(code, { language: lang }).value;
+                        } catch (err) {}
+                    }
+                    return hljs.highlightAuto(code).value;
+                },
+                breaks: true,
+                gfm: true
+            });
+            
+            markdownContainer.innerHTML = marked.parse(reportContent.textContent);
+            hljs.highlightAll();
+        }
+    });
+</script>
+{% endblock %}

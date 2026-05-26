@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>英语单词连连看 · 数据智慧看板</title>
+    <!-- Google Fonts & Chart.js CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4fc 0%, #e6edf5 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 28px 32px;
+            color: #1a2c3e;
+        }
+
+        /* 磨砂玻璃容器 */
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 头部标题栏 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .title-section h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1F3A5F, #2D5F8B);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .title-section p {
+            font-size: 0.9rem;
+            color: #4a627a;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+        .refresh-btn {
+            background: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1F3A5F;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .refresh-btn:hover {
+            background: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .last-update {
+            font-size: 0.75rem;
+            color: #5b6f88;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        /* KPI 卡片网格 */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 22px;
+            margin-bottom: 36px;
+        }
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+        .kpi-card:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-3px);
+        }
+        .kpi-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #4a6e8c;
+            margin-bottom: 12px;
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1c3b5c;
+            line-height: 1.1;
+        }
+        .kpi-sub {
+            font-size: 0.75rem;
+            color: #6d8aac;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* 双栏图表区 */
+        .insight-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+        .chart-card {
+            flex: 1.2;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255,255,255,0.7);
+            transition: all 0.2s;
+        }
+        .wrong-words-card {
+            flex: 0.9;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            color: #1e3a5f;
+            border-left: 5px solid #3b82f6;
+            padding-left: 14px;
+        }
+        canvas {
+            max-height: 280px;
+            width: 100%;
+        }
+        .error-list {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+        .error-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .error-word-pair {
+            font-weight: 600;
+            color: #1f3a5f;
+            background: #eef3fc;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+        }
+        .error-count {
+            background: #2c5a7a20;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-weight: 700;
+            color: #1f5f8e;
+            font-size: 0.85rem;
+        }
+        .progress-bar-bg {
+            width: 100px;
+            height: 6px;
+            background: #dce5ef;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #3b82f6;
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+        }
+        .mode-badge {
+            display: inline-block;
+            background: #eef2fa;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .mode-stats {
+            margin-top: 20px;
+        }
+        .mode-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        /* 表格区域 */
+        .table-wrapper {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 8px 4px 8px 0px;
+            border: 1px solid rgba(255,255,255,0.7);
+            overflow-x: auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 860px;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 18px 16px;
+            background: #f8fafd;
+            font-weight: 600;
+            color: #2c4f6e;
+            border-bottom: 1px solid #dce5ef;
+        }
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #1f3a52;
+            font-weight: 500;
+        }
+        .data-table tr:hover td {
+            background-color: #ffffffcc;
+        }
+        .error-badge {
+            background: #ffefe5;
+            border-radius: 16px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .status-badge {
+            font-weight: 600;
+        }
+        .loading-state, .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 40px;
+            font-weight: 500;
+        }
+        footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6f8dab;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+        @media (max-width: 780px) {
+            body { padding: 20px; }
+            .kpi-value { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="header">
+        <div class="title-section">
+            <h1>📊 英语单词连连看 · 数据驾驶舱</h1>
+            <p>实时学习洞察 | 错误词焦点 | 闯关表现</p>
+        </div>
+        <div style="text-align: right;">
+            <button class="refresh-btn" id="refreshBtn">🔄 刷新数据</button>
+            <div class="last-update" id="updateTimeLabel">— 未更新 —</div>
+        </div>
+    </div>
+
+    <!-- KPI 区域 -->
+    <div class="kpi-grid" id="kpiContainer">
+        <div class="kpi-card"><div class="kpi-label">📋 总提交数</div><div class="kpi-value" id="totalSubmissions">—</div><div class="kpi-sub">有效记录</div></div>
+        <div class="kpi-card"><div class="kpi-label">🏆 平均得分</div><div class="kpi-value" id="avgScore">—</div><div class="kpi-sub">满分100</div></div>
+        <div class="kpi-card"><div class="kpi-label">⬆️ 最高分</div><div class="kpi-value" id="maxScore">—</div><div class="kpi-sub">闪耀之星</div></div>
+        <div class="kpi-card"><div class="kpi-label">⬇️ 最低分</div><div class="kpi-value" id="minScore">—</div><div class="kpi-sub">待提升</div></div>
+        <div class="kpi-card"><div class="kpi-label">⚠️ 平均错误数</div><div class="kpi-value" id="avgMistakes">—</div><div class="kpi-sub">单词拼配失误</div></div>
+        <div class="kpi-card"><div class="kpi-label">🕹️ 平均剩余步数</div><div class="kpi-value" id="avgRemaining">—</div><div class="kpi-sub">闯关余量</div></div>
+    </div>
+
+    <!-- 图表与错误词双栏 -->
+    <div class="insight-row">
+        <div class="chart-card">
+            <div class="card-title">📈 成绩趋势 (按提交顺序)</div>
+            <canvas id="scoreTrendChart" width="400" height="240" style="max-width:100%; height:auto;"></canvas>
+        </div>
+        <div class="wrong-words-card">
+            <div class="card-title">🔥 高频错误词对 Top 6</div>
+            <div id="errorWordsList" class="error-list">
+                <div style="color: #7e95b0; text-align:center; padding:20px;">加载中...</div>
+            </div>
+            <div class="mode-stats" id="modeStatsArea">
+                <div class="card-title" style="margin-top: 12px;">🎮 模式分布</div>
+                <div id="modeDistribution"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交记录表格 -->
+    <div class="table-wrapper">
+        <table class="data-table" id="submissionsTable">
+            <thead>
+                <tr><th>提交时间</th><th>玩家</th><th>得分</th><th>关卡</th><th>错误次数</th><th>剩余步数</th><th>模式</th><th>错词简览</th></tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="8" style="text-align:center;">正在获取数据...</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <footer>💡 数据源自 API 实时同步 | 单词连连看 · 学习轨迹大屏</footer>
+</div>
+
+<script>
+    // ---------- 全局变量 ----------
+    const API_URL = "http://192.168.31.83:5001/api/iTX0pyewoEF";
+    let scoreChartInstance = null;      // Chart.js 实例
+
+    // 辅助函数: 将Python dict字符串 (单引号) 转为JS对象
+    function parsePythonDictToObj(pyStr) {
+        if (!pyStr || typeof pyStr !== 'string') return null;
+        try {
+            // 1. 处理布尔值 True/False, None -> null
+            let fixed = pyStr.replace(/\bTrue\b/g, 'true').replace(/\bFalse\b/g, 'false').replace(/\bNone\b/g, 'null');
+            // 2. 将单引号替换为双引号 (但注意字符串内部可能转义，不过样例无复杂转义)
+            fixed = fixed.replace(/'/g, '"');
+            // 3. 尝试JSON解析
+            return JSON.parse(fixed);
+        } catch (e) {
+            // 降级方案: 使用 Function 构造函数 (更宽容, 模拟eval)
+            try {
+                // 复原可能被过度替换的内容？不，直接新Function
+                // 先恢复 True/False 布尔对象? Function 方式直接识别 js 字面量
+                let jsLike = pyStr.replace(/\bTrue\b/g, 'true').replace(/\bFalse\b/g, 'false').replace(/\bNone\b/g, 'null');
+                // 不替换单引号为双引号，而是用 new Function 包裹对象字面量（需注意键最好有引号，不过py字典键无引号会报语法，需要将键加上双引号）
+                // 更严谨: 给键加上双引号 (匹配类似 name: 'xdd' => "name": 'xdd')
+                jsLike = jsLike.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":');
+                // 将剩余单引号替换成双引号
+                jsLike = jsLike.replace(/'/g, '"');
+                return (new Function('return (' + jsLike + ')'))();
+            } catch (e2) {
+                console.warn("解析raw_data失败", pyStr, e2);
+                return null;
+            }
+        }
+    }
+
+    // 标准化每条 submission 记录 (合并 raw_data 或 直接字段)
+    function standardizeSubmission(subItem) {
+        // 默认占位
+        let std = {
+            name: '未知',
+            score: 0,
+            stage: 0,
+            remaining: 0,
+            mistakes: 0,
+            maxMistakes: 15,
+            errorWords: [],
+            timestamp: null,
+            mode: '未知模式',
+            submitted_at: null
+        };
+        // 如果有 raw_data 字段，优先解析并使用内部数据
+        if (subItem.raw_data && typeof subItem.raw_data === 'string') {
+            const parsed = parsePythonDictToObj(subItem.raw_data);
+            if (parsed && typeof parsed === 'object') {
+                std.name = parsed.name || std.name;
+                std.score = typeof parsed.score === 'number' ? parsed.score : (parseInt(parsed.score) || 0);
+                std.stage = parsed.stage || 0;
+                std.remaining = parsed.remaining ?? 0;
+                std.mistakes = parsed.mistakes ?? 0;
+                std.maxMistakes = parsed.maxMistakes ?? 15;
+                std.errorWords = Array.isArray(parsed.errorWords) ? parsed.errorWords : [];
+                std.timestamp = parsed.timestamp || null;
+                std.mode = parsed.mode || '未知模式';
+            } else {
+                // 解析失败, 尝试用外层字段, 但raw_data存在但无效, fallback
+                fallbackOuter(subItem, std);
+            }
+        } else {
+            // 无 raw_data，直接使用外层字段
+            fallbackOuter(subItem, std);
+        }
+        // 确保 submitted_at 使用外层提供的，raw_data里的timestamp仅作为参考但不覆盖提交时间
+        std.submitted_at = subItem.submitted_at || (std.timestamp ? new Date(std.timestamp).toLocaleString() : '未知时间');
+        // 额外补充 maxMistakes 防止除零
+        if (!std.maxMistakes || std.maxMistakes <= 0) std.maxMistakes = 15;
+        // 规范错误词格式: 确保每个元素是 [英,中] 数组
+        if (!Array.isArray(std.errorWords)) std.errorWords = [];
+        std.errorWords = std.errorWords.filter(item => Array.isArray(item) && item.length >= 2);
+        return std;
+    }
+
+    function fallbackOuter(subItem, target) {
+        target.name = subItem.name || target.name;
+        target.score = typeof subItem.score === 'number' ? subItem.score : (parseInt(subItem.score) || 0);
+        target.stage = subItem.stage || 0;
+        target.remaining = subItem.remaining ?? 0;
+        target.mistakes = subItem.mistakes ?? 0;
+        target.maxMistakes = subItem.maxMistakes ?? 15;
+        target.errorWords = Array.isArray(subItem.errorWords) ? subItem.errorWords : [];
+        target.timestamp = subItem.timestamp || null;
+        target.mode = subItem.mode || '未知模式';
+    }
+
+    // 加载并渲染看板
+    async function fetchAndRender() {
+        const tableBody = document.getElementById('tableBody');
+        const errorListDiv = document.getElementById('errorWordsList');
+        const modeDistDiv = document.getElementById('modeDistribution');
+        // 显示加载状态
+        tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">⏳ 加载数据中...</td></tr>';
+        errorListDiv.innerHTML = '<div style="color: #7e95b0; text-align:center; padding:20px;">加载错误词统计...</div>';
+        modeDistDiv.innerHTML = '<div style="font-size:0.8rem;">加载模式分布...</div>';
+        
+        try {
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                cache: 'no-cache'
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            
+            // 更新最后更新时间
+            const nowStr = new Date().toLocaleString('zh-CN');
+            document.getElementById('updateTimeLabel').innerHTML = `📅 最新拉取: ${nowStr}`;
+            
+            // 提取 submissions 数组并标准化
+            let rawSubmissions = data.submissions || [];
+            if (!Array.isArray(rawSubmissions)) rawSubmissions = [];
+            const submissions = rawSubmissions.map(sub => standardizeSubmission(sub)).filter(s => s.name !== '未知' || s.score > 0); // 过滤完全无效记录但保留
+            
+            // 展示任务标题
+            const taskTitle = data.task_title || '英语单词连连看';
+            document.querySelector('.title-section h1').innerHTML = `📖 ${taskTitle} · 数据驾驶舱`;
+            
+            // 更新KPI
+            updateKPI(submissions);
+            // 渲染错误词TOP & 模式分布
+            renderErrorWordsAndModes(submissions);
+            // 渲染表格
+            renderTable(submissions);
+            // 渲染折线图 (成绩趋势)
+            renderScoreTrendChart(submissions);
+            
+        } catch (err) {
+            console.error("API获取失败", err);
+            tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#c2410c;">❌ 数据加载失败: ${err.message}<br>请检查API地址或网络 (需要CORS支持)</td></tr>`;
+            errorListDiv.innerHTML = `<div style="color:#c2410c;">无法获取错误词数据，请刷新重试</div>`;
+            document.getElementById('updateTimeLabel').innerHTML = `⚠️ 连接失败 ${new Date().toLocaleTimeString()}`;
+            // 清空KPI显示错误占位
+            const kpiIds = ['totalSubmissions','avgScore','maxScore','minScore','avgMistakes','avgRemaining'];
+            kpiIds.forEach(id => document.getElementById(id).innerText = 'ERR');
+        }
+    }
+
+    // KPI 指标计算
+    function updateKPI(submissions) {
+        const total = submissions.length;
+        if (total === 0) {
+            document.getElementById('totalSubmissions').innerText = '0';
+            document.getElementById('avgScore').innerText = '—';
+            document.getElementById('maxScore').innerText = '—';
+            document.getElementById('minScore').innerText = '—';
+            document.getElementById('avgMistakes').innerText = '—';
+            document.getElementById('avgRemaining').innerText = '—';
+            return;
+        }
+        const scores = submissions.map(s => s.score);
+        const avgScore = (scores.reduce((a,b) => a+b,0)/total).toFixed(1);
+        const maxScore = Math.max(...scores);
+        const minScore = Math.min(...scores);
+        const avgMistakes = (submissions.reduce((sum,s) => sum + (s.mistakes || 0),0)/total).toFixed(1);
+        const avgRemaining = (submissions.reduce((sum,s) => sum + (s.remaining || 0),0)/total).toFixed(1);
+        
+        document.getElementById('totalSubmissions').innerText = total;
+        document.getElementById('avgScore').innerText = avgScore;
+        document.getElementById('maxScore').innerText = maxScore;
+        document.getElementById('minScore').innerText = minScore;
+        document.getElementById('avgMistakes').innerText = avgMistakes;
+        document.getElementById('avgRemaining').innerText = avgRemaining;
+    }
+
+    // 错误词统计 & 模式分布 (右侧区域)
+    function renderErrorWordsAndModes(submissions) {
+        // 1. 错误词频统计
+        const errorFreq = new Map(); // key: "英文|中文" , value: {eng, chn, count}
+        submissions.forEach(sub => {
+            const errors = sub.errorWords || [];
+            errors.forEach(pair => {
+                if (Array.isArray(pair) && pair.length >= 2) {
+                    const eng = String(pair[0]);
+                    const chn = String(pair[1]);
+                    const key = `${eng}|${chn}`;
+                    if (errorFreq.has(key)) {
+                        errorFreq.get(key).count += 1;
+                    } else {
+                        errorFreq.set(key, { eng, chn, count: 1 });
+                    }
+                }
+            });
+        });
+        const sortedErrors = Array.from(errorFreq.values()).sort((a,b) => b.count - a.count).slice(0,6);
+        const errorListDiv = document.getElementById('errorWordsList');
+        if (sortedErrors.length === 0) {
+            errorListDiv.innerHTML = '<div style="padding:20px; text-align:center;">✨ 暂无错误词记录，学习者表现优秀！</div>';
+        } else {
+            const maxCount = sortedErrors[0]?.count || 1;
+            errorListDiv.innerHTML = sortedErrors.map(item => {
+                const percent = (item.count / maxCount) * 100;
+                return `
+                    <div class="error-item">
+                        <div><span class="error-word-pair">📖 ${item.eng} · ${item.chn}</span></div>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <span class="error-count">${item.count} 次</span>
+                            <div class="progress-bar-bg"><div class="progress-fill" style="width: ${percent}%;"></div></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 2. 模式分布统计
+        const modeMap = new Map();
+        submissions.forEach(sub => {
+            const mode = sub.mode || '未知模式';
+            modeMap.set(mode, (modeMap.get(mode) || 0) + 1);
+        });
+        const total = submissions.length;
+        const modeDiv = document.getElementById('modeDistribution');
+        if (modeMap.size === 0) {
+            modeDiv.innerHTML = '<div style="color:#8198b1;">暂无模式数据</div>';
+        } else {
+            let modeHtml = '';
+            for (let [mode, count] of modeMap.entries()) {
+                const percent = total === 0 ? 0 : ((count / total) * 100).toFixed(1);
+                modeHtml += `
+                    <div class="mode-row">
+                        <span><span class="mode-badge">${mode}</span></span>
+                        <span><strong>${count}</strong> 次 (${percent}%)</span>
+                    </div>
+                `;
+            }
+            modeDiv.innerHTML = modeHtml;
+        }
+    }
+
+    // 表格渲染
+    function renderTable(submissions) {
+        const tbody = document.getElementById('tableBody');
+        if (!submissions.length) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">暂无提交记录</td></tr>';
+            return;
+        }
+        // 按 submitted_at 倒序（最新在上）
+        const sorted = [...submissions].sort((a,b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+        tbody.innerHTML = sorted.map(sub => {
+            let errorPreview = '';
+            const errList = sub.errorWords || [];
+            if (errList.length === 0) {
+                errorPreview = '<span class="error-badge">✅ 无错词</span>';
+            } else {
+                const showWords = errList.slice(0, 2).map(p => `${p[0]}/${p[1]}`).join(', ');
+                errorPreview = `<span class="error-badge">⚠️ ${showWords}${errList.length > 2 ? '...' : ''}</span>`;
+            }
+            return `<tr>
+                <td>${sub.submitted_at || '—'}</td>
+                <td><strong>${escapeHtml(sub.name)}</strong></td>
+                <td>${sub.score}</td>
+                <td>${sub.stage}</td>
+                <td>${sub.mistakes} / ${sub.maxMistakes}</td>
+                <td>${sub.remaining}</td>
+                <td>${escapeHtml(sub.mode)}</td>
+                <td>${errorPreview}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    // 成绩趋势折线图 (按提交时间升序)
+    function renderScoreTrendChart(submissions) {
+        if (!submissions.length) {
+            if (scoreChartInstance) { scoreChartInstance.destroy(); scoreChartInstance = null; }
+            const ctx = document.getElementById('scoreTrendChart').getContext('2d');
+            if(window.scoreDummyChart) return;
+            const dummy = new Chart(ctx, { type: 'line', data: { labels: ['无数据'], datasets: [] }, options: { responsive: true } });
+            scoreChartInstance = dummy;
+            return;
+        }
+        // 按时间升序（原始时间线）
+        const sortedByTime = [...submissions].sort((a,b) => new Date(a.submitted_at) - new Date(b.submitted_at));
+        const labels = sortedByTime.map((_, idx) => `#${idx+1}`);
+        const scoresData = sortedByTime.map(s => s.score);
+        const ctx = document.getElementById('scoreTrendChart').getContext('2d');
+        if (scoreChartInstance) scoreChartInstance.destroy();
+        scoreChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '得分 (0-100)',
+                    data: scoresData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59,130,246,0.1)',
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#1e4a76',
+                    pointBorderColor: '#ffffff',
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    tooltip: { callbacks: { label: (ctx) => `得分: ${ctx.raw} 分` } },
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { title: { display: true, text: '分数', font: { weight: 'bold' } }, min: 0, max: 100, grid: { color: '#e2e8f0' } },
+                    x: { title: { display: true, text: '提交次序 (按时间)', font: { weight: 'bold' } }, ticks: { autoSkip: true, maxTicksLimit: 12 } }
+                }
+            }
+        });
+    }
+
+    // 简单防XSS
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // 手动刷新 & 自动初始化
+    let loadingFlag = false;
+    async function handleRefresh() {
+        if (loadingFlag) return;
+        loadingFlag = true;
+        const btn = document.getElementById('refreshBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '🔄 同步中...';
+        await fetchAndRender();
+        btn.innerHTML = originalText;
+        loadingFlag = false;
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', handleRefresh);
+    // 首次自动加载
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchAndRender();
+        // 可选每60秒自动刷新（静默）
+        setInterval(() => {
+            if (!loadingFlag) handleRefresh();
+        }, 60000);
+    });
+</script>
+</body>
+</html>

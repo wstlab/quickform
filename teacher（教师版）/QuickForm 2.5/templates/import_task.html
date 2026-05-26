@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('导入任务') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mb-4 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('导入任务') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="mb-4">
+                    <p class="mb-4" style="color: #6b7280;">{{ _('本功能可以导入quickform.cn的任务列表，请确保已在"设置"中配置QFLink。') }}</p>
+                    <p class="mb-4">
+                        {{ _('QuickForm接口文档说明：') }}<a href="https://quickform.cn/cli" target="_blank" style="color: #b8956a; text-decoration: none; font-weight: 500;">https://quickform.cn/cli</a>
+                    </p>
+                </div>
+
+                <div id="errorMessage" class="alert alert-danger mb-4" style="border-radius: 8px; display: none;"></div>
+
+                <button type="button" id="fetchTasksBtn" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease; display: inline-block; white-space: nowrap;" onclick="fetchTasks()">
+                    {{ _('获取全部任务') }}
+                </button>
+                <button type="button" class="btn" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease; display: inline-block; white-space: nowrap; margin-left: 0.5rem;" onclick="showImportModal()">
+                    {{ _('导入指定任务') }}
+                </button>
+
+                <div style="margin-top: 1rem;">
+                    <button type="button" class="btn" style="background-color: #9d7a50; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease; display: inline-block; white-space: nowrap;" onclick="showFileImportModal()">
+                        {{ _('从文件（zip格式）导入数据任务') }}
+                    </button>
+                </div>
+
+                <div id="importModal" class="modal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);">
+                    <div style="width: 90%; max-width: 500px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 10px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+                        <h5 id="importModalLabel" style="margin-bottom: 15px; font-weight: 600; color: #111827;">{{ _('输入数据任务的API地址') }}</h5>
+                        <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px;">{{ _('格式如：') }}https://quickform.cn/api/hkonwxc8ks</p>
+                        <input type="text" id="taskUrl" class="form-control" placeholder="" style="border-radius: 8px; border: 1px solid #e5e7eb; padding: 0.75rem 1rem; margin-bottom: 15px;">
+                        <div style="text-align: right;">
+                            <button type="button" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeImportModal()">{{ _('取消') }}</button>
+                            <button type="button" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; margin-left: 0.5rem;" onclick="submitTaskUrl()">{{ _('确定') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="fileImportModal" class="modal" tabindex="-1" aria-labelledby="fileImportModalLabel" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);">
+    <div style="width: 90%; max-width: 500px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 10px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <h5 id="fileImportModalLabel" style="margin-bottom: 15px; font-weight: 600; color: #111827;">{{ _('从文件导入任务') }}</h5>
+        <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px;">{{ _('请上传从quickform.cn中导出的输入任务文件，压缩包格式。') }}</p>
+        <form method="POST" action="{{ url_for('import_task_from_file') }}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="file" class="form-control" name="task_file" accept=".zip,.tar,.tar.gz,.tgz" required style="border-radius: 8px; border: 1px solid #e5e7eb; padding: 0.75rem 1rem;">
+            </div>
+            <div style="text-align: right;">
+                <button type="button" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeFileImportModal()">{{ _('取消') }}</button>
+                <button type="submit" class="btn" style="background-color: #9d7a50; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; margin-left: 0.5rem;">{{ _('确定') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if tasks %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10">
+        <div class="card mb-4 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #16a34a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('从quickform.cn获取的任务列表') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border-radius: 8px; overflow: hidden;">
+                        <thead style="background-color: #f3f4f6;">
+                            <tr>
+                                <th style="font-weight: 600; color: #374151;">{{ _('任务名称') }}</th>
+                                <th style="font-weight: 600; color: #374151;">{{ _('任务描述') }}</th>
+                                <th style="font-weight: 600; color: #374151;">{{ _('API ID') }}</th>
+                                <th style="font-weight: 600; color: #374151;">{{ _('操作') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td>{{ task.task_name or task.title or task.name or '无' }}</td>
+                                <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ task.task_intro or task.description or '无' }}</td>
+                                <td>{{ task.apiid }}</td>
+                                <td>
+                                    <button type="button" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease; display: inline-block; white-space: nowrap;" onclick="importTask('{{ task.apiid }}', '{{ task.task_name or task.title or task.name }}')">
+                                        {{ _('导入') }}
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div id="importDataModal" class="modal" tabindex="-1" aria-labelledby="importDataModalLabel" aria-hidden="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);">
+    <div style="width: 90%; max-width: 450px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 10px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <h5 id="importDataModalLabel" style="margin-bottom: 15px; font-weight: 600; color: #111827;">{{ _('导入数据') }}</h5>
+        <p id="importDataMessage" style="color: #374151; margin-bottom: 15px;"></p>
+        <div style="text-align: right;">
+            <button type="button" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeImportDataModal()">{{ _('否') }}</button>
+            <button type="button" class="btn" style="background-color: #10b981; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; margin-left: 0.5rem;" onclick="confirmImportData()">{{ _('是') }}</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showImportModal() {
+    document.getElementById('importModal').style.display = 'block';
+}
+function closeImportModal() {
+    document.getElementById('importModal').style.display = 'none';
+}
+function submitTaskUrl() {
+    var url = document.getElementById('taskUrl').value;
+    if (url) {
+        window.location.href = '{{ url_for("import_task_by_url") }}?url=' + encodeURIComponent(url);
+    }
+}
+function showFileImportModal() {
+    document.getElementById('fileImportModal').style.display = 'block';
+}
+function closeFileImportModal() {
+    document.getElementById('fileImportModal').style.display = 'none';
+}
+
+let pendingImportData = null;
+
+function importTask(apiid, taskName) {
+    const encodedName = encodeURIComponent(taskName || '导入的任务');
+    const url = '{{ url_for("import_task_action", apiid="PLACEHOLDER") }}'.replace('PLACEHOLDER', apiid) + '?ajax=1&task_name=' + encodedName;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            if (confirm('任务"' + (taskName || result.new_api_id) + '"导入成功！是否同时导入该任务的数据？')) {
+                pendingImportData = {
+                    task_id: result.task_id,
+                    apiid: result.original_apiid
+                };
+                importQFData(pendingImportData.task_id, pendingImportData.apiid);
+            } else {
+                window.location.href = '/task/' + result.task_id;
+            }
+        } else {
+            alert('导入失败: ' + result.message);
+        }
+    })
+    .catch(error => {
+        alert('导入失败: ' + error.message);
+    });
+}
+
+function importQFData(taskId, apiid) {
+    fetch('/api/qf/import_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ task_id: taskId, apiid: apiid })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert('数据导入成功！共导入 ' + result.count + ' 条数据');
+            window.location.href = '/task/' + taskId;
+        } else {
+            alert('数据导入失败: ' + result.message);
+            window.location.href = '/task/' + taskId;
+        }
+    })
+    .catch(error => {
+        alert('数据导入失败: ' + error.message);
+        window.location.href = '/task/' + taskId;
+    });
+}
+
+async function fetchTasks() {
+    const btn = document.getElementById('fetchTasksBtn');
+    const errorDiv = document.getElementById('errorMessage');
+    btn.disabled = true;
+    btn.textContent = '获取中...';
+    errorDiv.style.display = 'none';
+
+    try {
+        const response = await fetch('/api/qf/list');
+        const result = await response.json();
+
+        if (result.success) {
+            const tasks = result.tasks;
+            if (tasks.length === 0) {
+                errorDiv.textContent = '没有找到任何任务';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            window.location.href = '{{ url_for("import_task") }}?tasks=' + encodeURIComponent(JSON.stringify(tasks));
+        } else {
+            errorDiv.textContent = result.message;
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        errorDiv.textContent = '获取失败: ' + error.message;
+        errorDiv.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '获取全部任务';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('importModal');
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeImportModal();
+        }
+    });
+    var fileModal = document.getElementById('fileImportModal');
+    if (fileModal) {
+        fileModal.addEventListener('click', function(e) {
+            if (e.target === fileModal) {
+                closeFileImportModal();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息提交</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #5f6368;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="radio"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1557b0;
+        }
+
+        .unit {
+            color: #5f6368;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>个人信息提交</h1>
+        <form action="/api/EauRbSvgpJO" method="POST">
+            <div class="form-group">
+                <label for="height">身高</label>
+                <input type="number" id="height" name="height" step="0.1" required>
+                <span class="unit">单位：厘米 (cm)</span>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">体重</label>
+                <input type="number" id="weight" name="weight" step="0.1" required>
+                <span class="unit">单位：千克 (kg)</span>
+            </div>
+
+            <div class="form-group">
+                <label for="shoeSize">鞋码</label>
+                <input type="number" id="shoeSize" name="shoeSize" step="0.5" required>
+                <span class="unit">例如：39、42.5</span>
+            </div>
+
+            <div class="form-group">
+                <label>性别</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="gender" value="male" required> 男
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="female"> 女
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">提交信息</button>
+        </form>
+    </div>
+</body>
+</html>

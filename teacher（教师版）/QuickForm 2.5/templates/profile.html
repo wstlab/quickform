@@ -1,0 +1,547 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('设置') }} - {{ get_app_name() }}{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    #config-tab, #qf-tab, #password-tab, #init-tab, #upload-tab {
+        color: #1f2937 !important;
+    }
+    #config-tab.active, #qf-tab.active, #password-tab.active, #init-tab.active, #upload-tab.active {
+        color: #b8956a !important;
+        font-weight: 600;
+    }
+    .model-config {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+
+    <div class="card">
+        <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+            <h4 class="mb-0" style="color: white; font-weight: 600;">{{ _('设置') }}</h4>
+        </div>
+            <div class="card-body" style="padding: 1.5rem;">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="config-tab" data-bs-toggle="tab" href="#config">{{ _('AI配置') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="qf-tab" data-bs-toggle="tab" href="#qf">{{ _('QFLink') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="password-tab" data-bs-toggle="tab" href="#password">{{ _('用户信息修改') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="upload-tab" data-bs-toggle="tab" href="#upload">{{ _('上传文件设置') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="init-tab" data-bs-toggle="tab" href="#init">{{ _('系统初始化') }}</a>
+                    </li>
+                </ul>
+                
+                <div class="tab-content">
+                    <!-- AI配置标签页 -->
+                    <div class="tab-pane fade show active" id="config">
+                        <div class="card" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('AI配置') }}</h6>
+                                <form method="POST" action="{{ url_for('profile') }}">
+                                    <input type="hidden" name="active_tab" value="config">
+                                    <input type="hidden" name="update_config" value="1">
+                                    
+                                    <div class="form-group">
+                                        <label for="selected_model" style="font-weight: 600; color: #111827;">{{ _('选择AI模型') }}</label>
+                                        <select class="form-control" id="selected_model" name="selected_model" required style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <option value="deepseek" {% if ai_config and ai_config.selected_model == 'deepseek' %}selected{% endif %}>DeepSeek</option>
+                                            <option value="doubao" {% if ai_config and ai_config.selected_model == 'doubao' %}selected{% endif %}>豆包</option>
+                                            <option value="qwen" {% if ai_config and ai_config.selected_model == 'qwen' %}selected{% endif %}>阿里云百炼</option>
+                                            <option value="glm" {% if ai_config and ai_config.selected_model == 'glm' %}selected{% endif %}>智谱清言(GLM)</option>
+                                            <option value="siliconflow" {% if ai_config and ai_config.selected_model == 'siliconflow' %}selected{% endif %}>硅基流动</option>
+                                            <option value="ollama" {% if ai_config and ai_config.selected_model == 'ollama' %}selected{% endif %}>Ollama (本地)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="deepseek_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('DeepSeek 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="deepseek_api_key" style="font-weight: 600; color: #111827;">{{ _('API Key') }}</label>
+                                            <input type="password" class="form-control api-key-input" id="deepseek_api_key" name="deepseek_api_key" value="{{ model_configs_dict['deepseek'].api_key if model_configs_dict.get('deepseek') else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入您的DeepSeek API密钥') }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="deepseek" data-api-key-field="deepseek_api_key" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试API密钥') }}</button>
+                                    </div>
+
+                                    <div id="doubao_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('豆包 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="doubao_api_key" style="font-weight: 600; color: #111827;">{{ _('API Key') }}</label>
+                                            <input type="password" class="form-control api-key-input" id="doubao_api_key" name="doubao_api_key" value="{{ model_configs_dict['doubao'].api_key if model_configs_dict.get('doubao') else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="doubao" data-api-key-field="doubao_api_key" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试API密钥') }}</button>
+                                    </div>
+
+                                    <div id="qwen_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('阿里云百炼 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="qwen_api_key" style="font-weight: 600; color: #111827;">{{ _('API Key') }}</label>
+                                            <input type="password" class="form-control api-key-input" id="qwen_api_key" name="qwen_api_key" value="{{ model_configs_dict['qwen'].api_key if model_configs_dict.get('qwen') else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入您的阿里云百炼 API密钥') }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="qwen" data-api-key-field="qwen_api_key" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试API密钥') }}</button>
+                                    </div>
+
+                                    <div id="glm_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('智谱清言(GLM) 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="glm_api_key" style="font-weight: 600; color: #111827;">{{ _('API Key') }}</label>
+                                            <input type="password" class="form-control api-key-input" id="glm_api_key" name="glm_api_key" value="{{ model_configs_dict['glm'].api_key if model_configs_dict.get('glm') else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入您的智谱清言 API密钥') }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="glm" data-api-key-field="glm_api_key" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试API密钥') }}</button>
+                                    </div>
+
+                                    <div id="siliconflow_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('硅基流动 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="siliconflow_api_key" style="font-weight: 600; color: #111827;">{{ _('API Key') }}</label>
+                                            <input type="password" class="form-control api-key-input" id="siliconflow_api_key" name="siliconflow_api_key" value="{{ model_configs_dict['siliconflow'].api_key if model_configs_dict.get('siliconflow') else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入您的硅基流动 API密钥') }}</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="siliconflow_model" style="font-weight: 600; color: #111827;">{{ _('模型名称') }}</label>
+                                            <input type="text" class="form-control" id="siliconflow_model" name="siliconflow_model" value="{{ model_configs_dict['siliconflow'].extra_settings if model_configs_dict.get('siliconflow') else 'Qwen/Qwen2.5-72B-Instruct' }}" placeholder="Qwen/Qwen2.5-72B-Instruct" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入要使用的模型名称，如：Qwen/Qwen2.5-72B-Instruct、Qwen/QwQ-32B 等') }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="siliconflow" data-api-key-field="siliconflow_api_key" data-model-field="siliconflow_model" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试API密钥') }}</button>
+                                    </div>
+
+                                    <div id="ollama_config" class="model-config">
+                                        <h5 class="mt-4 mb-3" style="color: #111827; font-weight: 600;">{{ _('Ollama (本地) 配置') }}</h5>
+                                        <div class="form-group">
+                                            <label for="ollama_api_url" style="font-weight: 600; color: #111827;">{{ _('Ollama API 地址') }}</label>
+                                            <input type="text" class="form-control" id="ollama_api_url" name="ollama_api_url" value="{{ model_configs_dict['ollama'].api_url if model_configs_dict.get('ollama') else 'http://localhost:11434' }}" placeholder="http://localhost:11434" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入您的Ollama服务地址（默认：http://localhost:11434）') }}</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ollama_model" style="font-weight: 600; color: #111827;">{{ _('模型名称') }}</label>
+                                            <input type="text" class="form-control" id="ollama_model" name="ollama_model" value="{{ model_configs_dict['ollama'].extra_settings if model_configs_dict.get('ollama') else 'llama3' }}" placeholder="llama3" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('请输入要使用的模型名称，如：llama3、qwen3-coder:30b、deepseek-r1:7b 等') }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-info mt-2 test-api-key" data-model="ollama" data-api-url-field="ollama_api_url" data-model-field="ollama_model" style="font-weight: 500; background-color: #c9ab84; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('测试连接') }}</button>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success mt-4" style="font-weight: 500; background-color: #10b981; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('保存配置') }}</button>
+                                    
+                                    <div class="alert alert-secondary mt-4" style="border-radius: 8px; background-color: #fef9ef; border: 1px solid #e5e7eb;">
+                                        <p style="margin-bottom: 0.5rem;"><strong>{{ _('说明：') }}</strong></p>
+                                        <p style="margin-bottom: 0; color: #6b7280;">{{ _('配置完成AI模型后，您可以在任务分析页面使用智能分析功能。智能分析将根据您的表单数据和附件内容，生成详细的分析报告。请注意保护您的API密钥安全，避免泄露。') }}</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- QFLink标签页 -->
+                    <div class="tab-pane fade" id="qf">
+                        <div class="card" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('QFLink') }}</h6>
+                                <form method="POST" action="{{ url_for('profile') }}" id="qfForm">
+                                    <input type="hidden" name="active_tab" value="qf">
+                                    <input type="hidden" name="update_qf_config" value="1">
+                                    
+                                    <div class="form-group mb-3">
+                                        <label for="qf_username" style="font-weight: 600; color: #111827;">{{ _('QF在线版的用户名') }}</label>
+                                        <input type="text" class="form-control" id="qf_username" name="qf_username" value="{{ qf_config.username if qf_config else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                    </div>
+                                    
+                                    <div class="form-group mb-3">
+                                        <label for="qf_password" style="font-weight: 600; color: #111827;">QF在线版的密码</label>
+                                        <input type="password" class="form-control" id="qf_password" name="qf_password" value="{{ qf_config.password if qf_config else '' }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.625rem 1.5rem;">{{ _('保存') }}</button>
+                                    <button type="button" id="testQfBtn" class="btn" style="background-color: #10b981; color: white; font-weight: 500; border-radius: 8px; padding: 0.625rem 1.5rem; margin-left: 10px;">{{ _('测试连接') }}</button>
+                                    
+                                    <div class="alert alert-secondary mt-4" style="border-radius: 8px; background-color: #fef9ef; border: 1px solid #e5e7eb;">
+                                        <p style="margin-bottom: 0.5rem;"><strong>{{ _('说明：') }}</strong></p>
+                                        <p style="margin-bottom: 0; color: #6b7280;">在“<a href="https://quickform.cn/" target=“_blank" rel=“noopener”>QuickForm在线版</a>”（quickform.cn）中调试数据任务容易成功，尤其是"数据大屏"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 用户信息修改标签页 -->
+                    <div class="tab-pane fade" id="password">
+                        <div class="card mb-4" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('修改用户名') }}</h6>
+                                <form method="POST" action="{{ url_for('profile') }}">
+                                    <input type="hidden" name="active_tab" value="password">
+                                    <input type="hidden" name="change_username" value="1">
+                                    <div class="form-group">
+                                        <label for="username" style="font-weight: 600; color: #111827;">{{ _('用户名') }}</label>
+                                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                    </div>
+                                    <button type="submit" class="btn btn-success mt-2" style="font-weight: 500; background-color: #10b981; border: none; border-radius: 6px; padding: 0.5rem 1.5rem;">{{ _('保存用户名') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('修改密码') }}</h6>
+                                <form method="POST" action="{{ url_for('profile') }}">
+                                    <input type="hidden" name="active_tab" value="password">
+                                    <input type="hidden" name="change_password" value="1">
+                                    <div class="form-group">
+                                        <label for="current_password" style="font-weight: 600; color: #111827;">{{ _('当前密码') }}</label>
+                                        <input type="password" class="form-control" id="current_password" name="current_password" required style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new_password" style="font-weight: 600; color: #111827;">{{ _('新密码') }}</label>
+                                        <input type="password" class="form-control" id="new_password" name="new_password" required style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                        <small class="form-text text-muted" style="color: #6b7280;">{{ _('密码长度至少为6个字符') }}</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm_password" style="font-weight: 600; color: #111827;">{{ _('确认新密码') }}</label>
+                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                    </div>
+                                    <button type="submit" class="btn btn-success mt-2" style="font-weight: 500; background-color: #10b981; border: none; border-radius: 6px; padding: 0.5rem 1.5rem;">{{ _('保存密码') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-secondary mt-4" style="border-radius: 8px; background-color: #fef9ef; border: 1px solid #e5e7eb;">
+                            <p style="margin-bottom: 0.5rem;"><strong>{{ _('说明：') }}</strong></p>
+                                <p style="margin-bottom: 0; color: #6b7280;">{{ _('如果发现密码错误，可以使用启动页面来初始化用户名为"wst"、密码为"quickform"。') }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 上传文件设置标签页 -->
+                    <div class="tab-pane fade" id="upload">
+                        <div class="card" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('API上传文件设置') }}</h6>
+                                <form method="POST" action="{{ url_for('profile') }}">
+                                    <input type="hidden" name="active_tab" value="upload">
+                                    <input type="hidden" name="update_upload_settings" value="1">
+                                    
+                                    <div class="form-group mb-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label for="api_file_upload_enabled" style="font-weight: 600; color: #111827; margin: 0;">{{ _('API接口是否开启文件上传') }}</label>
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input" type="checkbox" id="api_file_upload_enabled" name="api_file_upload_enabled" value="1" {% if api_file_upload_enabled %}checked{% endif %} style="width: 3em; height: 1.5em;">
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted" style="color: #6b7280;">{{ _('关闭后，API接口将禁止上传文件，仅允许提交表单数据') }}</small>
+                                    </div>
+                                    
+                                    <div id="upload_settings_group">
+                                        <div class="form-group mb-3">
+                                            <label for="max_file_size" style="font-weight: 600; color: #111827;">{{ _('文件大小') }}（MB）</label>
+                                            <input type="number" class="form-control" id="max_file_size" name="max_file_size" value="{{ upload_default_max_size }}" min="1" max="100" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem; max-width: 200px;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('允许API上传的单个文件最大容量，单位 MB，默认 %sMB' % upload_default_max_size) }}</small>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="allowed_extensions" style="font-weight: 600; color: #111827;">{{ _('允许扩展名') }}</label>
+                                            <input type="text" class="form-control" id="allowed_extensions" name="allowed_extensions" value="{{ upload_default_extensions }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                                            <small class="form-text text-muted" style="color: #6b7280;">{{ _('允许上传的文件扩展名，以英文逗号分隔，如：jpg,jpeg,png,gif,pdf') }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.625rem 1.5rem;">{{ _('保存') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统初始化标签页 -->
+                    <div class="tab-pane fade" id="init">
+                        <div class="card mb-4" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('数据备份') }}</h6>
+                                <p style="color: #6b7280; margin-bottom: 1rem;">{{ _('备份数据库和所有上传文件，生成一个可下载的ZIP压缩包。') }}</p>
+                                <button type="button" id="backupBtn" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.625rem 1.5rem;">{{ _('备份数据') }}</button>
+                                <div id="backupStatus" class="mt-3" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <div class="card-body" style="padding: 1.5rem;">
+                                <h6 style="font-weight: 600; color: #111827; margin-bottom: 1rem;">{{ _('系统初始化') }}</h6>
+                                <div class="alert alert-warning" style="border-radius: 8px;">
+                                    <p style="margin-bottom: 0.5rem;"><strong>{{ _('警告：') }}</strong></p>
+                                    <p style="margin-bottom: 0;">{{ _('此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为"wst"、密码初始化为"quickform"、重置SECRET_KEY安全密钥，并删除前3个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！') }}</p>
+                                </div>
+                                
+                                <button type="button" id="initSystemBtn" class="btn" style="background-color: #dc2626; color: white; font-weight: 500; border-radius: 8px; padding: 0.625rem 1.5rem;">{{ _('执行系统初始化') }}</button>
+                                <div id="initStatus" class="mt-3" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var i18nTesting = "{{ _('测试中...') }}";
+    var i18nConnSuccessTasks = "{{ _('连接成功！找到') }}";
+    var i18nTasksUnit = "{{ _('个任务') }}";
+    var i18nSaveConfigQ = "{{ _('是否保存此配置？') }}";
+    var i18nConnFailed = "{{ _('连接失败：') }}";
+    var i18nTestFailed = "{{ _('测试失败：') }}";
+    var i18nBackingUp = "{{ _('备份中...') }}";
+    var i18nBackupFailed = "{{ _('备份失败') }}";
+    var i18nBackupSuccess = "{{ _('备份成功！') }}";
+    var i18nBackupFile = "{{ _('备份文件：') }}";
+    var i18nBackupSize = "{{ _('文件大小：') }}";
+    var i18nBackupDownload = "{{ _('点击下载') }}";
+    var i18nBackupSaved = "{{ _('文件已保存在服务器 backups 目录下，不下载也不会丢失。') }}";
+    var i18nBackupErr = "{{ _('备份失败：') }}";
+    // 根据URL参数或表单提交保持标签页状态
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('active_tab');
+        if (activeTab) {
+            const tabTrigger = document.querySelector(`[href="#${activeTab}"]`);
+            if (tabTrigger) {
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+            }
+        }
+    });
+
+    // 根据选择的模型显示对应的配置项
+    document.getElementById('selected_model').addEventListener('change', function() {
+        const model = this.value;
+        document.getElementById('deepseek_config').style.display = model === 'deepseek' ? 'block' : 'none';
+        document.getElementById('doubao_config').style.display = model === 'doubao' ? 'block' : 'none';
+        document.getElementById('qwen_config').style.display = model === 'qwen' ? 'block' : 'none';
+        document.getElementById('glm_config').style.display = model === 'glm' ? 'block' : 'none';
+        document.getElementById('siliconflow_config').style.display = model === 'siliconflow' ? 'block' : 'none';
+        document.getElementById('ollama_config').style.display = model === 'ollama' ? 'block' : 'none';
+    });
+
+    // 初始化显示
+    const selectedModel = document.getElementById('selected_model').value;
+    document.getElementById('deepseek_config').style.display = selectedModel === 'deepseek' ? 'block' : 'none';
+    document.getElementById('doubao_config').style.display = selectedModel === 'doubao' ? 'block' : 'none';
+    document.getElementById('qwen_config').style.display = selectedModel === 'qwen' ? 'block' : 'none';
+    document.getElementById('glm_config').style.display = selectedModel === 'glm' ? 'block' : 'none';
+    document.getElementById('siliconflow_config').style.display = selectedModel === 'siliconflow' ? 'block' : 'none';
+    document.getElementById('ollama_config').style.display = selectedModel === 'ollama' ? 'block' : 'none';
+    
+    // API文件上传开关控制
+    function toggleUploadSettings() {
+        const enabled = document.getElementById('api_file_upload_enabled').checked;
+        const settingsGroup = document.getElementById('upload_settings_group');
+        const inputs = settingsGroup.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.disabled = !enabled;
+            input.style.opacity = enabled ? '1' : '0.5';
+        });
+        settingsGroup.style.opacity = enabled ? '1' : '0.5';
+    }
+    
+    document.getElementById('api_file_upload_enabled').addEventListener('change', toggleUploadSettings);
+    toggleUploadSettings();
+    
+    // API密钥测试功能
+    document.querySelectorAll('.test-api-key').forEach(button => {
+        button.addEventListener('click', async function() {
+            const model = this.getAttribute('data-model');
+            const apiKeyField = this.getAttribute('data-api-key-field');
+            const apiUrlField = this.getAttribute('data-api-url-field');
+            const modelField = this.getAttribute('data-model-field');
+
+            let apiKey = '';
+            let apiUrl = '';
+            let modelName = '';
+
+            if (apiKeyField) {
+                apiKey = document.getElementById(apiKeyField).value;
+            }
+            if (apiUrlField) {
+                apiUrl = document.getElementById(apiUrlField).value;
+            }
+            if (modelField) {
+                modelName = document.getElementById(modelField).value;
+            }
+
+            if (model === 'ollama') {
+                if (!apiUrl) {
+                    alert('请先输入Ollama API地址');
+                    return;
+                }
+            } else {
+                if (!apiKey) {
+                    alert('请先输入API密钥');
+                    return;
+                }
+            }
+
+            const originalText = this.textContent;
+            this.textContent = '测试中...';
+            this.disabled = true;
+
+            try {
+                const response = await fetch('/test_api_key', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        api_key: apiKey,
+                        api_url: apiUrl,
+                        model_name: modelName
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(model === 'ollama' ? 'Ollama连接成功！' : 'API密钥测试成功！');
+                } else {
+                    alert(model === 'ollama' ? 'Ollama连接失败: ' + result.error : 'API密钥测试失败: ' + result.error);
+                }
+            } catch (error) {
+                alert('测试过程中发生错误: ' + error.message);
+            } finally {
+                this.textContent = originalText;
+                this.disabled = false;
+            }
+        });
+    });
+
+    // QFLink测试连接
+    document.getElementById('testQfBtn').addEventListener('click', async function() {
+        const originalText = this.textContent;
+        this.textContent = i18nTesting;
+        this.disabled = true;
+
+        const username = document.getElementById('qf_username').value;
+        const password = document.getElementById('qf_password').value;
+
+        try {
+            const response = await fetch('/api/qf/test_connection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                const saveConfirm = confirm(i18nConnSuccessTasks + ' ' + result.tasks.length + ' ' + i18nTasksUnit + '。\n\n' + i18nSaveConfigQ);
+                if (saveConfirm) {
+                    document.getElementById('qfForm').submit();
+                }
+            } else {
+                alert(i18nConnFailed + result.message);
+            }
+        } catch (error) {
+            alert(i18nTestFailed + error.message);
+        } finally {
+            this.textContent = originalText;
+            this.disabled = false;
+        }
+    });
+
+    // 系统初始化
+    document.getElementById('initSystemBtn').addEventListener('click', async function() {
+        if (!confirm('确定要执行系统初始化吗？所有数据将被清除！')) {
+            return;
+        }
+        
+        const originalText = this.textContent;
+        this.textContent = '初始化中...';
+        this.disabled = true;
+
+        try {
+            const response = await fetch('/api/system/init', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            const statusDiv = document.getElementById('initStatus');
+            statusDiv.style.display = 'block';
+
+            if (result.success) {
+                statusDiv.innerHTML = '<span style="color: #10b981;">' + result.message + '</span>';
+            } else {
+                statusDiv.innerHTML = '<span style="color: #ef4444;">' + result.message + '</span>';
+            }
+        } catch (error) {
+            document.getElementById('initStatus').style.display = 'block';
+            document.getElementById('initStatus').innerHTML = '<span style="color: #ef4444;">初始化失败: ' + error.message + '</span>';
+        } finally {
+            this.textContent = originalText;
+            this.disabled = false;
+        }
+    });
+
+    // 数据备份
+    document.getElementById('backupBtn').addEventListener('click', async function() {
+        const originalText = this.textContent;
+        this.textContent = i18nBackingUp;
+        this.disabled = true;
+
+        const statusDiv = document.getElementById('backupStatus');
+        statusDiv.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/backup');
+            const result = await response.json();
+            if (!result.success) {
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '<span style="color: #ef4444;">' + (result.message || i18nBackupFailed) + '</span>';
+                return;
+            }
+
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">'
+                + '<span style="color: #16a34a; font-weight: 600;">' + i18nBackupSuccess + '</span><br>'
+                + '<span style="color: #374151;">' + i18nBackupFile + result.filename + '</span><br>'
+                + '<span style="color: #374151;">' + i18nBackupSize + result.size + '</span><br>'
+                + '<span style="color: #6b7280; font-size: 0.85rem;">' + i18nBackupSaved + '</span><br>'
+                + '<a href="/api/backup/download/' + result.filename + '" style="display: inline-block; margin-top: 0.5rem; color: #b8956a; font-weight: 500; text-decoration: underline;">' + i18nBackupDownload + '</a>'
+                + '</div>';
+        } catch (error) {
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<span style="color: #ef4444;">' + i18nBackupErr + error.message + '</span>';
+        } finally {
+            this.textContent = originalText;
+            this.disabled = false;
+        }
+    });
+</script>
+{% endblock %}

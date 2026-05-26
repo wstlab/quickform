@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('首页') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 text-center">
+        <h1 class="mb-4" style="color: #111827; font-weight: 700;">{{ _('欢迎使用 QuickForm') }}</h1>
+        <p class="lead mb-6" style="color: #6b7280;">{{ _('简易高效的数据回收系统，专为大模型生成的交互网页设计') }}</p>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8 text-start">
+                        <h3 class="card-title mb-4" style="color: #111827; font-weight: 700;">{{ _('快速开始') }}</h3>
+                        <p class="card-text mb-2" style="color: #6b7280;">{{ _('1. 登录系统，创建新的数据任务，获取API地址（URL）') }}</p>
+                        <p class="card-text mb-2" style="color: #6b7280;">{{ _('2. 修改您的网页，将数据提交指定的API地址') }}</p>
+                        <p class="card-text mb-0" style="color: #6b7280;">{{ _('3. 在数据任务中查看并借助AI分析收集的数据') }}</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg" style="font-weight: 500;">{{ _('进入数据任务') }}</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg" style="font-weight: 500;">{{ _('快速登录') }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-primary/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b8956a" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('简单易用') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('数据回收功能无缝集成到任何网页') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-success/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#10b981" class="bi bi-database" viewBox="0 0 16 16">
+                                <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                                <path d="M6.5 16a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1H6.5v1zm-2-1a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1H4.5v1z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('数据存储') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('支持非结构化数据存储，随时可查') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-info/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#c9ab84" class="bi bi-bar-chart2" viewBox="0 0 16 16">
+                                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm5 2v8h2V5H6zm4 0v8h2V5h-2zm4 0v8h2V5h-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('数据分析') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('提供数据统计和可视化功能') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-primary/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#b8956a" class="bi bi-github" viewBox="0 0 16 16">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('项目地址') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('访问GitHub仓库了解源码') }}</p>
+                        <a href="https://github.com/quickform-cn/quickform" target="_blank" class="btn btn-sm" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px;">{{ _('访问项目') }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-success/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#16a34a" class="bi bi-book" viewBox="0 0 16 16">
+                                <path d="M0 4.5A2.5 2.5 0 0 1 2.5 2H13a2.5 2.5 0 0 1 2.5 2.5V14a2.5 2.5 0 0 1-2.5 2.5h-10A2.5 2.5 0 0 1 0 14v-9.5Zm2-1.5a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-10Zm13 2.2v7.8a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5Z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('开源教程') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('查看使用教程和案例') }}</p>
+                        <a href="https://quickform.cn/tutorials" target="_blank" class="btn btn-sm" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px;">{{ _('查看教程') }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 160px;">
+                    <div class="card-body text-center py-3">
+                        <div class="rounded-circle bg-info/10 w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#c9ab84" class="bi bi-chat-dots" viewBox="0 0 16 16">
+                                <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-2.646.853a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 0 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z"/>
+                                <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2Z"/>
+                                <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title" style="color: #111827; font-weight: 700;">{{ _('项目交流') }}</h3>
+                        <p class="card-text" style="color: #6b7280;">{{ _('加入社区分享经验') }}</p>
+                        <a href="https://quickform.cn/community" target="_blank" class="btn btn-sm" style="background-color: #c9ab84; color: white; font-weight: 500; border-radius: 8px;">{{ _('加入社区') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

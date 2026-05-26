@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>科学数据采集分析大屏</title>
+    <!-- ECharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a2b3e 0%, #0f3b4f 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Poppins', 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 24px 32px;
+            min-height: 100vh;
+        }
+
+        /* 大屏容器 */
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 头部区域 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 18px;
+        }
+        .title-section h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(120deg, #E0F2FE, #A5F3FC);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .title-section h1 i {
+            background: none;
+            color: #7dd3fc;
+            font-size: 2rem;
+        }
+        .subtitle {
+            color: #b0d4e8;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats-badge {
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            color: #cffafe;
+        }
+        .control-bar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            background: rgba(21, 49, 61, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 60px;
+        }
+        .refresh-btn {
+            background: #2c7da0;
+            border: none;
+            color: white;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .refresh-btn:hover {
+            background: #1f6390;
+            transform: scale(1.02);
+        }
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e6;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 14px;
+            border-radius: 40px;
+        }
+        .timer-text {
+            font-family: monospace;
+            font-weight: bold;
+            background: #0e2a36;
+            padding: 4px 8px;
+            border-radius: 20px;
+            color: #b9f3ff;
+        }
+        .last-update {
+            font-size: 0.75rem;
+            margin-left: 12px;
+            color: #9bb8ca;
+        }
+
+        /* KPI 卡片网格 */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 22px;
+            margin-bottom: 36px;
+        }
+        .kpi-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .kpi-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-3px);
+        }
+        .kpi-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #bdd9e8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .kpi-value {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+        .kpi-unit {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #b9d6e6;
+        }
+        .trend-note {
+            font-size: 0.7rem;
+            color: #9bc0d4;
+            margin-top: 8px;
+        }
+
+        /* 双图表布局 */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 32px;
+        }
+        .chart-card {
+            background: rgba(12, 35, 45, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 18px 16px 12px 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.2s;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 4px solid #2aa9c9;
+            color: #eef4ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 340px;
+        }
+
+        /* 表格区域 (原始数据) */
+        .data-table-wrapper {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 20px;
+            margin-top: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .table-header h3 {
+            color: #ccf0ff;
+            font-weight: 500;
+        }
+        .table-container {
+            overflow-x: auto;
+            border-radius: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e2edf2;
+            font-size: 0.8rem;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        th {
+            background: rgba(20, 80, 100, 0.5);
+            font-weight: 600;
+            color: #d9f2ff;
+        }
+        tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .badge-gender {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.4);
+            font-weight: 500;
+        }
+        .female-badge { background: #d96c9e30; color: #ffc0e0; border-left: 2px solid #f472b6; }
+        .male-badge { background: #5aa9dd30; color: #b9e2ff; border-left: 2px solid #3b82f6; }
+        .footer-note {
+            text-align: center;
+            margin-top: 28px;
+            color: #88b8ce;
+            font-size: 0.75rem;
+        }
+        @media (max-width: 850px) {
+            body { padding: 16px; }
+            .charts-row { grid-template-columns: 1fr; gap: 20px; }
+            .kpi-value { font-size: 2rem; }
+        }
+        .loading-overlay {
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+        i.fa, i.far, i.fas {
+            pointer-events: none;
+        }
+        button:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="header">
+        <div class="title-section">
+            <h1><i class="fas fa-chart-line"></i> 科学数据采集 · 分析大屏</h1>
+            <div class="subtitle">
+                <i class="fas fa-database"></i> 实时洞察身高/体重/鞋码分布
+                <span class="stats-badge" id="totalCountBadge">加载中...</span>
+            </div>
+        </div>
+        <div class="control-bar">
+            <div class="auto-refresh">
+                <i class="fas fa-sync-alt"></i>
+                <span>自动刷新</span>
+                <span class="timer-text" id="countdownSec">5</span><span>秒</span>
+            </div>
+            <button class="refresh-btn" id="manualRefreshBtn">
+                <i class="fas fa-arrows-rotate"></i> 立即刷新
+            </button>
+            <div class="last-update" id="lastUpdateTime">--:--:--</div>
+        </div>
+    </div>
+
+    <!-- KPI 卡片区域 -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-title"><i class="fas fa-users"></i> 总提交数</div>
+            <div class="kpi-value" id="totalSubmissions">—</div>
+            <div class="trend-note">来自科学数据采集任务</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title"><i class="fas fa-venus-mars"></i> 性别构成</div>
+            <div class="kpi-value" id="genderRatioText">—</div>
+            <div class="trend-note" id="genderDetail">男:? 女:?</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title"><i class="fas fa-ruler"></i> 平均身高</div>
+            <div class="kpi-value" id="avgHeight">— <span class="kpi-unit">cm</span></div>
+            <div class="trend-note" id="heightRange">范围: -</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title"><i class="fas fa-weight-hanging"></i> 平均体重</div>
+            <div class="kpi-value" id="avgWeight">— <span class="kpi-unit">kg</span></div>
+            <div class="trend-note" id="weightRange">范围: -</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title"><i class="fas fa-shoe-prints"></i> 平均鞋码</div>
+            <div class="kpi-value" id="avgShoeSize">— </div>
+            <div class="trend-note" id="shoeRange">常用区间分析</div>
+        </div>
+    </div>
+
+    <!-- 双图表: 身高体重散点/鞋码分布柱状图 & 性别饼图可组合? 为了最佳展示：左边散点图 + 右边鞋码分布柱状图，性别指标用卡片和饼图单独也行，但更直观用饼图代替右边? 但鞋码分布也很重要，就在下方增加一个性别饼图小卡片？保持右边为鞋码柱状图，额外再下方加个性别圆环图表模块？更专业 -->
+    <div class="charts-row">
+        <div class="chart-card">
+            <div class="chart-title"><i class="fas fa-chart-scatter"></i> 身高-体重 相关性分析</div>
+            <div id="scatterChart" class="chart-container"></div>
+            <div style="font-size:0.7rem; text-align:center; color:#aacad9;">每个点代表一名参与者 | 颜色区分性别</div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title"><i class="fas fa-chart-bar"></i> 鞋码分布 (人数)</div>
+            <div id="shoeHistogram" class="chart-container"></div>
+        </div>
+    </div>
+
+    <!-- 第三行: 性别占比圆环图 + BMI洞察卡片 (更增加科学感) -->
+    <div class="charts-row" style="margin-bottom: 28px;">
+        <div class="chart-card">
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> 性别比例</div>
+            <div id="genderPieChart" class="chart-container" style="height: 300px;"></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title"><i class="fas fa-heartbeat"></i> BMI 统计概览 (体重kg/身高m²)</div>
+            <div id="bmiStats" style="padding: 16px; display: flex; flex-direction: column; gap: 16px; justify-content: center; height: 300px;">
+                <div style="background:#0f2e3b; border-radius: 24px; padding: 14px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>平均BMI</span><strong id="avgBmiVal" style="font-size: 1.7rem;">—</strong></div>
+                    <div style="height: 8px; background:#1d4b5e; border-radius: 8px;"><div id="bmiProgress" style="width:0%; height:8px; background:#47d7ff; border-radius: 8px;"></div></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size:0.75rem;">
+                        <span>偏瘦 &lt;18.5</span><span>正常 18.5-24</span><span>超重 ≥24</span>
+                    </div>
+                    <div id="bmiCategoryDetail" style="margin-top: 12px; font-size:0.75rem; color:#b9ecff;"></div>
+                </div>
+                <div><i class="fas fa-chart-simple"></i> 基于当前提交数据计算健康参考</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 原始数据表格 -->
+    <div class="data-table-wrapper">
+        <div class="table-header">
+            <h3><i class="fas fa-table-list"></i> 最新提交明细</h3>
+            <span style="font-size:0.7rem;"><i class="far fa-clock"></i> 按提交时间倒序展示</span>
+        </div>
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr><th>性别</th><th>身高(cm)</th><th>体重(kg)</th><th>鞋码</th><th>提交时间</th></tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="5">加载数据中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer-note">
+        <i class="fas fa-chart-line"></i> 科学数据大屏 · 每5秒自动轮询刷新 | 数据实时同步自调查接口
+    </div>
+</div>
+
+<script>
+    // API 地址 (根据要求)
+    const API_URL = "/api/EauRbSvgpJO";
+    
+    // DOM 元素绑定
+    const totalSubmissionsSpan = document.getElementById("totalSubmissions");
+    const genderRatioText = document.getElementById("genderRatioText");
+    const genderDetailSpan = document.getElementById("genderDetail");
+    const avgHeightSpan = document.getElementById("avgHeight");
+    const avgWeightSpan = document.getElementById("avgWeight");
+    const avgShoeSizeSpan = document.getElementById("avgShoeSize");
+    const heightRangeSpan = document.getElementById("heightRange");
+    const weightRangeSpan = document.getElementById("weightRange");
+    const shoeRangeSpan = document.getElementById("shoeRange");
+    const lastUpdateSpan = document.getElementById("lastUpdateTime");
+    const totalCountBadge = document.getElementById("totalCountBadge");
+    const avgBmiValSpan = document.getElementById("avgBmiVal");
+    const bmiProgressDiv = document.getElementById("bmiProgress");
+    const bmiCategoryDetailSpan = document.getElementById("bmiCategoryDetail");
+    
+    let refreshInterval = null;
+    let countdownSecond = 5;
+    let countdownInterval = null;
+    let currentData = { submissions: [], total: 0 };
+    
+    // echarts 实例
+    let scatterChartInstance = null;
+    let shoeHistogramInstance = null;
+    let genderPieInstance = null;
+    
+    // 初始化图表
+    function initCharts() {
+        const scatterElem = document.getElementById('scatterChart');
+        const shoeElem = document.getElementById('shoeHistogram');
+        const genderElem = document.getElementById('genderPieChart');
+        if (scatterElem) scatterChartInstance = echarts.init(scatterElem);
+        if (shoeElem) shoeHistogramInstance = echarts.init(shoeElem);
+        if (genderElem) genderPieInstance = echarts.init(genderElem);
+    }
+    
+    // 更新所有显示内容 (核心)
+    function updateDashboard(data) {
+        if (!data || !data.submissions || data.submissions.length === 0) {
+            // 无数据显示占位
+            totalSubmissionsSpan.innerText = "0";
+            totalCountBadge.innerText = "0 条记录";
+            genderRatioText.innerText = "无数据";
+            genderDetailSpan.innerText = "男:0 女:0";
+            avgHeightSpan.innerHTML = "— <span class='kpi-unit'>cm</span>";
+            avgWeightSpan.innerHTML = "— <span class='kpi-unit'>kg</span>";
+            avgShoeSizeSpan.innerText = "—";
+            heightRangeSpan.innerText = "范围: -";
+            weightRangeSpan.innerText = "范围: -";
+            shoeRangeSpan.innerText = "无鞋码数据";
+            avgBmiValSpan.innerText = "—";
+            bmiProgressDiv.style.width = "0%";
+            bmiCategoryDetailSpan.innerText = "暂无数据";
+            document.getElementById("tableBody").innerHTML = '<tr><td colspan="5">暂无提交数据</td></tr>';
+            if(scatterChartInstance) scatterChartInstance.clear();
+            if(shoeHistogramInstance) shoeHistogramInstance.clear();
+            if(genderPieInstance) genderPieInstance.clear();
+            return;
+        }
+        
+        const submissions = data.submissions;
+        const total = submissions.length;
+        totalSubmissionsSpan.innerText = total;
+        totalCountBadge.innerText = `${total} 条记录`;
+        
+        // 性别统计
+        let maleCount = 0, femaleCount = 0;
+        submissions.forEach(s => {
+            if (s.gender === 'male') maleCount++;
+            else if (s.gender === 'female') femaleCount++;
+        });
+        const malePercent = total ? ((maleCount/total)*100).toFixed(1) : 0;
+        const femalePercent = total ? ((femaleCount/total)*100).toFixed(1) : 0;
+        genderRatioText.innerHTML = `${maleCount}:${femaleCount}`;
+        genderDetailSpan.innerHTML = `男 ${maleCount} 人 (${malePercent}%) &nbsp;| 女 ${femaleCount} 人 (${femalePercent}%)`;
+        
+        // 数值字段转数字
+        let heights = [], weights = [], shoeSizes = [];
+        submissions.forEach(s => {
+            let h = parseFloat(s.height);
+            let w = parseFloat(s.weight);
+            let shoe = parseFloat(s.shoeSize);
+            if (!isNaN(h)) heights.push(h);
+            if (!isNaN(w)) weights.push(w);
+            if (!isNaN(shoe)) shoeSizes.push(shoe);
+        });
+        
+        const avgHeight = heights.length ? (heights.reduce((a,b)=>a+b,0)/heights.length).toFixed(1) : 0;
+        const avgWeight = weights.length ? (weights.reduce((a,b)=>a+b,0)/weights.length).toFixed(1) : 0;
+        const avgShoe = shoeSizes.length ? (shoeSizes.reduce((a,b)=>a+b,0)/shoeSizes.length).toFixed(1) : 0;
+        const minHeight = heights.length ? Math.min(...heights).toFixed(1) : '-';
+        const maxHeight = heights.length ? Math.max(...heights).toFixed(1) : '-';
+        const minWeight = weights.length ? Math.min(...weights).toFixed(1) : '-';
+        const maxWeight = weights.length ? Math.max(...weights).toFixed(1) : '-';
+        const minShoe = shoeSizes.length ? Math.min(...shoeSizes).toFixed(1) : '-';
+        const maxShoe = shoeSizes.length ? Math.max(...shoeSizes).toFixed(1) : '-';
+        
+        avgHeightSpan.innerHTML = `${avgHeight} <span class="kpi-unit">cm</span>`;
+        avgWeightSpan.innerHTML = `${avgWeight} <span class="kpi-unit">kg</span>`;
+        avgShoeSizeSpan.innerText = avgShoe;
+        heightRangeSpan.innerText = `范围: ${minHeight} ~ ${maxHeight} cm`;
+        weightRangeSpan.innerText = `范围: ${minWeight} ~ ${maxWeight} kg`;
+        shoeRangeSpan.innerText = `鞋码区间: ${minShoe} ~ ${maxShoe}`;
+        
+        // BMI 计算 (体重kg / (身高m)^2)
+        let bmis = [];
+        submissions.forEach(s => {
+            let h = parseFloat(s.height);
+            let w = parseFloat(s.weight);
+            if (!isNaN(h) && !isNaN(w) && h > 0) {
+                let h_m = h / 100;
+                let bmi = w / (h_m * h_m);
+                if (isFinite(bmi)) bmis.push(bmi);
+            }
+        });
+        const avgBmi = bmis.length ? (bmis.reduce((a,b)=>a+b,0)/bmis.length).toFixed(1) : 0;
+        avgBmiValSpan.innerText = avgBmi;
+        let bmiPercent = Math.min(100, (avgBmi / 30) * 80);
+        bmiProgressDiv.style.width = `${bmiPercent}%`;
+        // 分类统计
+        let underweight=0, normal=0, overweight=0;
+        bmis.forEach(b=>{
+            if(b<18.5) underweight++;
+            else if(b>=18.5 && b<24) normal++;
+            else overweight++;
+        });
+        bmiCategoryDetailSpan.innerHTML = `偏瘦:${underweight}人 · 正常:${normal}人 · 超重:${overweight}人`;
+        
+        // 更新表格 (按时间倒序)
+        const sorted = [...submissions].sort((a,b)=>new Date(b.submitted_at) - new Date(a.submitted_at));
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = sorted.map(sub => {
+            const genderText = sub.gender === 'male' ? '男' : (sub.gender === 'female' ? '女' : '未知');
+            const genderClass = sub.gender === 'male' ? 'male-badge' : 'female-badge';
+            return `<tr>
+                        <td><span class="badge-gender ${genderClass}">${genderText}</span></td>
+                        <td>${parseFloat(sub.height).toFixed(1)} cm</td>
+                        <td>${parseFloat(sub.weight).toFixed(1)} kg</td>
+                        <td>${parseFloat(sub.shoeSize).toFixed(1)}</td>
+                        <td>${sub.submitted_at}</td>
+                    </tr>`;
+        }).join('');
+        
+        // 更新散点图 (身高体重)
+        const scatterData = submissions.map(s=>{
+            let h = parseFloat(s.height);
+            let w = parseFloat(s.weight);
+            let genderColor = s.gender === 'male' ? '#3b82f6' : '#f472b6';
+            return { value: [h, w], gender: s.gender, itemStyle: { color: genderColor } };
+        }).filter(p=>!isNaN(p.value[0]) && !isNaN(p.value[1]));
+        if(scatterChartInstance){
+            scatterChartInstance.setOption({
+                title: { show: false },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: (params)=>`身高: ${params.value[0]} cm<br>体重: ${params.value[1]} kg` },
+                xAxis: { name: '身高 (cm)', nameLocation: 'middle', nameGap: 35, axisLabel: { color:'#cbdde8' } },
+                yAxis: { name: '体重 (kg)', nameLocation: 'middle', nameGap: 40, axisLabel: { color:'#cbdde8' } },
+                series: [{
+                    type: 'scatter', data: scatterData.map(d=>d.value), symbolSize: 12,
+                    itemStyle: { color: (params)=> { let idx = params.dataIndex; return scatterData[idx]?.itemStyle?.color || '#2aa9c9'; } },
+                    emphasis: { scale: 1.2 }
+                }],
+                grid: { containLabel: true, backgroundColor: 'rgba(0,0,0,0.1)' }
+            });
+        }
+        
+        // 鞋码直方图 (分布)
+        let shoeCountMap = new Map();
+        shoeSizes.forEach(sz=>{
+            let key = sz.toFixed(0);
+            shoeCountMap.set(key, (shoeCountMap.get(key)||0)+1);
+        });
+        let shoeCategories = Array.from(shoeCountMap.keys()).sort((a,b)=>parseFloat(a)-parseFloat(b));
+        let shoeValues = shoeCategories.map(c=>shoeCountMap.get(c));
+        if(shoeHistogramInstance){
+            shoeHistogramInstance.setOption({
+                tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                xAxis: { type: 'category', data: shoeCategories, name: '鞋码 (欧码)', axisLabel: { rotate: 0, color:'#cde1ec' } },
+                yAxis: { type: 'value', name: '人数', nameLocation: 'middle', nameGap: 35 },
+                series: [{ type: 'bar', data: shoeValues, itemStyle: { borderRadius: [8,8,0,0], color: '#41b0d9' }, barWidth: '50%' }],
+                grid: { containLabel: true }
+            });
+        }
+        
+        // 性别饼图
+        if(genderPieInstance){
+            genderPieInstance.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { orient: 'vertical', left: 'left', textStyle: { color: '#e2f0f5' } },
+                series: [{
+                    type: 'pie', radius: '55%', data: [
+                        { name: '男性', value: maleCount, itemStyle: { color: '#3b82f6' } },
+                        { name: '女性', value: femaleCount, itemStyle: { color: '#f472b6' } }
+                    ], label: { color: '#f0fcff' }, emphasis: { scale: true }
+                }]
+            });
+        }
+    }
+    
+    // 从API获取数据并更新页面，处理错误
+    async function fetchDataAndRefresh() {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            const response = await fetch(API_URL, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const json = await response.json();
+            // 符合格式: { submissions, total_submissions, note, task_id ... }
+            let submissions = json.submissions || [];
+            let total = json.total_submissions || submissions.length;
+            currentData = { submissions: submissions, total: total };
+            updateDashboard(currentData);
+            // 更新时间戳
+            const now = new Date();
+            lastUpdateSpan.innerText = now.toLocaleTimeString('zh-CN', { hour12: false });
+        } catch (err) {
+            console.error("数据获取失败:", err);
+            lastUpdateSpan.innerText = `获取失败 ${new Date().toLocaleTimeString()}`;
+            document.getElementById("tableBody").innerHTML = '<tr><td colspan="5">⚠️ 无法连接数据服务，请检查网络或稍后重试</td></tr>';
+        }
+    }
+    
+    // 倒计时刷新逻辑
+    function startAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownSecond = 5;
+        const timerSpan = document.getElementById("countdownSec");
+        const refreshFunc = async () => {
+            await fetchDataAndRefresh();
+            countdownSecond = 5;
+            if(timerSpan) timerSpan.innerText = "5";
+        };
+        refreshInterval = setInterval(refreshFunc, 5000);
+        // 倒计时展示
+        countdownInterval = setInterval(() => {
+            if(countdownSecond > 0){
+                countdownSecond--;
+                if(timerSpan) timerSpan.innerText = countdownSecond;
+            } else {
+                countdownSecond = 5;
+            }
+        }, 1000);
+    }
+    
+    // 手动刷新
+    function manualRefresh() {
+        countdownSecond = 5;
+        const timerSpan = document.getElementById("countdownSec");
+        if(timerSpan) timerSpan.innerText = "5";
+        fetchDataAndRefresh();
+    }
+    
+    // 页面初始化
+    window.addEventListener('load', () => {
+        initCharts();
+        startAutoRefresh();
+        const manualBtn = document.getElementById("manualRefreshBtn");
+        if(manualBtn) manualBtn.addEventListener("click", manualRefresh);
+        fetchDataAndRefresh();
+    });
+    
+    // 窗口大小适配
+    window.addEventListener('resize', () => {
+        if(scatterChartInstance) scatterChartInstance.resize();
+        if(shoeHistogramInstance) shoeHistogramInstance.resize();
+        if(genderPieInstance) genderPieInstance.resize();
+    });
+</script>
+</body>
+</html>

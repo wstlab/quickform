@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>校园文具分类图像采集</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 20px 16px 40px;
+            color: #0f172a;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding: 20px 20px 28px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #475569;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        /* 分类按钮组 */
+        .category-section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+        }
+
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .cat-btn {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 60px;
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 0 0 auto;
+        }
+
+        .cat-btn.active {
+            background: #2d5f9e;
+            border-color: #2d5f9e;
+            color: white;
+            box-shadow: 0 4px 10px rgba(45, 95, 158, 0.25);
+        }
+
+        .cat-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 采集方式卡片 - 只保留文件选择 */
+        .capture-actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 48px;
+            padding: 12px 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .action-btn.primary {
+            background: #eef2ff;
+            border-color: #b9d0f0;
+            color: #1e4a76;
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* 预览区 */
+        .preview-area {
+            background: #f8fafc;
+            border-radius: 28px;
+            padding: 20px 16px;
+            margin-bottom: 24px;
+            border: 1px solid #eef2ff;
+            transition: all 0.2s;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .image-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 24px;
+            min-height: 180px;
+            border: 1px dashed #cbd5e1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #previewImg {
+            max-width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .placeholder-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .file-info {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            background: #eef2ff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            color: #1e3a8a;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(100deg, #1e4620, #2b7a2d);
+            border: none;
+            border-radius: 60px;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 12px;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.97);
+            background: linear-gradient(100deg, #1a3a1c, #1f6221);
+        }
+
+        .status-msg {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 10px;
+            border-radius: 40px;
+            background: #f1f5f9;
+            color: #2c3e66;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px 12px 28px;
+            }
+            .container {
+                padding: 16px;
+            }
+            .cat-btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+            .action-btn {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📸 校园文具分类图像采集</h1>
+    <div class="sub">橡皮 · 笔 · 修正带 · 尺子 · 圆规 · 文具盒</div>
+
+    <!-- 分类按钮区 -->
+    <div class="category-section">
+        <div class="section-title">📌 1. 选择图像分类</div>
+        <div class="category-buttons" id="categoryGroup">
+            <button data-cat="橡皮" class="cat-btn active">✏️ 橡皮</button>
+            <button data-cat="笔" class="cat-btn">🖊️ 笔</button>
+            <button data-cat="修正带" class="cat-btn">📜 修正带</button>
+            <button data-cat="尺子" class="cat-btn">📏 尺子</button>
+            <button data-cat="圆规" class="cat-btn">⭕ 圆规</button>
+            <button data-cat="文具盒" class="cat-btn">🧰 文具盒</button>
+        </div>
+    </div>
+
+    <!-- 采集方式：仅文件选择 -->
+    <div class="section-title">📷 2. 选择图片</div>
+    <div class="capture-actions">
+        <button id="filePickBtn" class="action-btn primary">📁 从相册/文件选择</button>
+    </div>
+    <input type="file" id="imageFileInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="display: none;">
+
+    <!-- 预览 + 压缩信息 -->
+    <div class="preview-area">
+        <div class="preview-header">
+            <span>🖼️ 图片预览</span>
+            <span id="sizeInfo" class="file-info">未选择图片</span>
+        </div>
+        <div class="image-preview" id="imagePreviewContainer">
+            <img id="previewImg" src="" alt="预览" style="display: none;">
+            <div id="previewPlaceholder" class="placeholder-text">⬅️ 点击上方按钮选择图片<br>自动压缩至2MB以内</div>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <button id="submitDataBtn" class="submit-btn">🚀 上传提交数据</button>
+    <div id="statusMessage" class="status-msg">✅ 等待操作，图片将自动压缩至2MB以内</div>
+    <footer>支持移动端 · 自动压缩 · 数据提交至 /api/AqfASqtCXPJ</footer>
+</div>
+
+<script>
+    // ---------- DOM 元素 ----------
+    const categoryBtns = document.querySelectorAll('.cat-btn');
+    const fileInput = document.getElementById('imageFileInput');
+    const filePickBtn = document.getElementById('filePickBtn');
+    const previewImg = document.getElementById('previewImg');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+    const sizeInfoSpan = document.getElementById('sizeInfo');
+    const submitBtn = document.getElementById('submitDataBtn');
+    const statusDiv = document.getElementById('statusMessage');
+
+    // 全局状态
+    let currentCategory = "橡皮";        // 默认分类
+    let currentCompressedBlob = null;    // 压缩后的图片blob (保证≤2MB)
+    let currentOriginalFileName = "image.jpg";
+
+    // ---------- 辅助函数 ----------
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 更新预览UI (显示压缩后图片)
+    function updatePreviewUI(blob) {
+        if (!blob) {
+            previewImg.style.display = 'none';
+            previewPlaceholder.style.display = 'block';
+            sizeInfoSpan.innerText = '未选择图片';
+            return;
+        }
+        const url = URL.createObjectURL(blob);
+        previewImg.src = url;
+        previewImg.style.display = 'block';
+        previewPlaceholder.style.display = 'none';
+        sizeInfoSpan.innerText = `压缩后: ${formatBytes(blob.size)} (≤2MB)`;
+        // 释放旧URL内存
+        previewImg.onload = () => URL.revokeObjectURL(url);
+    }
+
+    // 核心压缩函数: 保证输出blob ≤ maxSizeMB (此处2MB)
+    // 接受File或Blob，返回Promise<Blob>
+    async function compressImageToLimit(fileOrBlob, maxSizeMB = 2) {
+        return new Promise((resolve, reject) => {
+            const maxSizeBytes = maxSizeMB * 1024 * 1024;
+            const img = new Image();
+            const url = URL.createObjectURL(fileOrBlob);
+            img.onload = () => {
+                URL.revokeObjectURL(url);
+                let width = img.width;
+                let height = img.height;
+                // 限制最长边为 1280px (保持清晰度且压缩大小)
+                const maxLongEdge = 1280;
+                let canvasWidth = width;
+                let canvasHeight = height;
+                if (width > maxLongEdge || height > maxLongEdge) {
+                    if (width >= height) {
+                        canvasWidth = maxLongEdge;
+                        canvasHeight = (height / width) * maxLongEdge;
+                    } else {
+                        canvasHeight = maxLongEdge;
+                        canvasWidth = (width / height) * maxLongEdge;
+                    }
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+                // 自适应质量：从0.85开始尝试，确保最终大小 ≤ maxSizeBytes
+                let quality = 0.85;
+                const tryCompress = (q) => {
+                    canvas.toBlob(blob => {
+                        if (!blob) {
+                            reject(new Error("canvas压缩失败"));
+                            return;
+                        }
+                        if (blob.size <= maxSizeBytes || q <= 0.35) {
+                            // 满足大小 或 质量已经很低就接受目前结果
+                            resolve(blob);
+                        } else {
+                            // 否则降低质量再试 (每次降低0.08)
+                            const newQuality = Math.max(0.4, q - 0.08);
+                            tryCompress(newQuality);
+                        }
+                    }, 'image/jpeg', q);
+                };
+                tryCompress(quality);
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error("图片加载失败"));
+            };
+            img.src = url;
+        });
+    }
+
+    // 处理原始图片文件
+    async function handleOriginalImage(fileOrBlob, sourceName = "image.jpg") {
+        if (!fileOrBlob) return;
+        statusDiv.innerHTML = "⏳ 正在压缩图片，请稍候...";
+        statusDiv.style.background = "#fff3cd";
+        try {
+            const compressedBlob = await compressImageToLimit(fileOrBlob, 2);
+            currentCompressedBlob = compressedBlob;
+            currentOriginalFileName = sourceName.endsWith('.jpg') ? sourceName : 'image_compressed.jpg';
+            updatePreviewUI(compressedBlob);
+            statusDiv.innerHTML = "✅ 图片压缩完成，大小 " + formatBytes(compressedBlob.size) + " (符合≤2MB要求)";
+            statusDiv.style.background = "#e6ffed";
+        } catch (err) {
+            console.error(err);
+            statusDiv.innerHTML = "❌ 图片压缩失败，请重试或更换图片";
+            statusDiv.style.background = "#ffe6e6";
+            currentCompressedBlob = null;
+            updatePreviewUI(null);
+        }
+    }
+
+    // 文件选择处理
+    function onFileSelected(file) {
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            statusDiv.innerHTML = "⚠️ 请选择图片格式文件 (jpg/png/webp)";
+            return;
+        }
+        handleOriginalImage(file, file.name);
+    }
+
+    // ---------- 分类按钮交互 ----------
+    function setActiveCategory(catValue) {
+        currentCategory = catValue;
+        categoryBtns.forEach(btn => {
+            if (btn.getAttribute('data-cat') === catValue) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        statusDiv.innerHTML = `📌 当前分类: ${catValue}，请选择图片`;
+        statusDiv.style.background = "#f1f5f9";
+    }
+
+    // ---------- 提交数据到API ----------
+    async function submitData() {
+        if (!currentCompressedBlob) {
+            statusDiv.innerHTML = "⚠️ 请先选择图片，完成压缩后再提交";
+            statusDiv.style.background = "#fff3cd";
+            return;
+        }
+        if (!currentCategory) {
+            statusDiv.innerHTML = "⚠️ 请选择图像分类";
+            return;
+        }
+
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "⏳ 提交中...";
+        statusDiv.innerHTML = "📡 正在上传到服务器...";
+        statusDiv.style.background = "#eef2ff";
+
+        const formData = new FormData();
+        formData.append('category', currentCategory);
+        const timestamp = Date.now();
+        const fileName = `${currentCategory}_${timestamp}.jpg`;
+        formData.append('image', currentCompressedBlob, fileName);
+
+        try {
+            const response = await fetch('/api/AqfASqtCXPJ', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const result = await response.text();
+                statusDiv.innerHTML = `🎉 提交成功！服务器响应: ${result.substring(0, 80)}`;
+                statusDiv.style.background = "#d1fae5";
+            } else {
+                const errorText = await response.text();
+                statusDiv.innerHTML = `❌ 上传失败 (${response.status}): ${errorText.substring(0, 100)}`;
+                statusDiv.style.background = "#ffe6e6";
+            }
+        } catch (err) {
+            console.error("提交异常", err);
+            statusDiv.innerHTML = `🌐 网络错误或接口不可达: ${err.message} (请确保后端服务可用，当前为前端演示)`;
+            statusDiv.style.background = "#ffebee";
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
+    }
+
+    // ---------- 事件绑定 ----------
+    categoryBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const cat = btn.getAttribute('data-cat');
+            setActiveCategory(cat);
+        });
+    });
+
+    filePickBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            onFileSelected(file);
+        }
+        fileInput.value = ''; // 清空以便重复选择同一文件
+    });
+
+    submitBtn.addEventListener('click', () => {
+        submitData();
+    });
+
+    // 初始化默认分类
+    setActiveCategory("橡皮");
+</script>
+</body>
+</html>

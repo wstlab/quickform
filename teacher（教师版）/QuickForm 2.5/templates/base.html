@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ get_app_name() }}{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='quickform.ico') }}">
+    <!-- QRCode JS -->
+    <script src="{{ url_for('static', filename='vendor/qrcodejs/qrcode.min.js') }}"></script>
+    <!-- Bootstrap CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
+    <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
+    {% block styles %}{% endblock %}
+    <style>
+        /* 全局字体设置 - 使用现代系统字体栈，参考 Cursor 网站设计 */
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            background-color: #fffbeb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        
+        /* 导航栏 - 橙棕色暖调 */
+        .navbar {
+            background-color: #b8956a !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+            letter-spacing: 0.5px;
+        }
+        
+        .navbar-brand:hover {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* 卡片样式 - 带浅灰色边框和阴影 */
+        .card {
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            background-color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            background-color: #b8956a;
+            color: white;
+            font-weight: 600;
+            border-bottom: none;
+            padding: 1rem 1.5rem;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* 按钮样式 - 统一字体，使用更现代的无衬线字体 */
+        .btn, button.btn, a.btn {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif !important;
+            font-weight: 500 !important;
+            letter-spacing: 0.02em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
+            vertical-align: middle;
+        }
+        
+        /* 统一按钮图标间距 */
+        .btn i.bi, .btn svg {
+            margin-right: 0.375rem;
+        }
+        
+        .btn i.bi:last-child, .btn svg:last-child {
+            margin-right: 0;
+            margin-left: 0.375rem;
+        }
+        
+        /* 确保所有按钮垂直对齐 */
+        .btn, button.btn, a.btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+        }
+        
+        /* 统一按钮高度，确保对齐 */
+        .btn-sm {
+            min-height: 36px;
+            padding: 0.5rem 1rem;
+        }
+        
+        .btn {
+            min-height: 40px;
+            padding: 0.625rem 1.5rem;
+        }
+        
+        .btn-lg {
+            min-height: 48px;
+            padding: 0.75rem 2rem;
+        }
+        
+        /* 按钮样式 - 主按钮为纯色填充，次要按钮为边框样式 */
+        .btn-primary {
+            background-color: #b8956a;
+            border-color: #b8956a;
+            color: white;
+            font-weight: 500;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #8b7355;
+            border-color: #8b7355;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(184, 149, 106, 0.3);
+            color: white;
+        }
+        
+        .btn-outline-primary {
+            color: #b8956a;
+            border-color: #b8956a;
+            background-color: transparent;
+            font-weight: 500;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #b8956a;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(184, 149, 106, 0.3);
+        }
+        
+        /* 其他按钮变体 - 扁平风格，有底色 */
+        .btn-success {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+            background-color: #10b981 !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669 !important;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-danger {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+            background-color: #ef4444 !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626 !important;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-warning {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+        }
+        
+        .btn-info {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+            background-color: #c9ab84 !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .btn-info:hover {
+            background-color: #b8956a !important;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(201, 171, 132, 0.3);
+        }
+        
+        .btn-secondary {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+            background-color: #6b7280 !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #4b5563 !important;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
+        }
+        
+        .btn-outline-secondary {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+        }
+        
+        .btn-light {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 500 !important;
+        }
+        
+        /* 状态标签 - 胶囊形色块 */
+        .badge {
+            padding: 0.5rem 0.875rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .badge.bg-success {
+            background-color: #10b981 !important;
+        }
+        
+        .badge.bg-warning {
+            background-color: #f59e0b !important;
+            color: white !important;
+        }
+        
+        .badge.bg-danger {
+            background-color: #ef4444 !important;
+        }
+        
+        .badge.bg-info {
+            background-color: #c9ab84 !important;
+        }
+        
+        .badge.bg-secondary {
+            background-color: #6b7280 !important;
+        }
+        
+        /* 表单控件 - 浅灰色边框 + 圆角 */
+        .form-control, .form-select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 0.625rem 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #b8956a;
+            box-shadow: 0 0 0 3px rgba(184, 149, 106, 0.1);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 数据展示 - 数字加粗大号字体 */
+        .data-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+        
+        .data-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .data-trend {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+        
+        /* 标题样式（覆盖范围最广的 h1–h6 颜色定义） */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        /* 蓝底/深色头部内的标题继承父级颜色，避免黑字 */
+        .card-header h1, .card-header h2, .card-header h3, .card-header h4, .card-header h5, .card-header h6,
+        .org-header h1, .org-header h2, .org-header h3, .org-header h4, .org-header h5, .org-header h6,
+        .statistics-header h1, .statistics-header h2, .statistics-header h3 {
+            color: inherit;
+        }
+        
+        h1 {
+            font-size: 2rem;
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
+        
+        /* 表格样式 */
+        .table {
+            background-color: white;
+        }
+        
+        .table thead th {
+            background-color: #fef9ef;
+            color: #111827;
+            font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #fef9ef;
+        }
+        
+        /* 消息闪现 */
+        .flash-message {
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+        
+        /* 页脚 */
+        .footer {
+            margin-top: auto;
+            background-color: transparent;
+            color: #6b7280;
+            padding: 1.5rem 0;
+        }
+        .footer-helper-wrap {
+            position: relative;
+            cursor: pointer;
+            color: #b8956a;
+            font-weight: 500;
+        }
+        .footer-helper-wrap:hover {
+            text-decoration: underline;
+        }
+        .footer-helper-popup {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .footer-helper-wrap:hover .footer-helper-popup {
+            display: block;
+        }
+        .footer-helper-popup img {
+            max-width: 220px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .container {
+            margin-bottom: 2rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .card {
+                margin-bottom: 1rem;
+            }
+            .btn-lg {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+            .data-number {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .card-body {
+                padding: 1rem;
+            }
+            .btn-lg {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+            .data-number {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">{{ get_app_name() }}</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="切换导航">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}"><i class="bi bi-house-door"></i> {{ _('首页') }}</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}"><i class="bi bi-database"></i> {{ _('数据任务') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('import_task') }}"><i class="bi bi-plus-circle"></i> {{ _('导入任务') }}</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://quickform.cn/tutorials" target="_blank" rel="noopener"><i class="bi bi-book"></i> {{ _('开源教程') }} <i class="bi bi-box-arrow-up-right" style="font-size: 0.7em;"></i></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdownAuth" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i> {{ get_languages()[get_current_language()] }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdownAuth">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh_CN') }}">{{ _('简体中文') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh_TW') }}">{{ _('繁体中文') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='en') }}">English</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="bi bi-person"></i> {{ _('设置') }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> {{ _('退出登录') }}</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i> {{ get_languages()[get_current_language()] }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh_CN') }}">{{ _('简体中文') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh_TW') }}">{{ _('繁体中文') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='en') }}">English</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right"></i> {{ _('登录') }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <div class="container mt-5">
+        <!-- 消息闪现 -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show flash-message" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ _('关闭') }}"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- 页面内容 -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="mb-2">{{ _('QuickForm：打通AI赋能教育的"最后一公里"') }}</p>
+            <p class="mb-2 small">
+                <a href="https://quickform.cc/" target="_blank" rel="noopener" class="text-decoration-none me-3">{{ _('QF项目简介') }}</a>
+                <a href="https://quickform.cn/" target="_blank" rel="noopener" class="text-decoration-none me-3">{{ _('访问QF在线版') }}</a>
+                <a href="https://quickform.readthedocs.io/zh-cn/latest/guide/deploy.html" target="_blank" rel="noopener" class="text-decoration-none me-3">{{ _('本地部署') }}</a>
+                <a href="https://my.feishu.cn/docx/KYlJdyq3wojmwox8KJTcnKORnob" target="_blank" rel="noopener" class="text-decoration-none me-3">{{ _('免责声明') }}</a>
+            </p>
+            <p class="mb-0 small text-muted">{{ _('联系我们：') }}<span class="footer-helper-wrap">{{ _('QuickForm小助手') }}<span class="footer-helper-popup"><img src="{{ url_for('static', filename='us/helper.jpg') }}" alt="QuickForm小助手" loading="lazy"></span></span> / {{ _('投稿邮箱') }} <a href="mailto:xiezuoru@vip.qq.com">xiezuoru@vip.qq.com</a></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

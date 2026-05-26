@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>校园文具图像采集展示 | 数据看板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f7fc;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            padding: 20px 16px 48px;
+            color: #0f172a;
+        }
+
+        /* 主容器 */
+        .dashboard {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* 头部卡片 */
+        .hero {
+            background: white;
+            border-radius: 32px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid #eef2ff;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hero .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            color: #334155;
+            font-size: 0.9rem;
+            border-top: 1px solid #eef2ff;
+            padding-top: 14px;
+        }
+
+        .task-badge {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #1e4a76;
+        }
+
+        .stats {
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+
+        /* 筛选按钮栏 */
+        .filter-bar {
+            background: white;
+            border-radius: 60px;
+            padding: 8px 12px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .filter-btn {
+            background: #f8fafc;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .filter-btn.active {
+            background: #2d5f9e;
+            border-color: #2d5f9e;
+            color: white;
+            box-shadow: 0 6px 12px rgba(45, 95, 158, 0.2);
+        }
+
+        .filter-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 网格视图 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 20px;
+            transition: all 0.2s;
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid #eef2ff;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-wrapper {
+            aspect-ratio: 1 / 1;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .img-wrapper img {
+            transform: scale(1.02);
+        }
+
+        .card-info {
+            padding: 12px 12px 14px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: #eef2ff;
+            color: #1e4a76;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-bottom: 8px;
+        }
+
+        .submitted-date {
+            font-size: 0.7rem;
+            color: #5b6e8c;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        /* 加载状态 & 空状态 */
+        .loading-state, .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: white;
+            border-radius: 48px;
+            color: #475569;
+            margin-top: 20px;
+            border: 1px solid #eef2ff;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #2d5f9e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            background: #fff5f5;
+            border: 1px solid #ffc9c9;
+            color: #c92a2a;
+            padding: 24px;
+            border-radius: 36px;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 48px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 560px) {
+            body {
+                padding: 16px 12px 32px;
+            }
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 14px;
+            }
+            .filter-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+            }
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* 辅助 */
+        button {
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- 头部信息 -->
+    <div class="hero">
+        <h1>
+            📚 校园文具 · 图像采集展示
+            <span class="task-badge" id="taskIdSpan">AqfASqtCXPJ</span>
+        </h1>
+        <div class="meta">
+            <span>📂 任务: 校园图像数据收集</span>
+            <span class="stats" id="totalStats">加载中...</span>
+        </div>
+    </div>
+
+    <!-- 分类筛选按钮组 (所有文具类别 + 全部) -->
+    <div class="filter-bar" id="filterBar">
+        <button data-category="all" class="filter-btn active">✨ 全部</button>
+        <button data-category="橡皮" class="filter-btn">✏️ 橡皮</button>
+        <button data-category="笔" class="filter-btn">🖊️ 笔</button>
+        <button data-category="修正带" class="filter-btn">📜 修正带</button>
+        <button data-category="尺子" class="filter-btn">📏 尺子</button>
+        <button data-category="圆规" class="filter-btn">⭕ 圆规</button>
+        <button data-category="文具盒" class="filter-btn">🧰 文具盒</button>
+    </div>
+
+    <!-- 图片网格容器 -->
+    <div id="galleryContainer" class="gallery">
+        <!-- 动态渲染卡片 -->
+    </div>
+
+    <footer>
+        🔍 点击任意图片可查看原图 | 数据实时来源于 /api/AqfASqtCXPJ
+    </footer>
+</div>
+
+<script>
+    // API 端点
+    const API_URL = '/api/AqfASqtCXPJ';
+    // 全局存储原始提交数据
+    let allSubmissions = [];
+    // 当前选中的筛选类别 ( 'all' 或者具体中文类别 )
+    let currentFilter = 'all';
+    // 加载状态
+    let isLoading = false;
+
+    // DOM 元素
+    const galleryContainer = document.getElementById('galleryContainer');
+    const totalStatsSpan = document.getElementById('totalStats');
+    const taskIdSpan = document.getElementById('taskIdSpan');
+
+    // 辅助函数: 格式化显示时间 (后端返回格式 "2026-05-23 13:53:22")
+    function formatDateTime(dateStr) {
+        if (!dateStr) return '未知时间';
+        // 直接展示原始字符串，简单优雅
+        return dateStr.replace(' ', ' · ');
+    }
+
+    // 构建图片完整URL (基于当前域名 + attachment)
+    function getImageUrl(attachment) {
+        if (!attachment) return '';
+        // 如果已经是完整URL则直接返回
+        if (attachment.startsWith('http://') || attachment.startsWith('https://')) {
+            return attachment;
+        }
+        // 一般 attachment 格式如 "/static/uploads/...", 拼接 origin
+        const origin = window.location.origin;
+        // 确保拼接后不会产生双斜杠
+        if (attachment.startsWith('/')) {
+            return origin + attachment;
+        }
+        return origin + '/' + attachment;
+    }
+
+    // 渲染图片网格 (根据筛选条件)
+    function renderGallery() {
+        if (!allSubmissions.length) {
+            // 没有数据时显示空状态
+            galleryContainer.innerHTML = `<div class="empty-state">📭 暂无采集数据，请先通过采集页面上传图片。</div>`;
+            totalStatsSpan.innerText = `总计 0 条`;
+            return;
+        }
+
+        // 根据当前筛选过滤
+        let filtered = [];
+        if (currentFilter === 'all') {
+            filtered = [...allSubmissions];
+        } else {
+            filtered = allSubmissions.filter(item => item.category === currentFilter);
+        }
+
+        // 更新统计栏显示
+        const totalCount = allSubmissions.length;
+        const filteredCount = filtered.length;
+        if (currentFilter === 'all') {
+            totalStatsSpan.innerText = `📸 总计 ${totalCount} 张图像`;
+        } else {
+            totalStatsSpan.innerText = `🔍 ${currentFilter} · ${filteredCount} 张 / 共 ${totalCount} 张`;
+        }
+
+        // 如果没有匹配的类别
+        if (filtered.length === 0) {
+            galleryContainer.innerHTML = `<div class="empty-state">🏷️ 暂无“${currentFilter}”类别的图像，试试其他分类~</div>`;
+            return;
+        }
+
+        // 生成卡片html
+        let cardsHtml = '';
+        filtered.forEach(sub => {
+            const category = sub.category || '未分类';
+            const submittedAt = sub.submitted_at || '未知时间';
+            const attachment = sub.attachment || '';
+            const imgUrl = getImageUrl(attachment);
+            // 用于图片加载失败时的占位
+            const fallbackIcon = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"%3E%3Cpath d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 8h-4v4h-4v-4H6V9h4V5h4v4h4v2z"/%3E%3C/svg%3E';
+            
+            cardsHtml += `
+                <div class="card" data-img-url="${imgUrl}" data-category="${category}">
+                    <div class="img-wrapper">
+                        <img 
+                            src="${imgUrl}" 
+                            alt="${category} 图像" 
+                            loading="lazy"
+                            onerror="this.onerror=null; this.src='${fallbackIcon}'; this.style.objectFit='contain'; this.style.padding='20px';"
+                        >
+                    </div>
+                    <div class="card-info">
+                        <span class="category-tag">${category}</span>
+                        <div class="submitted-date">
+                            📅 ${formatDateTime(submittedAt)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        galleryContainer.innerHTML = cardsHtml;
+
+        // 绑定卡片点击事件 (新窗口查看大图)
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const imgUrl = card.getAttribute('data-img-url');
+            if (imgUrl && imgUrl !== '#') {
+                card.addEventListener('click', (e) => {
+                    // 避免点到内部按钮冒泡干扰，直接打开原图
+                    e.stopPropagation();
+                    if (imgUrl) {
+                        window.open(imgUrl, '_blank');
+                    }
+                });
+            }
+        });
+    }
+
+    // 从API获取数据
+    async function fetchSubmissions() {
+        // 显示加载状态
+        galleryContainer.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <div>📡 正在获取图像数据 ...</div>
+            </div>
+        `;
+        totalStatsSpan.innerText = `加载中...`;
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            
+            // 校验数据结构
+            if (!data || !Array.isArray(data.submissions)) {
+                throw new Error('返回数据结构异常，缺少 submissions 字段');
+            }
+
+            // 提取关键信息，并增强稳定性
+            allSubmissions = data.submissions.map(sub => ({
+                category: sub.category || '未分类',
+                attachment: sub.attachment || '',
+                submitted_at: sub.submitted_at || '',
+            }));
+            
+            // 可选: 按提交时间排序(旧->新)，但保留后端顺序也可，为了呈现整洁按时间正序(最早在上)
+            // 根据 submitted_at 简单排序（字符串可直接比较）
+            allSubmissions.sort((a, b) => (a.submitted_at || '').localeCompare(b.submitted_at || ''));
+            
+            // 可选: 展示任务title 如果有
+            if (data.task_title) {
+                const heroTitle = document.querySelector('.hero h1');
+                if (heroTitle && !heroTitle.innerText.includes(data.task_title)) {
+                    // 保留原风格，不作强制覆盖
+                }
+            }
+            if (data.task_id) {
+                taskIdSpan.innerText = data.task_id;
+            }
+            
+            // 渲染网格
+            renderGallery();
+            
+        } catch (error) {
+            console.error('获取数据失败:', error);
+            let errorMsg = '⚠️ 无法加载数据，请检查网络或API服务。';
+            if (error.name === 'AbortError') {
+                errorMsg = '⏱️ 请求超时，请检查接口可用性或稍后重试。';
+            } else if (error.message.includes('Failed to fetch')) {
+                errorMsg = '🌐 网络错误，请确认后端接口 /api/AqfASqtCXPJ 可访问（同源或CORS配置正确）。';
+            } else {
+                errorMsg = `❌ 加载失败: ${error.message}`;
+            }
+            galleryContainer.innerHTML = `<div class="error-state">${errorMsg}<br><button style="margin-top:16px;background:#eef2ff;padding:8px 20px;border-radius:40px;cursor:pointer;" id="retryBtn">🔄 重试</button></div>`;
+            totalStatsSpan.innerText = `数据加载失败`;
+            const retryBtn = document.getElementById('retryBtn');
+            if (retryBtn) retryBtn.addEventListener('click', () => fetchSubmissions());
+        }
+    }
+
+    // 筛选按钮事件绑定 & 激活样式切换
+    function initFilterButtons() {
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const categoryVal = btn.getAttribute('data-category');
+                if (!categoryVal) return;
+                // 更新当前筛选
+                currentFilter = categoryVal;
+                // 更新按钮样式
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // 重新渲染当前数据
+                if (allSubmissions.length > 0) {
+                    renderGallery();
+                } else {
+                    // 数据尚未加载完成，等待fetch完成会自动重绘，但为了体验重新触发渲染
+                    if (allSubmissions.length === 0 && !isLoading) {
+                        // 如果还没有数据，触发fetch后渲染？但fetch已经开始或还未开始；安全起见等数据
+                        // 由于fetch可能异步，等数据到后调用renderGallery。所以不需要额外操作。
+                        // 但是点击时若数据还在加载，就等加载完，renderGallery会基于当前currentFilter重新过滤。
+                        // 这里简单设置等待监听，或者如果allSubmissions为空且未加载, 不用渲染, 等fetch完成
+                        // fetch完成后会调用renderGallery，且此时currentFilter已变，会正确渲染。
+                    } else if (allSubmissions.length === 0 && isLoading === false) {
+                        // 意外情况重新拉取
+                        fetchSubmissions();
+                    }
+                }
+                // 如果在数据尚未返回时切换过滤器，等待fetch完成在renderGallery中会读取currentFilter过滤
+            });
+        });
+    }
+
+    // 可选：增加一个“全部”类别默认高亮
+    function setDefaultFilter() {
+        currentFilter = 'all';
+        const allBtn = document.querySelector('.filter-btn[data-category="all"]');
+        if (allBtn) allBtn.classList.add('active');
+    }
+
+    // 初始化页面：获取数据，设置过滤器
+    async function init() {
+        initFilterButtons();
+        setDefaultFilter();
+        await fetchSubmissions();
+        // 增加窗口加载完成后，若有图片加载失败兜底已在img onerror处理
+    }
+
+    // 启动
+    init();
+</script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('编辑任务') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="mb-3 d-flex justify-content-end">
+            <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> {{ _('返回任务详情') }}
+            </a>
+        </div>
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h3 class="text-center mb-0" style="color: white; font-weight: 600;">{{ _('编辑数据任务') }}</h3>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <form method="POST" action="{{ url_for('edit_task', task_id=task.id) }}" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="title" class="form-label" style="font-weight: 500;">{{ _('任务标题') }}</label>
+                        <input type="text" class="form-control" id="title" name="title" required value="{{ task.title }}" style="border-radius: 8px;">
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label" style="font-weight: 500;">{{ _('任务描述（可选）') }}</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" style="border-radius: 8px;">{{ task.description }}</textarea>
+                    </div>
+
+                    <!-- 已有附件列表 -->
+                    {% if task.attachments %}
+                    <div id="attachments-section" class="mb-4" style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; background-color: #fafafa;">
+                        <label class="form-label" style="font-weight: 600; color: #374151; font-size: 1.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px; color: #b8956a;">
+                                <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
+                            </svg>
+                            {{ _('已有附件') }}（{{ task.attachments|length }}{{ _('个') }}）
+                        </label>
+                        {% for attachment in task.attachments %}
+                        <br>
+                        <div class="d-inline-flex align-items-center me-2 mb-2" style="gap: 4px;">
+                                <a href="/static/assets/{{ attachment.file_path.split('/')[-1].split('\\')[-1] }}" target="_blank" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
+                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3-2A1.5 1.5 0 0 1 9.5 0H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5a1.5 1.5 0 0 1-1.5 1.5H11a1.5 1.5 0 0 1-1.5-1.5z"/>
+                                    </svg>
+                                    {{ attachment.file_name }}
+                                </a>
+                                {% set ext = attachment.file_name.rsplit('.', 1)[-1].lower() if '.' in attachment.file_name else '' %}
+                                {% if ext in ('html', 'htm') %}
+                                <button type="button" class="btn edit-attachment" data-id="{{ attachment.id }}" data-name="{{ attachment.file_name }}" style="background-color: #10b981; color: white; border-radius: 8px; padding: 0.5rem 0.75rem;" title="{{ _('编辑代码') }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>
+                                </button>
+                                {% endif %}
+                                <button type="button" class="btn delete-attachment" data-id="{{ attachment.id }}" style="background-color: #ef4444; color: white; border-radius: 8px; padding: 0.5rem 0.75rem;" title="{{ _('删除附件') }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- 新附件上传区域 -->
+                    <div class="mb-4" style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; background-color: #fafafa;">
+                        <label class="form-label" style="font-weight: 600; color: #374151; font-size: 1.1rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px; color: #b8956a;">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            {{ _('添加新附件（可选）') }}
+                        </label>
+                        
+                        <!-- 文件1上传 -->
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="file" name="file" accept=".pdf,.html,.htm,.jpg,.zip" style="border-radius: 8px; border: 1px solid #d1d5db;">
+                        </div>
+                        
+                        <!-- 文件2上传 -->
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="file_2" name="file_2" accept=".pdf,.html,.htm,.jpg,.zip" style="border-radius: 8px; border: 1px solid #d1d5db;">
+                        </div>
+                        <div class="form-text" style="color: #6b7280;">{{ _('支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。') }}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between" style="gap: 10px;">
+                        <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                            {{ _('取消') }}
+                        </a>
+                        <button type="submit" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                            {{ _('保存修改') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var deleteConfirmMsg = "{{ _('确定要删除这个附件吗？') }}";
+var deleteFailedMsg = "{{ _('删除失败') }}";
+var deleteErrorMsg = "{{ _('删除出错') }}";
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.delete-attachment')) {
+        const btn = e.target.closest('.delete-attachment');
+        const attachmentId = btn.getAttribute('data-id');
+        if (confirm(deleteConfirmMsg)) {
+            fetch('/delete_attachment/' + attachmentId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    btn.closest('.d-inline-flex').remove();
+                } else {
+                    alert(deleteFailedMsg + ': ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert(deleteErrorMsg + ': ' + error.message);
+            });
+        }
+    }
+});
+</script>
+
+<!-- 代码编辑器模态框 -->
+<div id="codeEditorModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1060; background-color: rgba(0,0,0,0.6);">
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px;">
+        <div style="background: white; border-radius: 10px; flex: 1; display: flex; flex-direction: column; overflow: hidden; max-width: 1200px; margin: 0 auto; width: 100%;">
+            <div style="padding: 15px 20px; background-color: #1e293b; color: white; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+                <h5 id="codeEditorTitle" style="margin: 0; font-weight: 600; font-size: 16px; color: white;"></h5>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span id="codeEditorStatus" style="font-size: 13px; color: #94a3b8;"></span>
+                    <button type="button" onclick="toggleFindReplace()" style="background-color: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 13px;">
+                        {{ _('查找替换') }} (Ctrl+H)
+                    </button>
+                    <button type="button" onclick="smartReplaceApiUrl()" style="background-color: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 13px;">
+                        {{ _('智能替换API地址') }}
+                    </button>
+                    <button type="button" onclick="saveAndCloseCode()" style="background-color: #10b981; color: white; border: none; padding: 6px 16px; border-radius: 6px; font-weight: 500; cursor: pointer; font-size: 14px;">
+                        {{ _('保存并关闭') }}
+                    </button>
+                    <button type="button" onclick="closeCodeEditor()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 1;">&times;</button>
+                </div>
+            </div>
+            <div id="findReplacePanel" style="display: none; padding: 10px 20px; background-color: #334155; flex-shrink: 0;">
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="findInput" placeholder="{{ _('查找内容') }}" style="width: 250px; padding: 5px 10px; border: 1px solid #475569; border-radius: 4px; background-color: #1e293b; color: #e2e8f0; font-size: 13px; outline: none;">
+                    <input type="text" id="replaceInput" placeholder="{{ _('替换为') }}" style="width: 250px; padding: 5px 10px; border: 1px solid #475569; border-radius: 4px; background-color: #1e293b; color: #e2e8f0; font-size: 13px; outline: none;">
+                    <button type="button" onclick="findNext()" style="background-color: #c9ab84; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">{{ _('查找下一个') }}</button>
+                    <button type="button" onclick="replaceAll()" style="background-color: #ef4444; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 13px; cursor: pointer;">{{ _('全部替换') }}</button>
+                    <span id="findResultCount" style="font-size: 12px; color: #94a3b8;"></span>
+                </div>
+            </div>
+            <div style="flex: 1; position: relative;">
+                <textarea id="codeEditorTextarea" spellcheck="false" style="width: 100%; height: 100%; border: none; outline: none; padding: 16px; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.6; resize: none; background-color: #0f172a; color: #e2e8f0; tab-size: 2;"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var currentEditAttachmentId = null;
+var codeEditorModal = document.getElementById('codeEditorModal');
+var codeEditorTextarea = document.getElementById('codeEditorTextarea');
+var codeEditorTitle = document.getElementById('codeEditorTitle');
+var codeEditorStatus = document.getElementById('codeEditorStatus');
+
+codeEditorModal.addEventListener('click', function(e) {
+    if (e.target === codeEditorModal || e.target.parentElement === codeEditorModal) {
+        if (!codeEditorTextarea.value || confirm("{{ _('确定要关闭编辑器吗？未保存的修改将丢失。') }}")) {
+            closeCodeEditor();
+        }
+    }
+});
+
+codeEditorTextarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 2;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveCode();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'h') {
+        e.preventDefault();
+        toggleFindReplace();
+    }
+});
+
+function openCodeEditor(attachmentId, fileName) {
+    currentEditAttachmentId = attachmentId;
+    codeEditorTitle.textContent = fileName;
+    codeEditorStatus.textContent = "{{ _('加载中...') }}";
+    codeEditorTextarea.value = '';
+    codeEditorModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+
+    fetch('/get_attachment_content/' + attachmentId)
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.success) {
+                codeEditorTextarea.value = data.content;
+                codeEditorStatus.textContent = "{{ _('已加载') }}";
+            } else {
+                alert(data.message);
+                closeCodeEditor();
+            }
+        })
+        .catch(function(error) {
+            alert("{{ _('加载文件失败') }}: " + error.message);
+            closeCodeEditor();
+        });
+}
+
+function saveCode() {
+    if (!currentEditAttachmentId) return;
+
+    codeEditorStatus.textContent = "{{ _('保存中...') }}";
+
+    fetch('/save_attachment_content/' + currentEditAttachmentId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: codeEditorTextarea.value })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.success) {
+            codeEditorStatus.textContent = "{{ _('已保存 ✓') }}";
+        } else {
+            alert("{{ _('保存失败') }}: " + data.message);
+            codeEditorStatus.textContent = "{{ _('保存失败') }}";
+        }
+    })
+    .catch(function(error) {
+        alert("{{ _('保存出错') }}: " + error.message);
+        codeEditorStatus.textContent = "{{ _('保存出错') }}";
+    });
+}
+
+function saveAndCloseCode() {
+    if (!currentEditAttachmentId) {
+        closeCodeEditor();
+        return;
+    }
+    codeEditorStatus.textContent = "{{ _('保存中...') }}";
+    fetch('/save_attachment_content/' + currentEditAttachmentId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: codeEditorTextarea.value })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.success) {
+            closeCodeEditor();
+        } else {
+            alert("{{ _('保存失败') }}: " + data.message);
+        }
+    })
+    .catch(function(error) {
+        alert("{{ _('保存出错') }}: " + error.message);
+    });
+}
+
+function closeCodeEditor() {
+    codeEditorModal.style.display = 'none';
+    document.body.style.overflow = '';
+    currentEditAttachmentId = null;
+}
+
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.edit-attachment');
+    if (btn) {
+        var attachmentId = btn.getAttribute('data-id');
+        var fileName = btn.getAttribute('data-name');
+        openCodeEditor(attachmentId, fileName);
+    }
+});
+
+function toggleFindReplace() {
+    var panel = document.getElementById('findReplacePanel');
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        document.getElementById('findInput').focus();
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+function findNext() {
+    var textarea = codeEditorTextarea;
+    var searchText = document.getElementById('findInput').value;
+    if (!searchText) return;
+    var content = textarea.value;
+    var startPos = textarea.selectionEnd;
+    var idx = content.indexOf(searchText, startPos);
+    if (idx === -1) {
+        idx = content.indexOf(searchText, 0);
+    }
+    if (idx !== -1) {
+        textarea.focus();
+        textarea.setSelectionRange(idx, idx + searchText.length);
+        document.getElementById('findResultCount').textContent = '';
+    } else {
+        document.getElementById('findResultCount').textContent = "{{ _('未找到') }}";
+    }
+}
+
+function replaceAll() {
+    var findText = document.getElementById('findInput').value;
+    var replaceText = document.getElementById('replaceInput').value;
+    if (!findText) return;
+    var content = codeEditorTextarea.value;
+    var count = 0;
+    var idx = content.indexOf(findText);
+    while (idx !== -1) {
+        count++;
+        idx = content.indexOf(findText, idx + findText.length);
+    }
+    if (count > 0) {
+        codeEditorTextarea.value = content.split(findText).join(replaceText);
+        codeEditorStatus.textContent = "{{ _('已替换') }} " + count + " {{ _('处') }}";
+    } else {
+        document.getElementById('findResultCount').textContent = "{{ _('未找到') }}";
+    }
+}
+
+function smartReplaceApiUrl() {
+    var content = codeEditorTextarea.value;
+    var regex = /https?:\/\/[^\/"'`\s]+(:\d+)?(\/api\/[a-zA-Z0-9/_-]*)/g;
+    var matches = content.match(regex);
+    if (!matches || matches.length === 0) {
+        alert("{{ _('未找到需要替换的API地址') }}");
+        return;
+    }
+    var unique = [];
+    for (var i = 0; i < matches.length; i++) {
+        if (unique.indexOf(matches[i]) === -1) unique.push(matches[i]);
+    }
+    var msg = "{{ _('找到以下API地址，将转换为相对路径：') }}" + "\n\n";
+    for (var j = 0; j < unique.length; j++) {
+        var rel = unique[j].replace(/https?:\/\/[^\/"'`\s]+(:\d+)?/, '');
+        msg += unique[j] + "\n  → " + rel + "\n";
+    }
+    msg += "\n{{ _('共') }} " + unique.length + " {{ _('个地址，') }}" + matches.length + " {{ _('处替换。确认替换？') }}";
+    if (!confirm(msg)) return;
+    codeEditorTextarea.value = content.replace(regex, '$2');
+    codeEditorStatus.textContent = "{{ _('已替换') }} " + matches.length + " {{ _('处API地址') }}";
+}
+</script>
+{% endblock %}

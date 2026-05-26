@@ -1,0 +1,483 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ task.title }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h2 class="mb-0">{{ task.title }}</h2>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 4z"/>
+                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0z"/>
+                        </svg>
+                        {{ _('导出') }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="exportDropdown" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        <li><a class="dropdown-item" href="{{ url_for('export_data', task_id=task.id) }}" style="padding: 0.5rem 1rem;"><i class="bi bi-file-earmark-spreadsheet me-2"></i>{{ _('导出数据') }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="showExportTaskModal(); return false;" style="padding: 0.5rem 1rem;"><i class="bi bi-archive me-2"></i>{{ _('导出任务') }}</a></li>
+                    </ul>
+                </div>
+                <a href="{{ url_for('smart_analyze', task_id=task.id) }}" class="btn" style="background-color: #c9ab84; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart2" viewBox="0 0 16 16">
+                        <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm5 2v8h2V5H6zm4 0v8h2V5h-2zm4 0v8h2V5h-2z"/>
+                    </svg>
+                    {{ _('数据分析') }}
+                </a>
+                <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                    {{ _('编辑任务') }}
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path d="M5.854 7.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708l-2 2a.5.5 0 0 0 0 .708zm-2.5 0a.5.5 0 0 1 0-.708l2-2a.5.5 0 0 1 .708.708L5.56 7.5H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H5.56l1.293 1.293a.5.5 0 0 1-.708.708l-2-2z"/>
+                    </svg>
+                    {{ _('返回列表') }}
+                </a>
+            </div>
+        </div>
+        
+        <!-- 任务信息卡片 -->
+        <div class="card mb-4 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('任务信息') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p class="mb-2"><strong>{{ _('创建时间：') }}</strong>{{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p class="mb-0"><strong>{{ _('提交数量：') }}</strong>{{ submission|length }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <strong class="d-block mb-2">{{ _('API地址：') }}</strong>
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly value="{{ request.host_url }}api/{{ task.task_id }}" id="task-url" style="border-radius: 8px;">
+                                <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 8px;" onclick="copyToClipboard('task-url')">{{ _('复制') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if task.description %}
+                <div class="mt-4">
+                    <strong class="d-block mb-2">任务描述：</strong>
+                    <p style="color: #6b7280;">{{ task.description }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <strong class="d-block mb-2">已上传文件（{{ task.attachments|length }}个）：</strong>
+                    {% if task.attachments %}
+                    {% for attachment in task.attachments %}
+                    <div class="d-inline-flex align-items-center me-2 mb-2" style="gap: 4px;">
+                        <a href="/static/assets/{{ attachment.file_path.split('/')[-1].split('\\')[-1] }}" target="_blank" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
+                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3-2A1.5 1.5 0 0 1 9.5 0H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5a1.5 1.5 0 0 1-1.5 1.5H11a1.5 1.5 0 0 1-1.5-1.5z"/>
+                            </svg>
+                            {{ attachment.file_name }}
+                        </a>
+                        <button type="button" class="btn qr-btn" style="background-color: #10b981; color: white; border-radius: 8px; padding: 0.5rem 0.75rem;" data-path="/static/assets/{{ attachment.file_path.split('/')[-1].split('\\')[-1] }}" title="生成二维码">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" style="display: block;">
+                                    <rect x="1" y="1" width="5" height="5" rx="0.5" fill="currentColor"/>
+                                    <rect x="2" y="2" width="3" height="3" rx="0.25" fill="white"/>
+                                    <rect x="2.5" y="2.5" width="2" height="2" rx="0.25" fill="currentColor"/>
+                                    <rect x="10" y="1" width="5" height="5" rx="0.5" fill="currentColor"/>
+                                    <rect x="11" y="2" width="3" height="3" rx="0.25" fill="white"/>
+                                    <rect x="11.5" y="2.5" width="2" height="2" rx="0.25" fill="currentColor"/>
+                                    <rect x="1" y="10" width="5" height="5" rx="0.5" fill="currentColor"/>
+                                    <rect x="2" y="11" width="3" height="3" rx="0.25" fill="white"/>
+                                    <rect x="2.5" y="11.5" width="2" height="2" rx="0.25" fill="currentColor"/>
+                                    <rect x="7" y="1" width="2" height="2" fill="currentColor"/>
+                                    <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+                                    <rect x="7" y="4" width="1" height="1" fill="currentColor"/>
+                                    <rect x="8" y="5" width="1" height="1" fill="currentColor"/>
+                                    <rect x="9" y="6" width="1" height="1" fill="currentColor"/>
+                                    <rect x="10" y="7" width="1" height="1" fill="currentColor"/>
+                                    <rect x="7" y="8" width="1" height="1" fill="currentColor"/>
+                                    <rect x="8" y="9" width="1" height="1" fill="currentColor"/>
+                                    <rect x="12" y="8" width="1" height="1" fill="currentColor"/>
+                                    <rect x="13" y="9" width="1" height="1" fill="currentColor"/>
+                                    <rect x="14" y="10" width="1" height="1" fill="currentColor"/>
+                                </svg>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <div class="mt-3">
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}#attachments-section" class="btn" style="background-color: #10b981; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;">
+                            <i class="bi bi-upload"></i> 上传文件
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提交代码提示词 -->
+        <div class="card mb-4 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #c9ab84; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;">数据提交说明</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="mb-4">
+                    <strong class="d-block mb-2">参考提示词（点击复制）：</strong>
+                    <div class="input-group">
+                        <input type="text" class="form-control" readonly value="创建完应用后，以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送数据" id="simple-instruction" style="border-radius: 8px;">
+                        <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 8px;" onclick="copyToClipboard('simple-instruction')">复制</button>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <strong class="d-block mb-2">💡 数据接口（API）说明：</strong>
+                    <span style="color: #6b7280;">访问下方 URL，即GET方式即可查看已收集的数据；制作实时统计页面时可向大模型提供该 URL 及数据样例。<br>点击这里<a href="{{ request.host_url }}api/{{ task.task_id }}" target="_blank">{{ request.host_url }}api/{{ task.task_id }}</a>可以看到全部已经回收的数据。</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提交数据列表 -->
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0" style="color: white; font-weight: 600;">提交数据列表</h5>
+                    <a href="{{ url_for('task_data_view', task_id=task.id) }}" style="color: white; text-decoration: none;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 4px;"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/></svg>查看实时数据</a>
+                </div>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                {% if submission %}
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border-radius: 8px; overflow: hidden;">
+                        <thead style="background-color: #f3f4f6;">
+                            <tr>
+                                <th style="font-weight: 600; color: #374151;">
+                                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
+                                </th>
+                                <th style="font-weight: 600; color: #374151;">ID</th>
+                                <th style="font-weight: 600; color: #374151;">提交时间</th>
+                                <th style="font-weight: 600; color: #374151;">数据内容</th>
+                                <th style="font-weight: 600; color: #374151; width: 120px;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in submission %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="submission_ids" value="{{ sub.id }}">
+                                </td>
+                                <td>{{ sub.id }}</td>
+                                <td>{{ sub.submitted_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    <button type="button" class="btn" style="background-color: #b8956a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;" onclick="showModal('dataModal-{{ sub.id }}');">
+                                        查看数据
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn" style="background-color: #ef4444; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;" onclick="deleteSingleSubmission({{ sub.id }})">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3h11V2h-11z"/>
+                                        </svg>
+                                        删除
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 批量操作 -->
+                <div class="mt-4">
+                    <button type="button" class="btn" style="background-color: #ef4444; color: white; font-weight: 500; border-radius: 8px; padding: 0.75rem 1.5rem; transition: all 0.3s ease;" onclick="deleteSelectedSubmissions()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3h11V2h-11z"/>
+                        </svg>
+                        批量删除选中项
+                    </button>
+                    
+                    <form id="bulkDeleteForm" action="{{ url_for('delete_multiple_submissions', task_id=task.id) }}" method="POST" style="display:none;">
+                        <!-- 表单内容将通过JavaScript动态填充 -->
+                    </form>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="mt-4">
+                    <p class="text-center" style="color: #6b7280;">共 {{ submission|length }} 条记录</p>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-4" style="width: 48px; height: 48px; margin: 0 auto;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#6b7280" class="bi bi-database" viewBox="0 0 16 16">
+                            <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                            <path d="M6.5 16a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1H6.5v1zm-2-1a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1H4.5v1z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-muted mb-3">暂无提交数据</h4>
+                    <p class="text-muted mb-0">当用户通过表单提交数据后，将在这里显示</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 二维码显示模态框 -->
+<div id="qrcodeModal" tabindex="-1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);">
+    <div style="width: 90%; max-width: 300px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 10px; padding: 20px; text-align: center;">
+        <h5 style="margin-bottom: 15px; font-weight: 600; color: #111827;">扫描二维码</h5>
+        <div id="qrcodeContainer" style="margin: 0 auto 15px; width: 200px; height: 200px; position: relative;"></div>
+        <button type="button" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeQRCode()">关闭</button>
+    </div>
+</div>
+
+{% for sub in submission %}
+<div id="dataModal-{{ sub.id }}" class="modal" tabindex="-1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);" onclick="if(event.target===this) closeModal('dataModal-{{ sub.id }}');">
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; background: white; border-radius: 10px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="padding: 15px 20px; border-bottom: 1px solid #e5e7eb; background-color: #fef9ef; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h5 style="margin: 0; font-size: 16px; font-weight: 600; color: #111827;">提交数据详情 #{{ sub.id }}</h5>
+            <button type="button" onclick="closeModal('dataModal-{{ sub.id }}');" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #6b7280;">&times;</button>
+        </div>
+        <div style="padding: 20px; flex-grow: 1; overflow-y: auto;">
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #6b7280;"><strong>提交时间：</strong>{{ sub.submitted_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            {% set parsed = sub.data|from_json %}
+            {% if parsed and parsed.attachment is defined %}
+            <p style="margin: 0 0 12px 0; font-size: 14px; color: #374151;"><strong>附件：</strong>
+                {% if parsed.attachment is string %}
+                <a href="{{ parsed.attachment }}" target="_blank" style="color: #b8956a; text-decoration: underline;">{{ parsed.attachment.split('/')[-1] }}</a>
+                {% elif parsed.attachment is iterable %}
+                {% for att in parsed.attachment %}
+                <a href="{{ att }}" target="_blank" style="color: #b8956a; text-decoration: underline; margin-right: 10px;">{{ att.split('/')[-1] }}</a>
+                {% endfor %}
+                {% endif %}
+            </p>
+            {% endif %}
+            <h6 style="margin: 0 0 10px 0; font-size: 14px; font-weight: 600; color: #111827;">数据内容：</h6>
+            <pre style="font-size: 16px; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; margin: 0; min-height: 300px; background-color: #fef9ef; border: 1px solid #e5e7eb; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace;">{{ sub.data }}</pre>
+        </div>
+        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background-color: #fef9ef; border-radius: 0 0 10px 10px; text-align: right;">
+            <button type="button" class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeModal('dataModal-{{ sub.id }}');">关闭</button>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div id="exportTaskModal" class="modal" tabindex="-1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050; background-color: rgba(0,0,0,0.5);" onclick="if(event.target===this) closeExportTaskModal();">
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 520px; background: white; border-radius: 10px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+        <div style="padding: 15px 20px; border-bottom: 1px solid #e5e7eb; background-color: #fef9ef; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h5 style="margin: 0; font-size: 16px; font-weight: 600; color: #111827;">{{ _('导出任务') }}</h5>
+            <button type="button" onclick="closeExportTaskModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #6b7280;">&times;</button>
+        </div>
+        <div style="padding: 20px;">
+            <p style="font-weight: 600; color: #111827; margin-bottom: 0.75rem;">{{ _('导出内容包含：') }}</p>
+            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #166534; font-weight: 500; cursor: default;">
+                    <input type="checkbox" checked disabled style="accent-color: #16a34a;">
+                    {{ _('必选：任务名称、简介和相关网页文件') }}
+                </label>
+            </div>
+            <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 0.75rem 1rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #1e40af; font-weight: 500; cursor: pointer;">
+                    <input type="checkbox" id="exportIncludeSubmissions" style="accent-color: #b8956a;">
+                    {{ _('可选：学习数据') }}
+                </label>
+                {% if has_api_uploads %}
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #1e40af; font-weight: 500; cursor: pointer;">
+                    <input type="checkbox" id="exportIncludeApiUploads" style="accent-color: #b8956a;">
+                    {{ _('可选：通过API上传的附件') }}
+                </label>
+                {% endif %}
+            </div>
+        </div>
+        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background-color: #fef9ef; border-radius: 0 0 10px 10px; text-align: right;">
+            <button type="button" class="btn" style="background-color: #6b7280; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem;" onclick="closeExportTaskModal()">{{ _('取消') }}</button>
+            <button type="button" class="btn" style="background-color: #16a34a; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; margin-left: 0.5rem;" onclick="confirmExportTask()">{{ _('确认导出') }}</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var i18nCopied = "{{ _('已复制') }}";
+    var i18nConfirmDelete = "{{ _('确定要删除这条提交数据吗？此操作不可撤销！') }}";
+    var i18nDeleteFailed = "{{ _('删除失败') }}";
+    var i18nDeleteFailedDetail = "{{ _('删除失败：') }}";
+    var i18nSelectAtLeast = "{{ _('请至少选择一条要删除的提交数据') }}";
+    var i18nConfirmDeleteSelected = "{{ _('确定要删除选中的') }}";
+    var i18nSubmissions = "{{ _('条提交数据吗？此操作不可撤销！') }}";
+
+    function copyToClipboard(elementId) {
+        var element = document.getElementById(elementId);
+        if (!element) return;
+        element.select();
+        element.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+
+        var btn = element.nextElementSibling;
+        if (!btn) return;
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/></svg> ' + i18nCopied;
+
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+        }, 2000);
+    }
+
+    function confirmDelete() {
+        return confirm(i18nConfirmDelete);
+    }
+
+    function deleteSingleSubmission(submissionId) {
+        if (!confirm(i18nConfirmDelete)) return;
+        fetch('/delete_submission/' + submissionId, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            cache: 'no-store'
+        })
+        .then(function(r) { return r.json().catch(function() { return {}; }); })
+        .then(function(data) {
+            if (data.success) { location.reload(); }
+            else { alert(data.message || i18nDeleteFailed); }
+        })
+        .catch(function(e) { alert(i18nDeleteFailedDetail + e.message); });
+    }
+
+    function toggleSelectAll(source) {
+        var checkboxes = document.querySelectorAll('input[name="submission_ids"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function deleteSelectedSubmissions() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="submission_ids"]:checked');
+        if (selectedCheckboxes.length === 0) {
+            alert(i18nSelectAtLeast);
+            return;
+        }
+
+        if (confirm(i18nConfirmDeleteSelected + ' ' + selectedCheckboxes.length + ' ' + i18nSubmissions)) {
+            var bulkForm = document.getElementById('bulkDeleteForm');
+            while (bulkForm.firstChild) {
+                bulkForm.removeChild(bulkForm.firstChild);
+            }
+
+            for (var i = 0; i < selectedCheckboxes.length; i++) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'submission_ids';
+                input.value = selectedCheckboxes[i].value;
+                bulkForm.appendChild(input);
+            }
+
+            bulkForm.submit();
+        }
+    }
+
+    function showModal(modalId) {
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+
+    function closeModal(modalId) {
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function showQRCode(path) {
+        var modal = document.getElementById('qrcodeModal');
+        var container = document.getElementById('qrcodeContainer');
+        if (!modal || !container) {
+            alert('二维码弹窗组件未找到，请刷新页面重试');
+            return;
+        }
+        var fullUrl = window.location.origin + path;
+        modal.style.display = 'block';
+        container.innerHTML = '';
+        var img = document.createElement('img');
+        img.src = '/api/qrcode?data=' + encodeURIComponent(fullUrl);
+        img.style.cssText = 'width: 200px; height: 200px;';
+        img.alt = '二维码';
+        img.onerror = function() {
+            container.innerHTML = '<p style="color: red; padding-top: 80px;">二维码生成失败，请稍后重试</p>';
+        };
+        container.appendChild(img);
+        var logoImg = document.createElement('img');
+        logoImg.src = '/static/quickform.ico';
+        logoImg.style.cssText = 'position: absolute; width: 36px; height: 36px; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 4px; padding: 2px; border: 1px solid #ddd;';
+        container.appendChild(logoImg);
+    }
+
+    function closeQRCode() {
+        var modal = document.getElementById('qrcodeModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function initQRCodeButtons() {
+        var qrButtons = document.querySelectorAll('.qr-btn');
+        for (var i = 0; i < qrButtons.length; i++) {
+            (function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var path = btn.getAttribute('data-path');
+                    if (path) {
+                        showQRCode(path);
+                    }
+                });
+            })(qrButtons[i]);
+        }
+    }
+
+    function initQRCodeModal() {
+        var modal = document.getElementById('qrcodeModal');
+        if (!modal) return;
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initQRCodeModal();
+            initQRCodeButtons();
+        });
+    } else {
+        initQRCodeModal();
+        initQRCodeButtons();
+    }
+
+    function showExportTaskModal() {
+        document.getElementById('exportTaskModal').style.display = 'block';
+    }
+
+    function closeExportTaskModal() {
+        document.getElementById('exportTaskModal').style.display = 'none';
+    }
+
+    function confirmExportTask() {
+        var includeSubmissions = document.getElementById('exportIncludeSubmissions').checked;
+        var apiUploadsCheckbox = document.getElementById('exportIncludeApiUploads');
+        var includeApiUploads = apiUploadsCheckbox ? apiUploadsCheckbox.checked : false;
+        var url = '{{ url_for("export_task", task_id=task.id) }}';
+        url += '?include_submissions=' + (includeSubmissions ? '1' : '0');
+        url += '&include_api_uploads=' + (includeApiUploads ? '1' : '0');
+        window.location.href = url;
+        closeExportTaskModal();
+    }
+</script>
+{% endblock %}
