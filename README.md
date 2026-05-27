@@ -22,17 +22,21 @@ https://github.com/wstlab/quickform
 
 https://gitee.com/wstlab/quickform
 
-## 功能演示
+## 功能演示和文档
 
-QuickForm在线版：https://quickform.cn
+QuickForm（在线版）：https://quickform.cn
+
+QuickForm文档：https://quickform.readthedocs.io/
 
 ## 版本说明
 
 1.教师版（teacher）
 
-开源，单用户，最新版本为1.5。
+开源，单用户，最新版本为2.5。
 
 关于QuickForm的本地部署：https://quickform.readthedocs.io/zh-cn/latest/guide/deploy.html
+
+快速下载地址：https://my.feishu.cn/drive/folder/Q0FUf5KnLlQHJRdqyprck8YTnre
 
 2.校园版（school）
 
