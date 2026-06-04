@@ -1774,7 +1774,7 @@ def generate_qrcode():
     data = request.args.get('data', '')
     if not data:
         return 'Missing data parameter', 400
-    img = qr_lib.make(data, error_correction=qr_lib.constants.ERROR_CORRECT_L)
+    img = qr_lib.make(data, error_correction=qr_lib.constants.ERROR_CORRECT_H)
     buf = io.BytesIO()
     img.save(buf, format='PNG')
     buf.seek(0)
