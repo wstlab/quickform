@@ -54,7 +54,7 @@ OpenHydra网站：[https://openhydra.net](https://openhydra.net)
 
 模态（Modality），在这里指的是数据存在的形式或类型，如文本、图像、音频、视频、传感器数据等。多模态数据（Multimodal Data）是指由两种或两种以上不同模态的数据组合而成的数据集合。QuickForm一开始仅仅支持文本类数据，支持多模态数据回收，指的是其能够支持文件上传了。
 
-教师版默认支持多模态数据，上传后的文件存储在“/static/upload/”中以APIID命名的文件夹中。在线版目前需要申请试用。支持多模态数据后，可以回收学生的手写、手绘的作品了。
+教师版默认支持多模态数据，上传后的文件存储在“/static/upload/”中以APIID命名的文件夹中。在线版目前需要申请试用，如图所示。支持多模态数据后，可以回收学生的手写、手绘的作品了。
 
 ![](../images/guide/adv-mmd01.png)
 
@@ -63,6 +63,10 @@ OpenHydra网站：[https://openhydra.net](https://openhydra.net)
 > {"fullName": "谢作如", "schoolName": "温州科技高中", "subjectStage": "高中信息科技", "qfUsername": "xiezouru", "problemDescription": "收集实验照片", "applyTimestamp": "2026-06-02T07:00:56.394Z", "attachment": "/static/uploads/ktvkvyucxj/650be1d704.pdf"}
 
 ![](../images/guide/adv-mmd02.png)
+
+**注：校园版的多模态功能由管理员设置。如果没有开启，则需要在“个人设置”中申请。**
+
+![](../images/guide/adv-mmd03.png)
 
 ## 高级数据任务类型
 
