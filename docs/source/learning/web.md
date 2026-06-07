@@ -10,8 +10,7 @@ HTML（超文本标记语言）是网页的骨架，它使用标签来定义网�
 
 基础HTML结构：
 
-```
-html
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +24,9 @@ html
 
 ```
 
-常用HTML标签：
+常用HTML标签。
+
+```
 
 <h1>到<h6>：标题标签
 
@@ -36,6 +37,8 @@ html
 <img src="..." alt="...">：图片标签
 
 <div>和<span>：容器标签
+
+```
 
 2.CSS样式表
 
