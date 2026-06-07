@@ -6,7 +6,7 @@
    guide/start.md
    guide/principle.md
    guide/upgrade‌
-   guide/get_apikey.md
+   guide/advancement.md
    guide/deploy.md
    guide/tech.md
 
