@@ -6,7 +6,7 @@
 
 ## 第一步：生成API地址
 
-访问 QuickForm 平台（演示地址：[https://quickform.cn](https://quickform.cn)），注册账号后，在“数据任务”页面中点击“创建新任务”，系统将自动生成一个专属的API接口地址。该地址如同您的“数字收件箱”，所有学生提交的数据都会汇集于此。
+访问 QuickForm在线版（演示地址：[https://quickform.cn](https://quickform.cn)），注册账号后，在“数据任务”页面中点击“创建新任务”，系统将自动生成一个专属的API接口地址。该地址如同您的“数字收件箱”，所有学生提交的数据都会汇集于此。
 
 ![](../images/guide/start01-1.png)
 
@@ -19,9 +19,9 @@
 
 ![](../images/guide/start02-0.png)
 
-大模型会自动在网页中嵌入数据提交功能。学生完成操作后，数据将通过接口自动存储至您的 QuickForm 账户。
+大模型会自动在网页中嵌入数据提交功能。学生完成操作后，数据将通过接口自动存储至您的 QuickForm 账户，并于数据任务关联。
 
-注意，你可以先让大模型制作网页，再增加发送数据的指令，大模型基本上都能正确理解，并生成直接可用的网页代码。
+**注意：**你可以先让大模型制作普通的交互网页，再增加发送数据的指令，大模型基本上都能正确理解，并生成直接可用的网页代码。
 
 ![](../images/guide/start02-1.png)
 
@@ -48,14 +48,17 @@
 
 ![](../images/guide/start04.png)
 
+你也可以生成实时的数据大屏，在教学过程中根据学生的学习情况调整教学进度，效果如下面视频所示。具体请参考“进阶：数据分析和大屏显示”。
 
-## 总结：把QuickForm看成临时“储物柜”
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116345144411966&bvid=BV1JpDNB6EM7&cid=37230871295&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+## 总结：把QuickForm看成临时“数据储物柜”
 
 需要说明的是，以上四个步骤并非固定。你可以先让大模型生成网页，再加入“QucikForm数据采集的提示词”，也可以直接一步到位，在提示词中把每个步骤都写清楚。
 
-你可以把QuickForm后看成临时“储物柜”，存取“数据”的网络地址，那么就能做出各种精彩的互动网页来。任何需要回收数据的地方，都可以借助QuickForm的能力。总之，QuickForm以最低门槛和灵活操作，实现了大模型生成代码的数据回收。
+你可以把QuickForm后看成临时“数据储物柜”，存取“数据”的网络地址，那么就能做出各种精彩的互动网页来。任何需要回收数据的地方，都可以借助QuickForm的能力。总之，QuickForm以最低门槛和灵活操作，实现了大模型生成代码的数据回收。
 
 最后，看一个简单的介绍视频吧，点击视频可以全屏观看。
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116215053812928&bvid=BV1hsc6zHEoN&cid=36643342242&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116409233378089&bvid=BV1GXQJBgEwm&cid=37533321624&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 
