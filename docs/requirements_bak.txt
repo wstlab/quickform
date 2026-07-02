@@ -1,3 +1,14 @@
+sphinx
+sphinx_rtd_theme
+recommonmark
+myst-parser
+sphinx-copybutton
+sphinx_markdown_tables>=0.0.16
+docutils==0.16.0
+markdown>=3.4.0
+myst-parser
+urllib3<2.0.0
+
 sphinx>=7.3.0               # 最低 7.3.0 已移除对 imghdr 的依赖
 sphinx_rtd_theme>=2.0.0
 recommonmark>=0.7.1         # 或考虑迁移到 myst-parser（推荐）
