@@ -130,7 +130,7 @@ A类大模型严格说是编程智能体，如扣子编程、Trae等。面对A�
 
 QuickForm的数据格式非常简单，以JSON（JavaScript Object Notation，一种轻量级的数据交换格式）作为交换格式。返回一个对象，有“note”、“submissions”、“task_id”、“task_title”、“total_submissions”等5个字段。其中“submissions”的值为数组，数组内单条记录的值为对象，每一个对象，就是每一次提交收集的数据包。
 
-```json
+```text
 
 {
   "note": "提示",
@@ -147,7 +147,7 @@ QuickForm的数据格式非常简单，以JSON（JavaScript Object Notation，�
 
 以下面一个科学调查的数据任务为例。
 
-```json
+```text
 
 {
   "note": "This endpoint returns the 3 most recent submissions. Full list: https://quickform.cn/api/sg826h31vv/all",

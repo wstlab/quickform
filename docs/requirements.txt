@@ -1,6 +1,5 @@
 sphinx>=7.3.0               # 最低 7.3.0 已移除对 imghdr 的依赖
 sphinx_rtd_theme>=2.0.0
-recommonmark>=0.7.1         # 或考虑迁移到 myst-parser（推荐）
 myst-parser>=2.0.0          # 升级至最新，以配合新 Sphinx
 sphinx-copybutton>=0.5.2
 sphinx_markdown_tables>=0.0.17
