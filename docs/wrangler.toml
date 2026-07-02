@@ -1,6 +1,0 @@
-name = "qfdocs"
-workers_dev = true
-compatibility_date = "2026-07-02"
-
-[site]
-bucket = "build/html"          # 指定静态资源目录
