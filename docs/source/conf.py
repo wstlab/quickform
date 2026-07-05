@@ -84,6 +84,4 @@ myst_enable_extensions = [
     "smartquotes",
     "substitution",
     "tasklist",
-    # 开启表格
-    "table",
 ]
