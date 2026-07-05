@@ -25,6 +25,3 @@
 - 上海熊星科技
 - ……
 
-## 其他提示
-
-部署需要`pip install Sphinx  recommonmark sphinx-rtd-theme`
