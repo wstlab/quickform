@@ -26,7 +26,7 @@ https://gitee.com/wstlab/quickform
 
 QuickForm（在线版）：https://quickform.cn
 
-QuickForm文档：https://quickform.readthedocs.io/
+QuickForm文档：https://docs.quickform.cc/
 
 ## 版本说明
 

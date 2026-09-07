@@ -10,13 +10,21 @@
 
 https://my.feishu.cn/drive/folder/Q0FUf5KnLlQHJRdqyprck8YTnre
 
+## 文档地址
+
+https://docs.quickform.cc/
+
 ## 如何本地部署
 
 ### 纯代码版
 
 需要自行安装Python环境，安装必要的库。
 
-推荐方案1：使用龙虾类工具，如Qclaw、Marvis来安装环境，要求启动“app.py”即可。
+推荐方案1：使用龙虾类工具，如WorkBuddy、豆包工作来安装环境，要求解压并启动“app.py”即可。
+
+```提示词
+下载QuickForm教师版，解压并安装软件，启动服务。最后制作一个名为“启动QuickForm”的批处理文件，在桌面建立快捷方式。
+```
 
 推荐方法2：使用集成Python环境的工具，如mPython、Thonnny。
 

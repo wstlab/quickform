@@ -14,6 +14,10 @@ http://www.wzkjgz.site/
 
 仅供项目合作学校免费使用。
 
+## 文档地址
+
+https://docs.quickform.cc/
+
 ## 合作协议
 
 合作介绍：https://mp.weixin.qq.com/s/JIJSxCsL-ImGNuS2UnoAZg
