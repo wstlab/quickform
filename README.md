@@ -34,7 +34,7 @@ QuickForm文档：https://docs.quickform.cc/
 
 开源，单用户，最新版本为2.5。
 
-关于QuickForm的本地部署：https://quickform.readthedocs.io/zh-cn/latest/guide/deploy.html
+关于QuickForm的本地部署：https://quickform.readthedocs.io/zh-cn/latest/guide/5.deploy.html
 
 快速下载地址：https://my.feishu.cn/drive/folder/Q0FUf5KnLlQHJRdqyprck8YTnre
 
@@ -67,7 +67,6 @@ QuickForm项目由温州科技高级中学和温州大学教育学院联合开�
 ## 开源协议
 
 本项目采用 MIT 许可证开源。请查看 [LICENSE](LICENSE) 文件了解详情。
-
 
 
 
