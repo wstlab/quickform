@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语单词配对 · 教师大屏</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(160deg, #0f2027 0%, #203a43 55%, #2c5364 100%);
+    color: #eaf2f8;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ===== 顶栏 ===== */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 36px;
+    background: rgba(255,255,255,.06);
+    flex-shrink: 0;
+  }
+  .title {
+    font-size: clamp(20px, 2.6vw, 34px);
+    font-weight: 800; letter-spacing: 2px;
+    background: linear-gradient(90deg, #f9d423, #ff4e50);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .title .sub { font-size: .5em; color: #8fa8b8; -webkit-text-fill-color: #8fa8b8; margin-left: 12px; letter-spacing: 4px; }
+  .status-pill {
+    display: flex; align-items: center; gap: 10px;
+    font-size: clamp(12px, 1.2vw, 16px);
+    padding: 8px 18px; border-radius: 999px;
+    background: rgba(255,255,255,.08);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.on  { background: #2ecc71; box-shadow: 0 0 12px #2ecc71; animation: pulse 1.5s infinite; }
+  .dot.mid { background: #f1c40f; }
+  .dot.off { background: #e74c3c; }
+  @keyframes pulse { 50% { opacity: .4; } }
+
+  /* ===== 主区域 ===== */
+  main { flex: 1; display: flex; gap: 24px; padding: 24px 36px; min-height: 0; }
+
+  /* 舞台（出题 / 结果展示） */
+  .stage-panel {
+    flex: 1;
+    background: rgba(255,255,255,.04);
+    border: 2px solid rgba(255,255,255,.10);
+    border-radius: 24px;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .stage {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 22px; padding: 30px; min-height: 0;
+  }
+  .round-label {
+    font-size: clamp(15px, 1.6vw, 22px);
+    color: #8fa8b8; letter-spacing: 4px;
+    padding: 8px 24px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 999px;
+  }
+  .round-label.live { color: #f9d423; border-color: rgba(249,212,35,.5); animation: pulse 1.6s infinite; }
+  .round-label.done { color: #2ecc71; border-color: rgba(46,204,113,.5); }
+
+  .idle-tip { color: #5d7686; font-size: clamp(20px, 2.6vw, 34px); text-align: center; line-height: 1.8; }
+  .idle-tip .big { font-size: clamp(48px, 6vw, 90px); }
+
+  .en-word {
+    font-size: clamp(60px, 9vw, 130px);
+    font-weight: 900; color: #f9d423;
+    text-shadow: 0 6px 24px rgba(249,212,35,.35);
+    letter-spacing: 4px; word-break: break-word; text-align: center;
+    animation: popIn .4s ease;
+  }
+  @keyframes popIn { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+
+  .cn-word { font-size: clamp(24px, 3vw, 44px); font-weight: 700; min-height: 1.2em; text-align: center; }
+  .cn-word.hidden-word { color: #5d7686; font-size: clamp(15px, 1.6vw, 20px); cursor: pointer; }
+
+  .winner-box { display: flex; flex-direction: column; align-items: center; gap: 14px; animation: popIn .5s ease; }
+  .winner-medal { font-size: clamp(50px, 6vw, 90px); }
+  .winner-name {
+    font-size: clamp(56px, 8vw, 110px);
+    font-weight: 900; color: #2ecc71;
+    text-shadow: 0 6px 30px rgba(46,204,113,.4);
+    word-break: break-word; text-align: center;
+  }
+  .winner-sub { font-size: clamp(16px, 1.8vw, 24px); color: #8fa8b8; letter-spacing: 6px; }
+  .winner-word-chip { font-size: clamp(20px, 2.4vw, 32px); color: #f9d423; font-weight: 800; }
+
+  /* 操作条 */
+  .action-bar {
+    flex-shrink: 0;
+    display: flex; gap: 14px; align-items: center;
+    padding: 18px 26px;
+    border-top: 1px solid rgba(255,255,255,.10);
+  }
+  .btn {
+    font-family: inherit; font-weight: 700;
+    border: none; border-radius: 14px; cursor: pointer;
+    transition: transform .08s, filter .2s;
+  }
+  .btn:active { transform: scale(.95); }
+  .btn:disabled { filter: grayscale(.7); cursor: not-allowed; }
+  #publishBtn {
+    flex: 1;
+    font-size: clamp(18px, 2vw, 26px);
+    letter-spacing: 8px;
+    padding: 18px 0;
+    background: linear-gradient(135deg, #f9d423, #f39c12);
+    color: #203a43;
+    box-shadow: 0 8px 22px rgba(243,156,18,.35);
+  }
+  #revealBtn {
+    font-size: clamp(14px, 1.4vw, 18px);
+    padding: 14px 28px;
+    background: #2c5364; color: #eaf2f8;
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  #resetBtn {
+    font-size: clamp(12px, 1.2vw, 15px);
+    padding: 12px 20px;
+    background: transparent; color: #ff7675;
+    border: 1px solid rgba(231,76,60,.6);
+  }
+  #resetBtn:hover { background: rgba(231,76,60,.15); }
+  .action-tip { font-size: 12px; color: #5d7686; flex-shrink: 0; }
+
+  /* 右侧栏 */
+  .side {
+    flex: 0 0 30%;
+    display: flex; flex-direction: column; gap: 20px; min-height: 0;
+  }
+  .panel {
+    background: rgba(255,255,255,.04);
+    border: 2px solid rgba(255,255,255,.10);
+    border-radius: 24px;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    flex-shrink: 0;
+  }
+  .panel-head h2 { font-size: clamp(16px, 1.7vw, 22px); letter-spacing: 2px; }
+  .panel-count { font-size: clamp(14px, 1.4vw, 18px); color: #8fa8b8; }
+  .panel-count b { color: #f9d423; font-size: 1.5em; margin: 0 3px; }
+
+  .login-panel { flex: 0 0 42%; }
+  .login-chips {
+    flex: 1; overflow-y: auto; padding: 14px 20px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-content: flex-start;
+  }
+  .chip {
+    font-size: clamp(14px, 1.4vw, 18px);
+    padding: 8px 18px;
+    background: rgba(46,204,113,.15);
+    border: 1px solid rgba(46,204,113,.45);
+    color: #d5f5e3;
+    border-radius: 999px;
+    animation: slideIn .3s ease;
+  }
+  .login-empty { flex: 1; display: flex; align-items: center; justify-content: center; color: #5d7686; font-size: clamp(13px, 1.3vw, 17px); }
+
+  .history-panel { flex: 1; }
+  .history-list { flex: 1; overflow-y: auto; padding: 12px 18px; display: flex; flex-direction: column; gap: 10px; }
+  .h-row {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,.06);
+    border-radius: 12px; padding: 12px 18px;
+    animation: slideIn .3s ease; flex-shrink: 0;
+  }
+  @keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .h-no { font-size: clamp(13px, 1.3vw, 16px); color: #8fa8b8; width: 3.2em; flex-shrink: 0; }
+  .h-word { font-size: clamp(16px, 1.6vw, 21px); font-weight: 800; color: #f9d423; width: 4.5em; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; }
+  .h-result { flex: 1; font-size: clamp(14px, 1.5vw, 19px); }
+  .h-result.live { color: #8fa8b8; animation: pulse 1.6s infinite; }
+  .h-result.win { color: #2ecc71; font-weight: 700; }
+  .h-time { font-size: clamp(11px, 1.1vw, 14px); color: #5d7686; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .history-empty { flex: 1; display: flex; align-items: center; justify-content: center; color: #5d7686; font-size: clamp(13px, 1.3vw, 17px); }
+
+  .panel::-webkit-scrollbar, .history-list::-webkit-scrollbar, .login-chips::-webkit-scrollbar { width: 6px; }
+  .panel::-webkit-scrollbar-thumb, .history-list::-webkit-scrollbar-thumb, .login-chips::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
+
+  footer { text-align: center; padding: 10px; font-size: 13px; color: #4a6272; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">🔤 英语单词配对 · 教师大屏<span class="sub">WORD MATCHING</span></div>
+  <div class="status-pill">
+    <span class="dot off" id="statusDot"></span>
+    <span id="statusText">连接中…</span>
+    <span id="clock" style="color:#8fa8b8"></span>
+  </div>
+</header>
+
+<main>
+  <!-- 舞台 -->
+  <section class="stage-panel">
+    <div class="stage" id="stage">
+      <div class="idle-tip">
+        <div class="big">🎓</div>
+        <div>课堂准备中<br>点击下方「出 题」开始第一题</div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn" id="publishBtn">出 题</button>
+      <button class="btn" id="revealBtn">揭晓中文</button>
+      <button class="btn" id="resetBtn">清空（新课堂）</button>
+      <span class="action-tip">回车 = 出题</span>
+    </div>
+  </section>
+
+  <!-- 右侧栏 -->
+  <aside class="side">
+    <section class="panel login-panel">
+      <div class="panel-head">
+        <h2>👥 已登录学生</h2>
+        <div class="panel-count"><b id="loginCount">0</b>/ 24 人</div>
+      </div>
+      <div class="login-chips" id="loginChips"><div class="login-empty">还没有学生登录，等待中…</div></div>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="panel-head">
+        <h2>📋 出题记录</h2>
+        <div class="panel-count">已完成 <b id="doneCount">0</b> 轮</div>
+      </div>
+      <div class="history-list" id="historyList"><div class="history-empty">暂无出题记录</div></div>
+    </section>
+  </aside>
+</main>
+
+<footer>学生端：与本页面同目录的 student.html（学生选择名单中的名字进入课堂）· 第一位举手即结束本轮</footer>
+
+<script>
+  /* ================= 配置 ================= */
+  const API_URL = 'http://127.0.0.1:5001/api/uvauKltUpQK';
+  const ALL_URL = API_URL + '/all';
+  const WS_URL  = 'ws://127.0.0.1:5001/ws/uvauKltUpQK';
+  const RECONNECT_INTERVAL = 3000;  // WebSocket 断开后 3 秒自动重连
+  const POLL_INTERVAL      = 5000;  // 降级轮询 5 秒一次
+  const TOTAL_STUDENTS     = 24;    // 名单总人数
+
+  /* ================= 单词题库（英语单词配对） ================= */
+  const WORDS = [
+    ['apple','苹果'], ['banana','香蕉'], ['orange','橙子'], ['grape','葡萄'],
+    ['cat','猫'], ['dog','狗'], ['bird','鸟'], ['fish','鱼'],
+    ['book','书'], ['pen','钢笔'], ['ruler','尺子'], ['bag','书包'],
+    ['school','学校'], ['teacher','老师'], ['student','学生'], ['classroom','教室'],
+    ['water','水'], ['milk','牛奶'], ['bread','面包'], ['egg','鸡蛋'],
+    ['red','红色'], ['blue','蓝色'], ['yellow','黄色'], ['green','绿色'],
+    ['sun','太阳'], ['moon','月亮'], ['star','星星'], ['cloud','云'],
+    ['tree','树'], ['flower','花'], ['house','房子'], ['family','家庭']
+  ];
+  const usedWordIdx = new Set();
+
+  /* ================= 状态 ================= */
+  const loggedIn = new Map();  // student_name -> 首次登录时间（用于排序）
+  const rounds   = [];         // 每轮 {no, word, cn, publishAt, winner, winnerAt}
+  let currentRound = null;     // 最近一轮
+  const seenKeys  = new Set(); // 事件去重
+  let revealed    = false;     // 当前题中文是否已揭晓（仅教师本屏）
+
+  const stage      = document.getElementById('stage');
+  const publishBtn = document.getElementById('publishBtn');
+  const revealBtn  = document.getElementById('revealBtn');
+  const resetBtn   = document.getElementById('resetBtn');
+  const loginChips = document.getElementById('loginChips');
+  const loginCount = document.getElementById('loginCount');
+  const historyList= document.getElementById('historyList');
+  const doneCount  = document.getElementById('doneCount');
+  const statusDot  = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const clock      = document.getElementById('clock');
+
+  /* ================= 时钟 ================= */
+  function tickClock() { clock.textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false }); }
+  tickClock(); setInterval(tickClock, 1000);
+
+  /* ================= 音效 ================= */
+  function tone(freq, dur, delay, type, vol) {
+    try {
+      const ctx = tone.ctx || (tone.ctx = new (window.AudioContext || window.webkitAudioContext)());
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol || 0.15, ctx.currentTime + (delay || 0));
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (delay || 0) + dur);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + (delay || 0));
+      osc.stop(ctx.currentTime + (delay || 0) + dur);
+    } catch (e) {}
+  }
+  const blipPublish = () => tone(523, 0.12, 0, 'triangle', .12);
+  const fanfare = () => { tone(523,.13,0,'triangle',.16); tone(659,.13,.13,'triangle',.16); tone(784,.25,.26,'triangle',.18); };
+
+  function fmtTime(v) {
+    if (!v) return '--:--:--';
+    const d = new Date(String(v).replace(' ', 'T')); // 兼容 Safari 的空格分隔时间
+    if (isNaN(d.getTime())) return String(v);
+    return d.toLocaleTimeString('zh-CN', { hour12: false });
+  }
+  function parseTime(v) {
+    if (!v) return 0;
+    const d = new Date(String(v).replace(' ', 'T'));
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  /* ================= 事件处理（登录 / 出题 / 举手 / 重置） ================= */
+  function recordKey(r) {
+    return r._submitted_at
+      ? (r._submitted_at + '|' + r.student_name + '|' + r.action + '|' + (r.word || ''))
+      : 'raw:' + JSON.stringify(r);
+  }
+
+  function processEvent(r) {
+    if (!r || !r.action) return; // 忽略无 action 的历史数据
+    if (r.submitted_at && !r._submitted_at) r._submitted_at = r.submitted_at; // /all 与 WS 推送字段名不同，归一化
+    const k = recordKey(r);
+    if (seenKeys.has(k)) return;
+    seenKeys.add(k);
+
+    if (r.action === 'login' && r.student_name && r.student_name !== '__TEACHER__') {
+      if (!loggedIn.has(r.student_name)) {
+        loggedIn.set(r.student_name, r._submitted_at);
+        renderLogin();
+      }
+    } else if (r.action === 'publish') {
+      currentRound = {
+        no: rounds.filter(x => true).length + 1,
+        word: r.word, cn: r.cn,
+        publishAt: r._submitted_at,
+        winner: null, winnerAt: null
+      };
+      rounds.push(currentRound);
+      revealed = false;
+      blipPublish();
+      renderStage(); renderHistory();
+    } else if (r.action === 'hand') {
+      if (currentRound && !currentRound.winner) {
+        currentRound.winner = r.student_name;
+        currentRound.winnerAt = r._submitted_at;
+        fanfare();
+        renderStage(); renderHistory();
+      }
+      // 无题目时或已结束后到达的举手事件：忽略
+    } else if (r.action === 'reset') {
+      loggedIn.clear();
+      rounds.length = 0;
+      currentRound = null;
+      usedWordIdx.clear();
+      renderAll();
+    }
+  }
+
+  /* ================= 出题 ================= */
+  let publishing = false;
+  function pickWordIdx() {
+    if (usedWordIdx.size >= WORDS.length) usedWordIdx.clear(); // 题库用完则重来
+    let i;
+    do { i = Math.floor(Math.random() * WORDS.length); } while (usedWordIdx.has(i));
+    usedWordIdx.add(i);
+    return i;
+  }
+
+  async function publishWord() {
+    if (publishing) return;
+    publishing = true;
+    publishBtn.disabled = true;
+    publishBtn.textContent = '出题中…';
+    try {
+      const i = pickWordIdx();
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_name: '__TEACHER__', action: 'publish', word: WORDS[i][0], cn: WORDS[i][1] })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      syncNow(); // 立即拉取最新状态（WebSocket 也会推送回显，按 _submitted_at 去重）
+    } catch (err) {
+      alert('出题失败：' + err.message);
+    } finally {
+      publishing = false;
+      publishBtn.disabled = false;
+      publishBtn.textContent = '出 题';
+    }
+  }
+  publishBtn.addEventListener('click', publishWord);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') publishWord();
+  });
+
+  /* ================= 揭晓中文（仅教师本屏） ================= */
+  function revealCn() {
+    if (!currentRound) return;
+    revealed = true;
+    renderStage();
+  }
+  revealBtn.addEventListener('click', revealCn);
+
+  /* ================= 清空（新课堂） ================= */
+  resetBtn.addEventListener('click', async () => {
+    if (!confirm('确定开始新课堂吗？将清空登录名单与出题记录（学生端需刷新重新选名字）。')) return;
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_name: '__TEACHER__', action: 'reset' })
+      });
+      syncNow();
+    } catch (err) { alert('清空失败：' + err.message); }
+  });
+
+  /* ================= 渲染 ================= */
+  function renderStage() {
+    if (!currentRound) {
+      stage.innerHTML =
+        '<div class="idle-tip"><div class="big">🎓</div><div>课堂准备中<br>点击下方「出 题」开始第一题</div></div>';
+      return;
+    }
+    if (!currentRound.winner) {
+      stage.innerHTML =
+        '<div class="round-label live">第 ' + currentRound.no + ' 题 · 等待举手</div>' +
+        '<div class="en-word">' + escapeHtml(String(currentRound.word).toUpperCase()) + '</div>' +
+        '<div class="cn-word' + (revealed ? '' : ' hidden-word') + '" id="cnWord" title="点击揭晓">' +
+          (revealed ? escapeHtml(currentRound.cn || '') : '点击揭晓中文释义（仅教师可见）') +
+        '</div>' +
+        '<div class="winner-sub">第一位举手的同学将获得回答机会</div>';
+      const cn = document.getElementById('cnWord');
+      if (cn) cn.addEventListener('click', revealCn);
+    } else {
+      stage.innerHTML =
+        '<div class="round-label done">第 ' + currentRound.no + ' 题 · 本轮结束</div>' +
+        '<div class="winner-box">' +
+          '<div class="winner-medal">🥇</div>' +
+          '<div class="winner-name">' + escapeHtml(currentRound.winner) + '</div>' +
+          '<div class="winner-sub">第一位举手 · ' + fmtTime(currentRound.winnerAt) + '</div>' +
+          '<div class="winner-word-chip">' + escapeHtml(String(currentRound.word).toUpperCase()) + ' = ' + escapeHtml(currentRound.cn || '?') + '</div>' +
+        '</div>';
+    }
+  }
+
+  function renderLogin() {
+    loginCount.textContent = loggedIn.size;
+    if (!loggedIn.size) {
+      loginChips.innerHTML = '<div class="login-empty">还没有学生登录，等待中…</div>';
+      return;
+    }
+    const list = [...loggedIn.entries()].sort((a, b) => parseTime(a[1]) - parseTime(b[1]));
+    loginChips.innerHTML = list.map(([name]) => '<span class="chip">' + escapeHtml(name) + '</span>').join('');
+  }
+
+  function renderHistory() {
+    const done = rounds.filter(r => r.winner).length;
+    doneCount.textContent = done;
+    if (!rounds.length) {
+      historyList.innerHTML = '<div class="history-empty">暂无出题记录</div>';
+      return;
+    }
+    historyList.innerHTML = rounds.slice().reverse().map(r =>
+      '<div class="h-row">' +
+        '<div class="h-no">第' + r.no + '题</div>' +
+        '<div class="h-word">' + escapeHtml(String(r.word).toUpperCase()) + '</div>' +
+        '<div class="h-result ' + (r.winner ? 'win' : 'live') + '">' +
+          (r.winner ? '🥇 ' + escapeHtml(r.winner) : '举手进行中…') +
+        '</div>' +
+        '<div class="h-time">' + (r.winner ? fmtTime(r.winnerAt) : fmtTime(r.publishAt)) + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
+  function renderAll() { renderStage(); renderLogin(); renderHistory(); }
+
+  /* ================= 数据同步 ================= */
+  async function syncNow() {
+    try {
+      const res = await fetch(ALL_URL);
+      if (!res.ok) return;
+      let data = await res.json();
+      if (!Array.isArray(data)) data = data.submissions || [];
+      if (!Array.isArray(data)) return;
+      data.slice()
+        .sort((a, b) => parseTime(a._submitted_at || a.submitted_at) - parseTime(b._submitted_at || b.submitted_at))
+        .forEach(processEvent);
+    } catch (e) { /* 网络异常，静默 */ }
+  }
+
+  /* ================= WebSocket 实时推送（3 秒重连 / 不支持则 5 秒轮询） ================= */
+  let ws = null;
+  let polling = false;
+
+  function setStatus(kind, text) {
+    statusDot.className = 'dot ' + kind;
+    statusText.textContent = text;
+  }
+
+  function connectWS() {
+    if (!('WebSocket' in window)) { startPolling(); return; }
+    setStatus('mid', '连接中…');
+    try { ws = new WebSocket(WS_URL); }
+    catch (e) { setStatus('off', '连接失败，自动重连中'); setTimeout(connectWS, RECONNECT_INTERVAL); return; }
+
+    ws.onopen = () => setStatus('on', '实时已连接');
+    ws.onmessage = (ev) => {
+      let data;
+      try { data = JSON.parse(ev.data); } catch (e) { return; }
+      if (data && data.type === 'connected') return; // 首条确认消息
+      processEvent(data);
+    };
+    ws.onclose = () => {
+      if (polling) return;
+      setStatus('off', '已断开，3 秒后自动重连');
+      setTimeout(connectWS, RECONNECT_INTERVAL);
+    };
+    ws.onerror = () => { try { ws.close(); } catch (e) {} };
+  }
+
+  function startPolling() {
+    if (polling) return;
+    polling = true;
+    setStatus('mid', '轮询模式（每 5 秒）');
+    setInterval(syncNow, POLL_INTERVAL);
+  }
+
+  /* ================= 启动 ================= */
+  renderAll();
+  syncNow();
+  connectWS();
+</script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('开源教程') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<style>
+    .section-title {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin: 2rem 0 1rem 0;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+    .tut-hero {
+        background: linear-gradient(135deg, #fdf6ec 0%, #f7f1e6 100%);
+        border: 1px solid #f0e4d0;
+        border-radius: 12px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 2rem;
+    }
+    .tut-hero p { color: #5b4a33; line-height: 1.9; margin-bottom: 0; }
+    .tut-hero .hl { color: #b8956a; font-weight: 700; }
+    .tut-card {
+        background: #fff;
+        border: 1px solid #eceef1;
+        border-radius: 12px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    .tut-card h6 {
+        font-weight: 700;
+        color: #8a6d43;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+    .tut-card p { color: #4b5563; font-size: 0.9rem; line-height: 1.8; }
+    .tut-textarea {
+        border-radius: 8px !important;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        background-color: #fafafa;
+        resize: vertical;
+    }
+    .tut-code {
+        background-color: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0.875rem 1rem;
+        font-family: SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.8125rem;
+        color: #374151;
+        line-height: 1.7;
+        overflow-x: auto;
+        margin: 0.75rem 0;
+        white-space: pre;
+    }
+    .tut-code .cmt { color: #9ca3af; }
+    .tut-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        margin: 0.75rem 0;
+    }
+    .tut-table th, .tut-table td {
+        border: 1px solid #eceef1;
+        padding: 0.55rem 0.875rem;
+        text-align: left;
+        vertical-align: top;
+        color: #4b5563;
+        line-height: 1.7;
+    }
+    .tut-table th {
+        background-color: #fdf8f1;
+        color: #8a6d43;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+    .tut-table code {
+        background-color: #f3f4f6;
+        border-radius: 4px;
+        padding: 0.125rem 0.375rem;
+        font-size: 0.8125rem;
+        color: #b8956a;
+        white-space: nowrap;
+    }
+    .tut-more {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .tut-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background-color: #b8956a;
+        color: #fff !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: 8px;
+        padding: 0.5rem 1.1rem;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .tut-btn:hover { background-color: #a5834f; }
+    .tut-copied {
+        position: fixed;
+        left: 50%;
+        bottom: 2rem;
+        transform: translateX(-50%) translateY(1rem);
+        background: #1f2937;
+        color: #fff;
+        font-size: 0.85rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: 999px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 1080;
+    }
+    .tut-copied.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+
+<div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem 1rem;">
+    <h3 style="font-weight: 700; color: #111827; margin-bottom: 1.25rem;">{{ _('开源教程') }}</h3>
+
+    <div class="tut-hero">
+        <p>{{ _('把下面这些"提示词"复制给任意 AI 助手（WorkBuddy、ChatGPT、文心一言等），它就能为你编写出向 QuickForm 提交数据的前端页面。') }}<span class="hl">{{ _('共三种写法：普通数据提交、多模态数据提交、实时交互数据提交') }}</span>{{ _('——按你的课堂需求选用即可。提示词中的 API 地址来自每个数据任务的详情页。数据提交后，用 GET 方式访问 API 地址即可取回数据（见第 4 节）。') }}</p>
+    </div>
+
+    <!-- 1. 普通数据提交 -->
+    <h6 class="section-title">1. {{ _('普通数据提交') }}</h6>
+    <div class="tut-card">
+        <h6><i class="bi bi-1-circle-fill" style="color:#b8956a;"></i>{{ _('适用场景：投票、答题、签到、问卷') }}</h6>
+        <p>{{ _('学生提交姓名、选项、得分等<strong>纯文本/数字</strong>字段，后端原样存储。这是最简单、最常用的写法：告诉 AI 用 POST 方式把 JSON 数据发到任务的 API 地址即可。') }}</p>
+        <div class="input-group">
+            <textarea class="form-control tut-textarea" readonly rows="3" id="tut-normal">创建一个课堂投票网页：题目是"你最喜欢的编程语言"，选项为 Python / JavaScript / C++。学生输入姓名并选择后，以 POST 方式向 '<API地址>' 发送 JSON 数据（字段：student_name 学生姓名、choice 所选选项），提交成功后显示"投票成功"。</textarea>
+            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyTutPrompt('tut-normal')">{{ _('复制') }}</button>
+        </div>
+        <div class="tut-code"><span class="cmt">// AI 生成的前端核心代码会是这样：</span>
+fetch('&lt;API地址&gt;', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ student_name: '张三', choice: 'Python' })
+})</div>
+        <p class="mb-0"><i class="bi bi-lightbulb" style="color:#b8956a;"></i> {{ _('要点：字段名可自定义；提交成功会返回 {"message": "提交成功", "status": "success"}。') }}</p>
+    </div>
+
+    <!-- 2. 多模态数据提交 -->
+    <h6 class="section-title">2. {{ _('多模态数据提交（含文件上传）') }}</h6>
+    <div class="tut-card">
+        <h6><i class="bi bi-2-circle-fill" style="color:#b8956a;"></i>{{ _('适用场景：作品提交、语音作业、图片收集') }}</h6>
+        <p>{{ _('学生上传<strong>图片、音频、视频、文档</strong>等文件，可与文本字段混合提交。用 <code>multipart/form-data</code> 格式，文件放在 file 字段；保存后的访问路径会写入返回数据的 <code>attachment</code> 字段。') }}</p>
+        <div class="input-group">
+            <textarea class="form-control tut-textarea" readonly rows="4" id="tut-multimodal">创建一个美术作品提交网页：学生输入姓名、作品名称，并选择一张图片。以 POST 方式向 '<API地址>' 发送 multipart/form-data 表单数据：普通字段为文本（student_name 学生姓名、title 作品名称），文件放在 file 字段（单个不超过20MB，支持常见图片/音视频/文档类型）。提交成功后显示"作品已提交"。</textarea>
+            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyTutPrompt('tut-multimodal')">{{ _('复制') }}</button>
+        </div>
+        <div class="tut-code"><span class="cmt">// AI 生成的前端核心代码会是这样：</span>
+const fd = new FormData();
+fd.append('student_name', '张三');
+fd.append('file', fileInput.files[0]);
+fetch('&lt;API地址&gt;', { method: 'POST', body: fd })
+  .then(r => r.json())
+  .then(d => console.log(d.attachment)); <span class="cmt">// 文件访问路径</span></div>
+        <p class="mb-0"><i class="bi bi-lightbulb" style="color:#b8956a;"></i> {{ _('要点：不要手动设置 Content-Type，浏览器会自动带上文件边界；多文件可重复 append。') }}</p>
+    </div>
+
+    <!-- 3. 实时交互数据提交 -->
+    <h6 class="section-title">3. {{ _('实时交互数据提交') }}</h6>
+    <div class="tut-card">
+        <h6><i class="bi bi-3-circle-fill" style="color:#b8956a;"></i>{{ _('适用场景：课堂抢答、实时投票、数据大屏') }}</h6>
+        <p>{{ _('学生端照常 POST 提交；<strong>教师端/大屏页面用原生 WebSocket 订阅</strong>——每条新提交实时推送一条 JSON，无需轮询。告诉 AI 两个地址即可：提交地址（POST）和订阅地址（WebSocket）。') }}</p>
+        <div class="input-group">
+            <textarea class="form-control tut-textarea" readonly rows="5" id="tut-realtime">创建一个课堂抢答工具，包含学生端和教师端两个页面。学生端：输入姓名点击"抢答"，以 POST 方式向 '<API地址>' 发送 JSON 数据（字段：student_name）。教师端：大屏展示抢答先后顺序，通过 WebSocket 连接 '<WS地址>' 订阅数据推送（原生 new WebSocket 即可，连接成功会先收到 type=connected 的确认消息，之后每条新提交实时推送一条 JSON，含全部字段与 _submitted_at 提交时间；断开后每3秒自动重连，不支持 WebSocket 时改用每5秒 GET '<API地址>/all' 轮询）。</textarea>
+            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyTutPrompt('tut-realtime')">{{ _('复制') }}</button>
+        </div>
+        <div class="tut-code"><span class="cmt">// AI 生成的教师端核心代码会是这样：</span>
+const ws = new WebSocket('&lt;WS地址&gt;');
+ws.onmessage = (e) => {
+  const msg = JSON.parse(e.data);
+  if (msg.type === 'connected') return; <span class="cmt">// 订阅确认，忽略</span>
+  addRow(msg);                         <span class="cmt">// 实时追加一条抢答记录</span>
+};
+ws.onclose = () => setTimeout(connectWS, 3000); <span class="cmt">// 断线重连</span></div>
+        <p class="mb-0"><i class="bi bi-lightbulb" style="color:#b8956a;"></i> {{ _('要点：订阅地址就是把提交地址的 http:// 换成 ws://（https:// 换成 wss://），路径从 /api/ 换成 /ws/。') }}</p>
+    </div>
+
+    <!-- 4. 数据获取（GET 查询） -->
+    <h6 class="section-title">4. {{ _('数据获取（GET 查询）') }}</h6>
+    <div class="tut-card">
+        <h6><i class="bi bi-4-circle-fill" style="color:#b8956a;"></i>{{ _('适用场景：查看提交结果、教师端数据展示、轮询获取数据') }}</h6>
+        <p>{{ _('提交数据用 POST，取回数据更简单——<strong>用 GET 方式访问任务的 API 地址即可</strong>，无需登录、无需密钥，浏览器直接打开就能查看。同一个地址加不加 <code>/all</code>，区别在于返回的数据量：') }}</p>
+        <table class="tut-table">
+            <thead>
+                <tr>
+                    <th>{{ _('GET 访问地址') }}</th>
+                    <th>{{ _('返回的数据') }}</th>
+                    <th>{{ _('适用场景') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>&lt;API地址&gt;</code></td>
+                    <td>{{ _('最新 <strong>3 条</strong>提交') }}</td>
+                    <td>{{ _('快速预览最近的提交，响应体小') }}</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;API地址&gt;/all</code></td>
+                    <td>{{ _('<strong>全部</strong>提交记录') }}</td>
+                    <td>{{ _('教师端完整展示、数据分析、导出全部数据') }}</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;API地址&gt;/count</code></td>
+                    <td>{{ _('仅返回总条数') }}</td>
+                    <td>{{ _('轻量轮询，条数变化时再取全量') }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="tut-code"><span class="cmt">// GET &lt;API地址&gt;/all 的返回结构（不带 /all 时结构相同，submissions 最多 3 条）：</span>
+{
+  "note": "Total 5 submission(s). ...",
+  "submissions": [
+    { "student_name": "张三", "choice": "Python", "submitted_at": "2026-11-20 10:00:01" },
+    { "student_name": "李四", "choice": "C++",    "submitted_at": "2026-11-20 10:00:05" }
+  ],
+  "task_id": "abcd1234",
+  "task_title": "课堂投票",
+  "total_submissions": 5,
+  "help": "http://&lt;服务器地址&gt;:5001/tutorials"
+}</div>
+        <p class="mb-0"><i class="bi bi-lightbulb" style="color:#b8956a;"></i> {{ _('要点：submissions 按提交时间<strong>从旧到新</strong>排列，每条自动附带 submitted_at 字段；教师端需要全部数据时，务必使用带 /all 的地址。') }}</p>
+    </div>
+
+    <!-- 更多教程 -->
+    <h6 class="section-title">{{ _('更多内容') }}</h6>
+    <div class="tut-more">
+        <div>
+            <strong style="color: #111827;">{{ _('QuickForm 官方开源教程') }}</strong>
+            <p class="mb-0 mt-1" style="color: #6b7280; font-size: 0.875rem;">{{ _('任务创建、数据导入导出、QFLink 互联、CLI 工具等完整文档') }}</p>
+        </div>
+        <a class="tut-btn" href="https://quickform.cn/tutorials" target="_blank" rel="noopener">
+            <i class="bi bi-box-arrow-up-right"></i>{{ _('前往查看更多教程') }}
+        </a>
+    </div>
+</div>
+
+<div class="tut-copied" id="tutCopied">{{ _('已复制提示词') }}</div>
+<script>
+(function () {
+    var toast = document.getElementById('tutCopied');
+    var timer = null;
+    function showToast() {
+        if (!toast) return;
+        toast.classList.add('show');
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+    }
+    window.copyTutPrompt = function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.select();
+        el.setSelectionRange(0, 99999);
+        try { document.execCommand('copy'); } catch (e) {}
+        if (navigator.clipboard && el.value) {
+            navigator.clipboard.writeText(el.value).catch(function () {});
+        }
+        showToast();
+    };
+})();
+</script>
+{% endblock %}

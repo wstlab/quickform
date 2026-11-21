@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语单词配对 · 课堂</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    min-height: 100vh;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    padding: 32px 26px;
+    width: min(520px, 94vw);
+    text-align: center;
+  }
+
+  /* ===== 第一步：选名字 ===== */
+  .page-select h1 { font-size: 24px; color: #333; margin-bottom: 4px; }
+  .page-select .sub { font-size: 15px; color: #888; margin-bottom: 22px; }
+  .roster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 10px;
+    max-height: 56vh;
+    overflow-y: auto;
+    padding: 4px;
+  }
+  .roster button {
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    color: #4a4a68;
+    background: #f1f2fa;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 12px 6px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .roster button i { display: block; font-style: normal; font-size: 11px; color: #b0b2c8; margin-bottom: 2px; }
+  .roster button:hover { border-color: #667eea; background: #eef0ff; transform: translateY(-2px); }
+  .roster button:active { transform: scale(.95); }
+
+  /* ===== 第二步：课堂 ===== */
+  .page-class { display: none; flex-direction: column; }
+  .hello {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .hello .name { font-size: 22px; font-weight: 800; color: #333; }
+  .switch-btn {
+    font-family: inherit;
+    font-size: 13px;
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .word-area {
+    background: #f7f8fd;
+    border-radius: 18px;
+    padding: 34px 16px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .waiting {
+    font-size: 18px;
+    color: #9aa0b4;
+    animation: breathe 1.6s infinite;
+  }
+  @keyframes breathe { 50% { opacity: .45; } }
+  .en-word {
+    font-size: clamp(44px, 11vw, 64px);
+    font-weight: 900;
+    color: #5557d8;
+    letter-spacing: 2px;
+    word-break: break-word;
+    animation: pop .4s ease;
+  }
+  @keyframes pop {
+    0% { transform: scale(.5); opacity: 0; }
+    70% { transform: scale(1.12); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .round-banner {
+    font-size: 19px;
+    font-weight: 700;
+    color: #10ac84;
+    animation: pop .5s ease;
+  }
+  .round-banner .dim-word { font-size: 26px; color: #5557d8; font-weight: 900; }
+  .ended .en-word { opacity: .55; filter: grayscale(.3); }
+
+  #handBtn {
+    width: 100%;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    padding: 19px 0;
+    color: #fff;
+    background: linear-gradient(135deg, #ff9f43, #ee5253);
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(238,82,83,.45);
+    transition: transform .08s, filter .2s;
+    font-family: inherit;
+  }
+  #handBtn:active { transform: scale(.96); }
+  #handBtn:disabled {
+    filter: grayscale(.75);
+    cursor: not-allowed;
+    box-shadow: none;
+    letter-spacing: 2px;
+    font-size: 20px;
+  }
+  .msg { margin-top: 16px; font-size: 16px; min-height: 22px; color: #888; }
+  .msg.ok { color: #10ac84; font-weight: 700; }
+  .msg.err { color: #ee5253; }
+
+  .conn {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #b6b9cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .conn .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+  .conn .dot.on { background: #2ecc71; animation: breathe 1.5s infinite; }
+  .conn .dot.off { background: #e74c3c; }
+</style>
+</head>
+<body>
+
+<!-- 第一步：选择名字 -->
+<div class="card page-select" id="pageSelect">
+  <h1>🔤 英语单词配对</h1>
+  <div class="sub">请选择你的名字，进入课堂</div>
+  <div class="roster" id="roster"></div>
+</div>
+
+<!-- 第二步：课堂 -->
+<div class="card page-class" id="pageClass">
+  <div class="hello">
+    <div class="name">👋 你好，<span id="myName"></span></div>
+    <button class="switch-btn" id="switchBtn">换人</button>
+  </div>
+
+  <div class="word-area" id="wordArea">
+    <div class="waiting">⏳ 等待老师出题…</div>
+  </div>
+
+  <button id="handBtn">举 手 🙋</button>
+  <div class="msg" id="msg"></div>
+
+  <div class="conn">
+    <span class="dot off" id="connDot"></span>
+    <span id="connText">连接中…</span>
+  </div>
+</div>
+
+<script>
+  /* ================= 配置 ================= */
+  const API_URL = 'http://127.0.0.1:5001/api/uvauKltUpQK';
+  const ALL_URL = API_URL + '/all';
+  const WS_URL  = 'ws://127.0.0.1:5001/ws/uvauKltUpQK';
+  const RECONNECT_INTERVAL = 3000;  // WebSocket 断开后 3 秒自动重连
+  const POLL_INTERVAL      = 3000;  // 降级轮询 3 秒一次（尽快看到老师出的单词）
+
+  /* ================= 学生名单 ================= */
+  const ROSTER = [
+    '包斌佑','林毅','鲁温博','陈莉君','李子豪','马睿轩','吴宇辰','张皓琰',
+    '周祺浩','周添懿','诸葛祎祎','陈皓轩','季彬盈','季睿成','朱羿垚','吴辰皓',
+    '郁佳颖','张智涵','陈俊希','李妍希','郑晨','林奕呈','曾启南','胡水清清'
+  ];
+
+  /* ================= 全局状态 ================= */
+  let myName = localStorage.getItem('word_buzzer_name') || null;
+  let currentWord = null;   // 老师最新发布的单词 {word, at}
+  let roundEnded  = false;  // 本轮是否已有同学举手
+  let winner      = null;   // 第一位举手的同学
+  let myRaised    = false;  // 本轮我是否已举手
+  const seenKeys  = new Set(); // 事件去重（_submitted_at 唯一）
+
+  const pageSelect = document.getElementById('pageSelect');
+  const pageClass  = document.getElementById('pageClass');
+  const rosterEl   = document.getElementById('roster');
+  const wordArea   = document.getElementById('wordArea');
+  const handBtn    = document.getElementById('handBtn');
+  const msg        = document.getElementById('msg');
+  const connDot    = document.getElementById('connDot');
+  const connText   = document.getElementById('connText');
+
+  /* ================= 音效 ================= */
+  function tone(freq, dur, delay, type, vol) {
+    try {
+      const ctx = tone.ctx || (tone.ctx = new (window.AudioContext || window.webkitAudioContext)());
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol || 0.12, ctx.currentTime + (delay || 0));
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (delay || 0) + dur);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + (delay || 0));
+      osc.stop(ctx.currentTime + (delay || 0) + dur);
+    } catch (e) {}
+  }
+  const beepHand  = () => tone(880, 0.2);                        // 举手成功
+  const dingRound = () => { tone(660, 0.15, 0, 'triangle', .15); tone(880, 0.2, 0.15, 'triangle', .15); }; // 一轮结束
+
+  function setMsg(text, cls) {
+    msg.textContent = text;
+    msg.className = 'msg' + (cls ? ' ' + cls : '');
+  }
+
+  /* ================= 名单渲染 & 进入课堂 ================= */
+  ROSTER.forEach((name, i) => {
+    const btn = document.createElement('button');
+    const no = document.createElement('i');
+    no.textContent = String(i + 1);
+    btn.appendChild(no);
+    btn.appendChild(document.createTextNode(name));
+    btn.addEventListener('click', () => enterClass(name));
+    rosterEl.appendChild(btn);
+  });
+
+  function enterClass(name) {
+    myName = name;
+    localStorage.setItem('word_buzzer_name', name);
+    document.getElementById('myName').textContent = name;
+    pageSelect.style.display = 'none';
+    pageClass.style.display = 'flex';
+    renderClass();
+    // 上报登录事件（教师端据此统计登录人数；重复提交按姓名去重）
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_name: myName, action: 'login' })
+    }).catch(() => setMsg('登录上报失败，不影响答题', 'err'));
+  }
+
+  document.getElementById('switchBtn').addEventListener('click', () => {
+    localStorage.removeItem('word_buzzer_name');
+    location.reload();
+  });
+
+  /* ================= 事件处理（登录 / 出题 / 举手 / 重置） ================= */
+  // 归一化：WS 推送用 _submitted_at，GET /all 用 submitted_at，统一到 _submitted_at
+  // 时间格式 "YYYY-MM-DD HH:MM:SS"（空格分隔）在 Safari 下需转成 "T" 分隔再解析
+  function parseTime(v) {
+    if (!v) return 0;
+    const d = new Date(String(v).replace(' ', 'T'));
+    return isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+
+  function recordKey(r) {
+    return r._submitted_at
+      ? (r._submitted_at + '|' + r.student_name + '|' + r.action + '|' + (r.word || ''))
+      : 'raw:' + JSON.stringify(r);
+  }
+
+  function processEvent(r) {
+    if (!r || !r.action) return; // 忽略无 action 的历史数据
+    if (r.submitted_at && !r._submitted_at) r._submitted_at = r.submitted_at;
+    const k = recordKey(r);
+    if (seenKeys.has(k)) return;
+    seenKeys.add(k);
+
+    if (r.action === 'publish') {          // 老师出题：开启新的一轮
+      currentWord = { word: r.word, at: r._submitted_at };
+      roundEnded = false;
+      winner = null;
+      myRaised = false;
+      tone(523, 0.12, 0, 'triangle', .1);  // 出题提示音
+    } else if (r.action === 'hand') {      // 同学举手：本轮结束
+      if (currentWord && !roundEnded) {
+        roundEnded = true;
+        winner = r.student_name;
+        dingRound();
+      }
+    } else if (r.action === 'reset') {     // 老师清空（新课堂）
+      currentWord = null;
+      roundEnded = false;
+      winner = null;
+      myRaised = false;
+    }
+    // action === 'login' 学生端无需处理
+    renderClass();
+  }
+
+  /* ================= 课堂渲染 ================= */
+  function renderClass() {
+    if (!myName) return;
+    wordArea.classList.remove('ended');
+
+    if (!currentWord) {
+      wordArea.innerHTML = '<div class="waiting">⏳ 等待老师出题…</div>';
+      handBtn.disabled = true;
+      handBtn.textContent = '等待老师出题';
+      return;
+    }
+
+    if (!roundEnded) {
+      wordArea.innerHTML = '<div class="en-word">' + escapeHtml(String(currentWord.word).toUpperCase()) + '</div>' +
+                           '<div class="waiting">想一想它的中文意思，想好就举手！</div>';
+      if (myRaised) {
+        handBtn.disabled = true;
+        handBtn.textContent = '已举手 ✓';
+      } else {
+        handBtn.disabled = false;
+        handBtn.textContent = '举 手 🙋';
+      }
+    } else {
+      wordArea.classList.add('ended');
+      const isMe = winner === myName;
+      wordArea.innerHTML =
+        '<div class="round-banner">' + (isMe ? '🎉 是你！你获得了本轮回答机会' : '🎊 ' + escapeHtml(winner || '') + ' 获得了本轮回答机会') + '</div>' +
+        '<div class="en-word">' + escapeHtml(String(currentWord.word).toUpperCase()) + '</div>' +
+        '<div class="waiting">本轮已结束，等待老师出下一题</div>';
+      handBtn.disabled = true;
+      handBtn.textContent = '本轮已结束';
+      setMsg('');
+    }
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  /* ================= 举手 ================= */
+  let handing = false;
+  async function raiseHand() {
+    if (handing || !myName || !currentWord || roundEnded || myRaised) return;
+    handing = true;
+    handBtn.disabled = true;
+    handBtn.textContent = '提交中…';
+    const handWord = currentWord.word; // 记录本轮单词：若提交期间老师换了题，结果作废
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_name: myName, action: 'hand', word: handWord })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      // 仅当仍在同一轮时才锁定状态；轮次已切换则忽略本次迟到结果
+      if (currentWord && currentWord.word === handWord && !roundEnded) {
+        myRaised = true;
+        beepHand();
+        setMsg('🙋 已举手！', 'ok');
+      }
+      renderClass();
+      syncNow(); // 立即同步一次，确保尽快看到本轮结果（WebSocket 也会推送）
+    } catch (err) {
+      setMsg('举手失败：' + err.message + '，请重试', 'err');
+      renderClass();
+    } finally {
+      // ★ 修复：无论成功失败都必须复位，否则下一轮出题后无法再举手
+      handing = false;
+      renderClass();
+    }
+  }
+  handBtn.addEventListener('click', raiseHand);
+
+  /* ================= 数据同步 ================= */
+  async function syncNow() {
+    try {
+      const res = await fetch(ALL_URL);
+      if (!res.ok) return;
+      let data = await res.json();
+      if (!Array.isArray(data)) data = data.submissions || [];
+      if (!Array.isArray(data)) return;
+      data.slice()
+        .sort((a, b) => parseTime(a._submitted_at || a.submitted_at) - parseTime(b._submitted_at || b.submitted_at))
+        .forEach(processEvent);
+    } catch (e) { /* 网络异常，静默 */ }
+  }
+
+  /* ================= WebSocket 实时推送（3 秒重连 / 不支持则 3 秒轮询） ================= */
+  let ws = null;
+  let polling = false;
+
+  function setConn(kind, text) {
+    connDot.className = 'dot ' + kind;
+    connText.textContent = text;
+  }
+
+  function connectWS() {
+    if (!('WebSocket' in window)) { startPolling(); return; }
+    setConn('off', '连接中…');
+    try { ws = new WebSocket(WS_URL); }
+    catch (e) { setTimeout(connectWS, RECONNECT_INTERVAL); return; }
+
+    ws.onopen = () => setConn('on', '实时连接中');
+    ws.onmessage = (ev) => {
+      let data;
+      try { data = JSON.parse(ev.data); } catch (e) { return; }
+      if (data && data.type === 'connected') return; // 首条确认消息
+      processEvent(data);
+    };
+    ws.onclose = () => {
+      if (polling) return;
+      setConn('off', '已断开，自动重连中');
+      setTimeout(connectWS, RECONNECT_INTERVAL);
+    };
+    ws.onerror = () => { try { ws.close(); } catch (e) {} };
+  }
+
+  function startPolling() {
+    if (polling) return;
+    polling = true;
+    setConn('off', '轮询模式（每 3 秒）');
+    setInterval(syncNow, POLL_INTERVAL);
+  }
+
+  /* ================= 启动 ================= */
+  syncNow().then(() => {
+    if (myName && ROSTER.includes(myName)) enterClass(myName);
+  });
+  connectWS();
+</script>
+</body>
+</html>

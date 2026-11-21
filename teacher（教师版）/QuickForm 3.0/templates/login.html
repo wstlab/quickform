@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('登录') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<style>
+    #loginTabs .nav-link {
+        color: #6b7280 !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        border-bottom: none !important;
+        border-radius: 8px 8px 0 0 !important;
+        padding: 0.6rem 1.5rem !important;
+        transition: all 0.2s ease;
+    }
+    #loginTabs .nav-link:hover {
+        color: #b8956a !important;
+        background: #f0f5ff !important;
+    }
+    #loginTabs .nav-link.active {
+        color: #b8956a !important;
+        font-weight: 600 !important;
+        background: #f8f9fa !important;
+        border: 1px solid #e5e7eb !important;
+        border-bottom: 1px solid #f8f9fa !important;
+    }
+    #loginTabContent {
+        border: 1px solid #e5e7eb;
+        border-radius: 0 8px 8px 8px;
+        padding: 1.5rem;
+    }
+</style>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h3 class="text-center mb-0" style="color: white; font-weight: 600;">{{ _('用户登录') }}</h3>
+            </div>
+            <div class="card-body" style="padding: 1.5rem;">
+                {% if show_qf_login %}
+                <ul class="nav nav-tabs mb-3" id="loginTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="local-tab" data-bs-toggle="tab" data-bs-target="#localPane" type="button" role="tab">{{ _('本地登录') }}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="qf-tab" data-bs-toggle="tab" data-bs-target="#qfPane" type="button" role="tab">{{ _('QuickForm.cn 登录') }}</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="loginTabContent">
+                    <div class="tab-pane fade show active" id="localPane" role="tabpanel">
+                        <form method="POST" action="{{ url_for('login') }}" id="localLoginForm">
+                            <div class="mb-4">
+                                <label for="username" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('用户名') }}</label>
+                                <input type="text" class="form-control" id="username" name="username" required placeholder="{{ _('请输入您的用户名') }}" value="wst" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('密码') }}</label>
+                                <input type="password" class="form-control" id="password" name="password" required placeholder="{{ _('请输入您的密码') }}" value="" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                            </div>
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember">
+                                <label class="form-check-label" for="remember" style="color: #6b7280;">{{ _('记住我') }}</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-2" style="font-weight: 500; background-color: #b8956a; border-color: #b8956a; border-radius: 6px; padding: 0.625rem 1.5rem; min-height: 40px;">{{ _('登录') }}</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="qfPane" role="tabpanel">
+                        <form method="POST" action="{{ url_for('login') }}" id="qfLoginForm">
+                            <input type="hidden" name="qf_login" value="1">
+                            <div class="mb-4">
+                                <label for="qf_username" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('QuickForm.cn 用户名') }}</label>
+                                <input type="text" class="form-control" id="qf_username" name="qf_username" required placeholder="{{ _('请输入 QuickForm.cn 用户名') }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                            </div>
+                            <div class="mb-4">
+                                <label for="qf_password" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('QuickForm.cn 密码') }}</label>
+                                <input type="password" class="form-control" id="qf_password" name="qf_password" required placeholder="{{ _('请输入 QuickForm.cn 密码') }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                            </div>
+                            <button type="submit" class="btn w-100 py-2" style="font-weight: 500; background-color: #10b981; color: white; border-radius: 6px; padding: 0.625rem 1.5rem; min-height: 40px;">
+                                {{ _('使用 QuickForm.cn 登录') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <form method="POST" action="{{ url_for('login') }}" id="localLoginForm">
+                    <div class="mb-4">
+                        <label for="username" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('用户名') }}</label>
+                        <input type="text" class="form-control" id="username" name="username" required placeholder="{{ _('请输入您的用户名') }}" value="wst" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('密码') }}</label>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="{{ _('请输入您的密码') }}" value="" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                    </div>
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember" style="color: #6b7280;">{{ _('记住我') }}</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2" style="font-weight: 500; background-color: #b8956a; border-color: #b8956a; border-radius: 6px; padding: 0.625rem 1.5rem; min-height: 40px;">{{ _('登录') }}</button>
+                </form>
+                {% endif %}
+
+                <div class="mt-3 text-center">
+                    <small style="color: #6b7280;">{{ _('默认用户名和密码请查看README.md文件') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

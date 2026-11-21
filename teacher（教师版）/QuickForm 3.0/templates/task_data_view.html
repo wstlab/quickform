@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('提交数据') }} - {{ task.title }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<meta http-equiv="refresh" content="30">
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h4 class="mb-0">{{ _('提交数据') }} - {{ task.title }}</h4>
+            <div class="d-flex align-items-center gap-2" style="flex-wrap: wrap;">
+                <span class="badge" style="background-color: #9ca3af; color: white;">{{ _('每 30 秒自动刷新') }}</span>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {{ _('返回任务列表') }}
+                </a>
+                <a href="{{ url_for('task_detail', task_id=task.id) }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {{ _('返回任务详情') }}
+                </a>
+            </div>
+        </div>
+        <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0" style="color: white; font-weight: 600;">{{ _('提交列表') }}（{{ _('共') }} {{ total_submissions }} {{ _('条') }}）</h5>
+                    {% if submissions %}
+                    <button type="button" class="btn" style="background-color: #ef4444; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;" onclick="deleteAllData()">🗑 {{ _('删除全部') }}</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+                {% if submissions %}
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border-radius: 8px; overflow: hidden;">
+                        <thead style="background-color: #f3f4f6;">
+                            <tr>
+                                <th style="font-weight: 600; color: #374151;">{{ _('ID') }}</th>
+                                <th style="font-weight: 600; color: #374151;">{{ _('提交时间') }}</th>
+                                <th style="font-weight: 600; color: #374151;">{{ _('数据内容') }}</th>
+                                <th style="font-weight: 600; color: #374151; width: 100px;">{{ _('操作') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in submissions %}
+                            <tr>
+                                <td>{{ sub.id }}</td>
+                                <td>{{ sub.submitted_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>
+                                    {% set parsed = sub.data|from_json %}
+                                    {% if parsed and parsed.attachment is defined %}
+                                    <div style="margin-bottom: 8px; font-size: 13px;">
+                                        <strong>附件：</strong>
+                                        {% if parsed.attachment is string %}
+                                        <a href="{{ parsed.attachment }}" target="_blank" style="color: #b8956a; text-decoration: underline;">{{ parsed.attachment.split('/')[-1] }}</a>
+                                        {% elif parsed.attachment is iterable %}
+                                        {% for att in parsed.attachment %}
+                                        <a href="{{ att }}" target="_blank" style="color: #b8956a; text-decoration: underline; margin-right: 8px;">{{ att.split('/')[-1] }}</a>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    <pre class="mb-0 small" style="max-height: 120px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-family: 'Courier New', monospace; font-size: 14px; background-color: #fef9ef; padding: 10px; border-radius: 8px; border: 1px solid #e5e7eb;">{{ sub.data }}</pre>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn" style="background-color: #ef4444; color: white; font-weight: 500; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;" onclick="deleteSingleData({{ sub.id }})">{{ _('删除') }}</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if pagination.pages > 1 %}
+                <nav aria-label="{{ _('分页') }}" class="mt-4">
+                    <ul class="pagination justify-content-center" style="gap: 5px;">
+                        <li class="page-item {% if pagination.page <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('task_data_view', task_id=task.id, page=pagination.page - 1, per_page=pagination.per_page) }}" style="background-color: #f3f4f6; color: #374151; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;">&laquo; {{ _('上一页') }}</a>
+                        </li>
+                        <li class="page-item disabled"><span class="page-link" style="background-color: #e5e7eb; color: #6b7280; border-radius: 8px; padding: 0.5rem 1rem;">{{ _('第') }} {{ pagination.page }} / {{ pagination.pages }} {{ _('页') }}</span></li>
+                        <li class="page-item {% if pagination.page >= pagination.pages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('task_data_view', task_id=task.id, page=pagination.page + 1, per_page=pagination.per_page) }}" style="background-color: #f3f4f6; color: #374151; border-radius: 8px; padding: 0.5rem 1rem; transition: all 0.3s ease;">{{ _('下一页') }} &raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+                {% endif %}
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-4" style="width: 48px; height: 48px; margin: 0 auto;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#6b7280" class="bi bi-database" viewBox="0 0 16 16">
+                            <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                            <path d="M6.5 16a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1H6.5v1zm-2-1a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1H4.5v1z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-muted mb-3">{{ _('暂无提交数据') }}</h4>
+                    <p class="text-muted mb-0">{{ _('暂无提交数据') }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var deleteConfirmMsg = "{{ _('确定要删除这条提交记录吗？') }}";
+var deleteFailedMsg = "{{ _('删除失败') }}";
+function deleteSingleData(subId) {
+    if (!confirm(deleteConfirmMsg)) return;
+    fetch("{{ url_for('delete_submission', submission_id=0) }}".replace('0', subId) + "?_=" + Date.now(), {
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+    })
+    .then(function(r) { return r.json().catch(function() { return {}; }); })
+    .then(function(data) {
+        if (data.success) { location.reload(); }
+        else { alert(data.message || deleteFailedMsg); }
+    })
+    .catch(function(e) { alert(deleteFailedMsg + '：' + e.message); });
+}
+var clearConfirmMsg = "{{ _('确定要清空该任务的全部提交数据吗？此操作不可恢复。') }}";
+var clearFailedMsg = "{{ _('清空失败') }}";
+function deleteAllData() {
+    if (!confirm(clearConfirmMsg)) return;
+    fetch("{{ url_for('clear_all_submissions', task_id=task.id) }}?_=" + Date.now(), {
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        cache: 'no-store'
+    })
+    .then(function(r) { return r.json().catch(function() { return {}; }); })
+    .then(function(data) {
+        if (data.success) { location.reload(); }
+        else { alert(data.message || clearFailedMsg); }
+    })
+    .catch(function(e) { alert(clearFailedMsg + '：' + e.message); });
+}
+</script>
+{% endblock %}

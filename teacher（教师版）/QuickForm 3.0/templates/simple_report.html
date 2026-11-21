@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ _('分析报告') }} - {{ task_title }} - {{ get_app_name() }}</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; line-height: 1.8; color: #333; max-width: 900px; margin: 0 auto; padding: 40px 20px; background-color: #fffbeb; }
+        .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+        h1 { color: #1a1a1a; font-size: 28px; font-weight: 700; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #b8956a; }
+        .meta-info { background-color: #f8f9fa; padding: 16px 20px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #b8956a; }
+        .meta-info p { margin: 8px 0; color: #555; }
+        .report-content { font-size: 16px; line-height: 1.8; color: #333; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ _('数据分析报告') }}</h1>
+        <div class="meta-info">
+            <p><strong>{{ _('任务标题：') }}</strong>{{ task_title }}</p>
+            <p><strong>{{ _('生成时间：') }}</strong>{{ report_time }}</p>
+        </div>
+        <div class="report-content">{{ report_content }}</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('创建任务') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="mb-3 d-flex justify-content-end">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> {{ _('返回任务列表') }}
+            </a>
+        </div>
+        <div class="card">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h3 class="text-center mb-0" style="color: white; font-weight: 600;">{{ _('创建数据任务') }}</h3>
+            </div>
+            <div class="card-body" style="padding: 1.5rem;">
+                <form method="POST" action="{{ url_for('create_task') }}" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="title" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('任务标题') }}</label>
+                        <input type="text" class="form-control" id="title" name="title" required placeholder="{{ _('请输入任务标题') }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;">
+                        <div class="form-text" style="color: #6b7280;">{{ _('请为您的数据回收任务设置一个描述性的标题') }}</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label" style="font-weight: 600; color: #111827; margin-bottom: 0.5rem;">{{ _('任务描述（可选）') }}</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="{{ _('请输入任务描述') }}" style="border: 1px solid #d1d5db; border-radius: 6px; padding: 0.625rem 0.875rem;"></textarea>
+                        <div class="form-text" style="color: #6b7280;">{{ _('添加描述可以帮助您更好地管理和识别不同的任务') }}</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="alert alert-info" style="background-color: #eff6ff; border-color: #bfdbfe; color: #1e40af; padding: 1rem 1.5rem; border-radius: 6px; height: 100%;">
+                                    <h6 class="alert-heading" style="font-weight: 600; margin-bottom: 0.75rem;">{{ _('创建任务后，您将获得：') }}</h6>
+                                    <ul class="mb-0" style="color: #1e40af;">
+                                        <li>{{ _('一个唯一的API地址，用于接收表单数据') }}</li>
+                                        <li>{{ _('数据管理和分析工具') }}</li>
+                                        <li>{{ _('导出数据功能') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="alert" style="background-color: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 1rem 1.5rem; border-radius: 6px; height: 100%;">
+                                    <h6 class="alert-heading" style="font-weight: 600; margin-bottom: 0.75rem;">
+                                        <i class="bi bi-exclamation-triangle-fill" style="margin-right: 0.25rem;"></i>{{ _('安全警示') }}
+                                    </h6>
+                                    <p class="mb-0" style="font-size: 0.9rem; line-height: 1.6;">
+                                        {{ _('请勿在 QuickForm 中存储姓名、身份证号等敏感数据，详情查看') }}<a href="https://my.feishu.cn/docx/KYlJdyq3wojmwox8KJTcnKORnob" target="_blank" rel="noopener" style="color: #dc2626; text-decoration: underline;">{{ _('免责声明') }}</a>。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary" style="font-weight: 500; background-color: #6b7280; border: none; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('取消') }}</a>
+                        <button type="submit" class="btn btn-primary" style="font-weight: 500; background-color: #b8956a; border-color: #b8956a; border-radius: 6px; padding: 0.625rem 1.5rem;">{{ _('创建任务') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

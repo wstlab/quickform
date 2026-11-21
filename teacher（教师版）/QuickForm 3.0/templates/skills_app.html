@@ -1,0 +1,523 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('技能应用') }} - {{ get_app_name() }}{% endblock %}
+
+{% block content %}
+<style>
+    .cli-tip {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.875rem 1rem;
+        color: #475569;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+    }
+    .cli-table td, .cli-table th {
+        vertical-align: top;
+        padding: 0.625rem 0.875rem;
+    }
+    .cli-table code {
+        background-color: #f3f4f6;
+        border-radius: 4px;
+        padding: 0.125rem 0.375rem;
+        font-size: 0.8125rem;
+        color: #b8956a;
+        white-space: nowrap;
+    }
+    .section-title {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin: 2rem 0 1rem 0;
+    }
+    .section-title:first-of-type {
+        margin-top: 0;
+    }
+    .cli-link-card {
+        background-color: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .cli-link-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        border-color: #b8956a;
+    }
+    .cli-link-card .cli-link-url {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        color: #b8956a;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .cli-link-card .cli-link-arrow {
+        color: #b8956a;
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+    .cli-link-card a {
+        color: inherit;
+        text-decoration: none;
+        flex: 1;
+    }
+    .cli-link-card a:hover, .cli-link-card a:focus {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    /* ===== 如何使用 板块 ===== */
+    .how-hero {
+        background: linear-gradient(135deg, #fdf6ec 0%, #f7f1e6 100%);
+        border: 1px solid #f0e4d0;
+        border-radius: 12px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 1.75rem;
+    }
+    .how-hero p {
+        color: #5b4a33;
+        font-size: 1rem;
+        line-height: 1.9;
+        margin-bottom: 0;
+    }
+    .how-hero .how-hero-highlight {
+        color: #b8956a;
+        font-weight: 700;
+    }
+    .how-scenarios {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+    }
+    @media (max-width: 992px) {
+        .how-scenarios { grid-template-columns: 1fr; }
+    }
+    .how-scenario {
+        background: #fff;
+        border: 1px solid #eceef1;
+        border-radius: 12px;
+        padding: 1.35rem 1.25rem 1.25rem 1.25rem;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .how-scenario:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(184, 149, 106, 0.16);
+        border-color: #e3d3ba;
+    }
+    .how-scenario .how-scenario-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: linear-gradient(135deg, #b8956a, #cfa878);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 999px;
+        padding: 0.2rem 0.7rem;
+        margin-bottom: 0.9rem;
+    }
+    .how-scenario .how-scenario-row {
+        display: flex;
+        gap: 0.55rem;
+        margin-bottom: 0.7rem;
+    }
+    .how-scenario .how-scenario-row:last-child {
+        margin-bottom: 0;
+    }
+    .how-scenario .how-scenario-key {
+        flex-shrink: 0;
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+    .how-scenario .how-scenario-text {
+        color: #4b5563;
+        font-size: 0.85rem;
+        line-height: 1.7;
+    }
+    .how-scenario .how-scenario-text strong {
+        color: #1f2937;
+        font-weight: 600;
+    }
+    .how-prompt-label {
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin-bottom: 0.65rem;
+        display: block;
+    }
+    .how-prompts {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    @media (max-width: 768px) {
+        .how-prompts { grid-template-columns: 1fr; }
+    }
+    .how-prompt {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        background: #fafafa;
+        border: 1px dashed #ddd6cc;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+        text-align: left;
+        width: 100%;
+    }
+    .how-prompt:hover {
+        background: #fdf6ec;
+        border-color: #b8956a;
+    }
+    .how-prompt .how-prompt-icon {
+        color: #b8956a;
+        font-size: 1.05rem;
+        line-height: 1.4;
+        flex-shrink: 0;
+    }
+    .how-prompt .how-prompt-text {
+        color: #374151;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    .how-prompt .how-prompt-copy {
+        margin-left: auto;
+        color: #c9bda9;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+    .how-outcome {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+    .how-outcome .how-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.83rem;
+        color: #4b5563;
+        font-weight: 500;
+    }
+    .how-outcome .how-badge i {
+        color: #b8956a;
+    }
+    .how-copied {
+        position: fixed;
+        left: 50%;
+        bottom: 2rem;
+        transform: translateX(-50%) translateY(1rem);
+        background: #1f2937;
+        color: #fff;
+        font-size: 0.85rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: 999px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 1080;
+    }
+    .how-copied.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== QFLink 前置说明 ===== */
+    .qflink-card {
+        background: #fffdf8;
+        border: 1px solid #ecdcc0;
+        border-left: 4px solid #b8956a;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.75rem;
+    }
+    .qflink-head {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        color: #8a6d43;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    .qflink-head i { font-size: 1.15rem; }
+    .qflink-card p {
+        color: #4b5563;
+        font-size: 0.875rem;
+        line-height: 1.8;
+        margin-bottom: 0.75rem;
+    }
+    .qflink-card ol {
+        color: #4b5563;
+        font-size: 0.875rem;
+        line-height: 1.9;
+        padding-left: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+    .qflink-card code {
+        background: #f3f4f6;
+        border-radius: 4px;
+        padding: 0.1rem 0.35rem;
+        color: #b8956a;
+        font-size: 0.8125rem;
+    }
+    .qflink-thumb {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin: 1rem 0 0.875rem 0;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        cursor: zoom-in;
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    .qflink-thumb:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+    .qflink-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .qflink-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background-color: #b8956a;
+        color: #fff !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: 8px;
+        padding: 0.5rem 1.1rem;
+        text-decoration: none;
+    }
+    .qflink-btn:hover { background-color: #a5834f; }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mb-4 border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header" style="background-color: #b8956a; color: white; font-weight: 600; border-bottom: none; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0 !important;">
+                <h5 class="mb-0" style="color: white; font-weight: 600;"><i class="bi bi-rocket-takeoff"></i> {{ _('技能应用') }}</h5>
+            </div>
+            <div class="card-body" style="padding: 2rem;">
+
+                <h6 class="section-title">1. {{ _('QuickForm助手（QFTools） ：一键创建课堂互动工具') }}</h6>
+                <div class="cli-tip mb-4">
+                    {{ _('QuickForm助手（QFTools，fork 自 buBailai/quickform-teaching-tool）：让 AI 助手（如WorkBuddy、豆包等）自动完成需求收集、任务创建、教学页面开发、测试数据提交与数据可视化大屏的全流程。一次安装，同时支持在线版和教师版。') }}
+                </div>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered table-sm cli-table mb-0" style="font-size: 0.875rem;">
+                        <thead style="background-color: #f3f4f6;">
+                            <tr>
+                                <th style="width: 45%;">{{ _('资源') }}</th>
+                                <th>{{ _('说明') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="{{ url_for('static', filename='skills/QFTools.zip') }}" download style="color: #b8956a; text-decoration: none; font-weight: 600;"><i class="bi bi-file-earmark-zip"></i> {{ _('下载 Skill 安装包（ZIP）') }}</a></td>
+                                <td>{{ _('解压到 WorkBuddy 全局 skills 目录 ~/.trae-cn/skills/ 即可被识别') }}</td>
+                            </tr>
+                            <tr>
+                                <td><a href="{{ url_for('static', filename='skills/QFTools/SKILL.md') }}" target="_blank" style="color: #b8956a; text-decoration: none; font-weight: 600;"><i class="bi bi-file-earmark-text"></i> {{ _('查看 SKILL.md（技能说明）') }}</a></td>
+                                <td>{{ _('8 步工作流：需求收集 → 创建任务 → 教学页面 → 测试数据 → 可视化大屏') }}</td>
+                            </tr>
+                            <tr>
+                                <td><a href="{{ url_for('static', filename='skills/QFTools/references/quickform-api.md') }}" target="_blank" style="color: #b8956a; text-decoration: none; font-weight: 600;"><i class="bi bi-file-earmark-text"></i> {{ _('查看 CLI 参考文档') }}</a></td>
+                                <td>{{ _('qf 命令总览、--base-url 规则、官网版 / 本地版差异、数据接口说明') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cli-tip">
+                    <strong>{{ _('智能安装（把下面地址发给 AI 助手，让它自动完成安装）：') }}</strong><br>
+                    <code style="background-color: #f3f4f6; border-radius: 4px; padding: 0.125rem 0.375rem; font-size: 0.8125rem; word-break: break-all;">{{ request.host_url }}static/skills/QFTools.zip</code>
+                </div>
+
+                <div class="qflink-card">
+                    <div class="qflink-head"><i class="bi bi-shield-lock-fill"></i>{{ _('使用前必读：先配置 QFLink 授权码') }}</div>
+                    <p>{{ _('QFTools 技能可同时连接') }}<strong>{{ _('本地教师版') }}</strong>{{ _('与') }}<strong>{{ _('在线版（quickform.cn）') }}</strong>{{ _('。本地版以 QFLink 授权码作为功能开关——未配置时系统会拒绝所有 CLI 请求（403），技能将无法创建任务、提交数据。') }}</p>
+                    <ol>
+                        <li>{{ _('登录本系统后，点击右上角用户菜单 →「设置」，切换到「QFLink授权码」标签页。') }}</li>
+                        <li>{{ _('填写用途（例如：教师版 QFLink），点击「生成 QFLink 授权码」。') }}</li>
+                        <li>{{ _('把生成的授权码填入 QFLink 配置并保存，技能即可正常使用。') }}</li>
+                    </ol>
+                    <p>{{ _('注意：QFLink 互联仅已认证教师可用。未完成教师身份认证时，即使使用账号密码或授权码请求在线服务器，也会返回') }}<code>403 certification_required</code>{{ _('。') }}</p>
+                    <img class="qflink-thumb" src="{{ url_for('static', filename='qflink.jpg') }}" alt="{{ _('QFLink 授权码配置界面截图') }}" data-bs-toggle="modal" data-bs-target="#qflinkModal">
+                    <div class="qflink-actions">
+                        <a class="qflink-btn" href="{{ url_for('profile') }}"><i class="bi bi-gear-fill"></i>{{ _('前往设置 QFLink 授权码') }}</a>
+                        <span style="color:#9ca3af; font-size:0.8rem;">{{ _('点击图片放大查看') }}</span>
+                    </div>
+                </div>
+
+                <h6 class="section-title">2. {{ _('如何使用 ：说一句话，生成全套交互网页') }}</h6>
+                <div class="how-hero">
+                    <p>{{ _('不需要会写代码，也不需要配置接口。') }}<span class="how-hero-highlight">{{ _('安装好之后，只要对 AI 助手说出你的教学想法，') }}</span>{{ _('QuickForm助手就会自动完成「创建数据任务 → 生成交互页面 → 收集数据 → 画出分析图表」的全过程。你专注教学，剩下的交给它。') }}</p>
+                </div>
+
+                <div class="how-scenarios">
+                    <div class="how-scenario">
+                        <span class="how-scenario-tag"><i class="bi bi-1-circle"></i> {{ _('课堂签到') }}</span>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-chat-quote-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你说：') }}</strong>{{ _('“帮我做一个课堂签到表，学生扫码签到。”') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-robot" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('AI 自动完成：') }}</strong>{{ _('创建数据任务、生成签到网页、绑定分享二维码。') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-gift-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你得到：') }}</strong>{{ _('学生签到页 + 实时签到数据大屏。') }}</span>
+                        </div>
+                    </div>
+                    <div class="how-scenario">
+                        <span class="how-scenario-tag"><i class="bi bi-2-circle"></i> {{ _('随堂练习') }}</span>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-chat-quote-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你说：') }}</strong>{{ _('“做一个三年级数学加减法随堂练习，5 道选择题。”') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-robot" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('AI 自动完成：') }}</strong>{{ _('创建任务、生成在线答题页面、自动提交测试数据验证。') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-gift-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你得到：') }}</strong>{{ _('答题页 + 正确率统计图表。') }}</span>
+                        </div>
+                    </div>
+                    <div class="how-scenario">
+                        <span class="how-scenario-tag"><i class="bi bi-3-circle"></i> {{ _('小组互评') }}</span>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-chat-quote-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你说：') }}</strong>{{ _('“做一个小组互评投票，学生给各组作品打分。”') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-robot" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('AI 自动完成：') }}</strong>{{ _('创建任务、生成评分页面、生成可视化大屏。') }}</span>
+                        </div>
+                        <div class="how-scenario-row">
+                            <span class="how-scenario-key"><i class="bi bi-gift-fill" style="color:#b8956a;"></i></span>
+                            <span class="how-scenario-text"><strong>{{ _('你得到：') }}</strong>{{ _('评分页 + 得分排行与雷达图。') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="how-prompt-label">{{ _('不知道怎么说？点击下面任意一句试试（会自动复制）：') }}</span>
+                <div class="how-prompts">
+                    <button type="button" class="how-prompt">
+                        <i class="bi bi-chat-square-text how-prompt-icon"></i>
+                        <span class="how-prompt-text">{{ _('帮我做一个课堂签到表，学生扫码签到，我要看实时签到人数') }}</span>
+                        <i class="bi bi-clipboard how-prompt-copy"></i>
+                    </button>
+                    <button type="button" class="how-prompt">
+                        <i class="bi bi-chat-square-text how-prompt-icon"></i>
+                        <span class="how-prompt-text">{{ _('做一个三年级数学随堂练习，5 道选择题，做完自动统计正确率') }}</span>
+                        <i class="bi bi-clipboard how-prompt-copy"></i>
+                    </button>
+                    <button type="button" class="how-prompt">
+                        <i class="bi bi-chat-square-text how-prompt-icon"></i>
+                        <span class="how-prompt-text">{{ _('做一个小组互评投票工具，学生对各组作品打分，最后出排行榜') }}</span>
+                        <i class="bi bi-clipboard how-prompt-copy"></i>
+                    </button>
+                    <button type="button" class="how-prompt">
+                        <i class="bi bi-chat-square-text how-prompt-icon"></i>
+                        <span class="how-prompt-text">{{ _('用 QuickForm 做一个课堂抢答器，记录每个学生的抢答次数') }}</span>
+                        <i class="bi bi-clipboard how-prompt-copy"></i>
+                    </button>
+                </div>
+
+                <span class="how-prompt-label">{{ _('你会得到：') }}</span>
+                <div class="how-outcome">
+                    <span class="how-badge"><i class="bi bi-window"></i> {{ _('交互式 HTML 页面') }}</span>
+                    <span class="how-badge"><i class="bi bi-qr-code"></i> {{ _('一键分享链接 / 二维码') }}</span>
+                    <span class="how-badge"><i class="bi bi-inboxes"></i> {{ _('实时数据采集') }}</span>
+                    <span class="how-badge"><i class="bi bi-bar-chart-line"></i> {{ _('可视化分析大屏') }}</span>
+                    <span class="how-badge"><i class="bi bi-check2-circle"></i> {{ _('自动验证测试数据') }}</span>
+                </div>
+
+                <h6 class="section-title">3. {{ _('QuickForm CLI — 命令行工具') }}</h6>
+                <p style="color: #6b7280; font-size: 0.9rem; line-height: 1.8;">
+                    {{ _('CLI（quickform-cli，命令 qf）可以在终端中管理本系统的数据任务：创建任务、查看/导出数据、绑定任务页面、提交与查询表单数据。官方文档包含完整的命令参考、安装说明与示例：') }}
+                </p>
+                <a href="https://quickform.cn/cli" target="_blank" class="cli-link-card">
+                    <div>
+                        <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">{{ _('QuickForm CLI 官方文档') }}</div>
+                        <div class="cli-link-url">https://quickform.cn/cli</div>
+                    </div>
+                    <div class="cli-link-arrow">→</div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="qflinkModal" tabindex="-1" aria-labelledby="qflinkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content" style="border-radius: 10px; overflow: hidden;">
+            <div class="modal-header" style="border-bottom: 1px solid #eceef1; padding: 0.75rem 1.25rem;">
+                <h5 class="modal-title" id="qflinkModalLabel" style="font-size: 1rem; font-weight: 700; color: #1f2937;">{{ _('QFLink 授权码配置界面') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ _('关闭') }}"></button>
+            </div>
+            <div class="modal-body p-0" style="background: #f8fafc;">
+                <img src="{{ url_for('static', filename='qflink.jpg') }}" alt="{{ _('QFLink 授权码配置界面截图') }}" style="width: 100%; height: auto; display: block;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="how-copied" id="howCopied">{{ _('已复制，去 AI 助手粘贴即可') }}</div>
+<script>
+(function () {
+    var toast = document.getElementById('howCopied');
+    var timer = null;
+    function showToast() {
+        if (!toast) return;
+        toast.classList.add('show');
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+    }
+    function fallbackCopy(text) {
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast();
+        } catch (e) {}
+    }
+    var prompts = document.querySelectorAll('.how-prompt');
+    for (var i = 0; i < prompts.length; i++) {
+        prompts[i].addEventListener('click', function () {
+            var textEl = this.querySelector('.how-prompt-text');
+            if (!textEl) return;
+            var text = textEl.textContent.trim();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showToast, function () { fallbackCopy(text); });
+            } else {
+                fallbackCopy(text);
+            }
+        });
+    }
+})();
+</script>
+{% endblock %}

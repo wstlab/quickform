@@ -1,0 +1,390 @@
+/* QuickForm 统一样式系统 - 橙棕色暖调主题 */
+
+/* ========== 配色变量 ========== */
+:root {
+    --primary-blue: #b8956a;        /* 主色调：暖橙棕 */
+    --primary-blue-dark: #8b7355;   /* 主色调深色 */
+    --primary-blue-light: #c9ab84;  /* 主色调浅色 */
+    --bg-white: #ffffff;
+    --bg-light: #fffbeb;
+    --bg-gray: #fef9ef;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --border-color: #e5e7eb;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #c9ab84;
+}
+
+/* ========== 统一菜单栏样式 ========== */
+.top-navbar {
+    background-color: var(--primary-blue);
+    padding: 15px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ========== 基础容器样式 ========== */
+.main-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ========== 主页样式 ========== */
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+/* ========== 卡片样式 ========== */
+.assistant-card {
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    padding: 24px;
+    width: 300px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.assistant-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.assistant-card h2 {
+    color: var(--primary-blue);
+    margin-top: 0;
+    font-weight: 700;
+}
+
+.assistant-card p {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.assistant-card a {
+    display: inline-block;
+    background-color: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.assistant-card a:hover {
+    background-color: var(--primary-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(184, 149, 106, 0.3);
+}
+
+.ai-assistants {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin: 30px 0;
+}
+
+/* ========== 数据统计卡片 ========== */
+.stat-card {
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.stat-card .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-card .stat-trend {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+/* ========== 状态标签样式 ========== */
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 0.875rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1;
+}
+
+.status-badge.running {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.status-badge.pending {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.status-badge.featured {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-badge.rejected {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* ========== Footer样式 ========== */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: var(--text-secondary);
+}
+
+/* ========== 侧边栏布局（管理页面） ========== */
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+.admin-sidebar {
+    width: 240px;
+    min-width: 240px;
+    flex-shrink: 0;
+    background-color: var(--bg-white);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.admin-sidebar .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.admin-sidebar .sidebar-item:hover {
+    background-color: var(--bg-gray);
+    color: var(--primary-blue);
+    border-left-color: var(--primary-blue);
+}
+
+.admin-sidebar .sidebar-item.active {
+    background-color: rgba(184, 149, 106, 0.1);
+    color: var(--primary-blue);
+    border-left-color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.admin-sidebar .sidebar-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.admin-content {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem;
+    background-color: var(--bg-light);
+    overflow-x: auto;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0 15px;
+    }
+    
+    .nav-link {
+        font-size: 14px;
+        padding: 8px 12px;
+        flex: 1 1 auto;
+        min-width: 0;
+        text-align: center;
+    }
+    
+    .main-container {
+        padding: 15px;
+    }
+    
+    header {
+        margin-bottom: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .ai-assistants {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin: 20px 0;
+    }
+    
+    .assistant-card {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .stat-card .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    /* 移动端侧边栏改为顶部导航 */
+    .admin-layout {
+        flex-direction: column;
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0;
+        display: flex;
+        overflow-x: auto;
+    }
+    
+    .admin-sidebar .sidebar-item {
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .admin-sidebar .sidebar-item:hover,
+    .admin-sidebar .sidebar-item.active {
+        border-left: none;
+        border-bottom-color: var(--primary-blue);
+    }
+    
+    .admin-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .nav-link {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .main-container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.3rem;
+    }
+    
+    header p {
+        font-size: 0.9rem;
+    }
+    
+    .assistant-card {
+        padding: 15px;
+    }
+    
+    .assistant-card h2 {
+        font-size: 1.2rem;
+    }
+    
+    .assistant-card p {
+        font-size: 0.9rem;
+    }
+    
+    .assistant-card a {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .stat-card .stat-number {
+        font-size: 1.25rem;
+    }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('报告生成') }} - {{ get_app_name() }}</title>
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">
+    <!-- 引入marked.js用于markdown渲染 -->
+    <script src="{{ url_for('static', filename='vendor/marked/marked.min.js') }}"></script>
+    <!-- 引入highlight.js用于代码高亮 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/highlight.js/styles/github.min.css') }}">
+    <script src="{{ url_for('static', filename='vendor/highlight.js/highlight.min.js') }}"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #28a745;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        .report-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            line-height: 1.6;
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        .markdown-body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #24292e;
+        }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        .markdown-body h1 { font-size: 2em; }
+        .markdown-body h2 { font-size: 1.5em; }
+        .markdown-body h3 { font-size: 1.25em; }
+        .markdown-body p { margin-top: 0; margin-bottom: 16px; }
+        .markdown-body a { color: #0366d6; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27, 31, 35, 0.05);
+            border-radius: 3px;
+        }
+        .markdown-body pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+        }
+        .markdown-body pre code {
+            padding: 0;
+            margin: 0;
+            font-size: 100%;
+            word-break: normal;
+            white-space: pre;
+            background: transparent;
+            border: 0;
+        }
+        .markdown-body ul, .markdown-body ol {
+            padding-left: 2em;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        .markdown-body li { margin-top: 0.25em; }
+        .markdown-body table {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+        .markdown-body table th {
+            font-weight: 600;
+        }
+        .markdown-body table th, .markdown-body table td {
+            padding: 6px 13px;
+            border: 1px solid #dfe2e5;
+        }
+        .markdown-body table tr {
+            background-color: #fff;
+            border-top: 1px solid #c6cbd1;
+        }
+        .markdown-body table tr:nth-child(2n) {
+            background-color: #f6f8fa;
+        }
+        .loading-spinner {
+            margin: 50px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #28a745;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status-message {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="bi bi-file-text"></i> {{ _('分析报告') }} - {{ task.title if task else _('加载中...') }}
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger">
+                        <h5><i class="bi bi-exclamation-circle"></i> {{ _('生成报告失败') }}</h5>
+                        <p>{{ error }}</p>
+                        {% if ai_config_error %}
+                            <a href="{{ url_for('config') }}" class="btn btn-primary" target="_parent">{{ _('前往配置页面') }}</a>
+                        {% endif %}
+                        <button onclick="window.close()" class="btn btn-secondary">{{ _('关闭窗口') }}</button>
+                    </div>
+                {% elif report %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="report-content">
+                                <div id="markdown-content" class="markdown-body"></div>
+                                <!-- 保留原始报告内容用于下载 -->
+                                <div id="report-content" style="display: none;">{{ report }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('download_report', task_id=task.id) }}" class="btn btn-success me-2">
+                            <i class="bi bi-download"></i> {{ _('下载分析报告') }}
+                        </a>
+                        <a href="{{ url_for('smart_analyze', task_id=task.id) }}" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ _('完成并返回') }}
+                        </a>
+                    </div>
+                    
+                    {% if task and task.report_generated_at %}
+                    <div class="alert alert-info mt-3">
+                        <p><i class="bi bi-info-circle"></i> {{ _('报告生成时间：') }}{{ task.report_generated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="status-message">
+                        <div class="loading-spinner"></div>
+                        <h5 class="mt-4">{{ _('正在生成分析报告...') }}</h5>
+                        <p class="text-muted">{{ _('这可能需要几分钟时间，请耐心等待...') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        // 页面加载完成后渲染markdown内容
+        document.addEventListener('DOMContentLoaded', function() {
+            var reportContent = document.getElementById('report-content');
+            var markdownContainer = document.getElementById('markdown-content');
+            
+            if (reportContent && markdownContainer) {
+                // 设置marked选项
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            try {
+                                return hljs.highlight(code, { language: lang }).value;
+                            } catch (err) {}
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+                
+                // 渲染markdown
+                markdownContainer.innerHTML = marked.parse(reportContent.textContent);
+            }
+        });
+    </script>
+</body>
+</html>

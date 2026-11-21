@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多网页浏览（ZIP）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    background: #f4f4fa;
+    color: #2d2b55;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ===== 主区域 ===== */
+  .stage { position: relative; flex: 1; min-height: 0; }
+  #preview {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    display: none;
+  }
+
+  /* ===== 文件列表面板 ===== */
+  .drawer-mask {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(30,25,60,.35);
+    z-index: 5;
+  }
+  .drawer-mask.open { display: block; }
+  .drawer {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 320px;
+    max-width: 85%;
+    background: #fff;
+    z-index: 6;
+    box-shadow: -8px 0 30px rgba(40,30,90,.2);
+    transform: translateX(105%);
+    transition: transform .25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    flex: none;
+    padding: 16px 18px;
+    border-bottom: 1px solid #eeeef6;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .drawer-head .close { border: none; background: none; font-size: 20px; cursor: pointer; color: #9999b0; line-height: 1; }
+  .drawer-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .file-item:hover { background: #f4f3ff; }
+  .file-item.active { background: #eceaff; }
+  .file-item .ficon {
+    flex: none;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .file-item .finfo { min-width: 0; flex: 1; }
+  .file-item .fname { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-item .fpath { font-size: 11px; color: #a0a0b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; }
+  .t-html { background: #2b6fe0; } .t-css { background: #15a37a; } .t-js { background: #e8a431; }
+  .t-img { background: #d6488a; } .t-font { background: #7b61d8; } .t-media { background: #e0653a; }
+  .t-json { background: #6a8a9a; } .t-zip { background: #7b3ff2; } .t-file { background: #9aa0b4; }
+
+  /* ===== 加载遮罩 ===== */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.97);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .overlay.hidden { display: none; }
+  .loader-box { width: 100%; max-width: 420px; text-align: center; }
+  .spinner-big {
+    width: 46px; height: 46px;
+    border: 4px solid #e4e4f2;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .phase { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .phase-sub { font-size: 13px; color: #8a8aa3; margin-bottom: 18px; word-break: break-all; }
+  .progress-track {
+    height: 8px;
+    background: #ececf6;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #667eea, #9b6cf0);
+    border-radius: 999px;
+    transition: width .25s ease;
+  }
+  .progress-row { display: flex; justify-content: space-between; font-size: 12px; color: #a0a0b8; margin-top: 8px; }
+  .cancel-btn {
+    margin-top: 20px;
+    border: 1.5px solid #d8d8e8;
+    background: #fff;
+    color: #6b6b88;
+    padding: 8px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .cancel-btn:hover { border-color: #b9b9d6; }
+
+  /* ===== 错误 / 兜底卡片 ===== */
+  .panel {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 14px 44px rgba(50,40,100,.14);
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .panel .p-icon { font-size: 44px; margin-bottom: 12px; }
+  .panel h2 { font-size: 19px; margin-bottom: 10px; }
+  .panel p { font-size: 13.5px; color: #6b6b88; line-height: 1.8; word-break: break-all; }
+  .panel .p-actions { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .p-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .p-btn.primary { background: linear-gradient(135deg,#667eea,#764ba2); color: #fff; }
+  .p-btn.ghost { background: #f0f0f8; color: #55557a; }
+  .pick-tip { margin-top: 18px; font-size: 12px; color: #a0a0b8; }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <iframe id="preview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"></iframe>
+
+    <div class="drawer-mask" id="drawerMask"></div>
+    <div class="drawer" id="drawer">
+      <div class="drawer-head">
+        <span>压缩包文件 (<span id="drawerCount">0</span>)</span>
+        <button class="close" id="drawerClose">&times;</button>
+      </div>
+      <div class="drawer-list" id="drawerList"></div>
+    </div>
+
+    <div class="overlay" id="overlay">
+      <div class="loader-box" id="loaderBox">
+        <div class="spinner-big"></div>
+        <div class="phase" id="phaseText">正在准备…</div>
+        <div class="phase-sub" id="phaseSub"></div>
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-row">
+          <span id="progressPct">0%</span>
+          <span id="progressSize"></span>
+        </div>
+        <button class="cancel-btn" id="cancelBtn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本地兜底文件选择（跨域无法直接读取时使用） -->
+  <input type="file" id="localPicker" accept=".zip,application/zip,application/x-zip-compressed" hidden>
+
+<script src="js/zip-full.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var API_ORIGIN = 'https://qf.zmrobo.com';
+  var MAX_SIZE = 10 * 1024 * 1024; // 附件限制 10MB
+
+  var params = new URLSearchParams(location.search);
+  var zipParam = params.get('zip');
+  var workTitle = params.get('title') || '';
+  var studentName = params.get('student') || '';
+
+  var overlay = document.getElementById('overlay');
+  var loaderBox = document.getElementById('loaderBox');
+  var phaseText = document.getElementById('phaseText');
+  var phaseSub = document.getElementById('phaseSub');
+  var progressBar = document.getElementById('progressBar');
+  var progressPct = document.getElementById('progressPct');
+  var progressSize = document.getElementById('progressSize');
+  var cancelBtn = document.getElementById('cancelBtn');
+  var preview = document.getElementById('preview');
+  var drawer = document.getElementById('drawer');
+  var drawerMask = document.getElementById('drawerMask');
+  var drawerClose = document.getElementById('drawerClose');
+  var drawerList = document.getElementById('drawerList');
+  var drawerCount = document.getElementById('drawerCount');
+  var localPicker = document.getElementById('localPicker');
+
+  var abortController = null;
+  var zipReader = null;
+  var cancelled = false;
+  var objectUrls = [];
+  var extractedFiles = [];
+  var mainFile = null;
+  var originalBlobUrl = null;
+  var currentSourceName = '';
+
+  /* ---------- 工具 ---------- */
+  function escapeHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function formatSize(bytes) {
+    if (bytes == null) return '';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(2) + ' MB';
+  }
+  function getExt(name) {
+    var base = name.split('/').pop();
+    var idx = base.lastIndexOf('.');
+    return idx === -1 ? '' : base.slice(idx + 1).toLowerCase();
+  }
+  function setProgress(pct, sizeText) {
+    pct = Math.max(0, Math.min(100, Math.round(pct)));
+    progressBar.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+    if (sizeText) progressSize.textContent = sizeText;
+  }
+  function setPhase(text, sub) {
+    phaseText.textContent = text;
+    phaseSub.textContent = sub || '';
+  }
+
+  var MIME = {
+    html: 'text/html;charset=utf-8', htm: 'text/html;charset=utf-8',
+    css: 'text/css;charset=utf-8',
+    js: 'text/javascript;charset=utf-8', mjs: 'text/javascript;charset=utf-8',
+    json: 'application/json;charset=utf-8', xml: 'application/xml;charset=utf-8',
+    svg: 'image/svg+xml', txt: 'text/plain;charset=utf-8', md: 'text/plain;charset=utf-8',
+    png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif',
+    webp: 'image/webp', avif: 'image/avif', ico: 'image/x-icon', bmp: 'image/bmp',
+    woff: 'font/woff', woff2: 'font/woff2', ttf: 'font/ttf', otf: 'font/otf',
+    mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', m4a: 'audio/mp4',
+    mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime',
+    wasm: 'application/wasm', pdf: 'application/pdf'
+  };
+  var TEXT_EXTS = { html:1, htm:1, css:1, js:1, mjs:1, json:1, xml:1, svg:1, txt:1, md:1 };
+
+  function normalizeZipUrl(u) {
+    if (!u) return '';
+    try {
+      if (/^https?:\/\//i.test(u)) return u;
+      if (u.indexOf('//') === 0) return 'https:' + u;
+      if (u.charAt(0) === '/') return API_ORIGIN + u;
+      return new URL(u, location.href).href;
+    } catch (e) { return u; }
+  }
+
+  /* ---------- 界面：错误 / 兜底 ---------- */
+  function showPanel(html) {
+    overlay.classList.remove('hidden');
+    loaderBox.style.display = 'none';
+    var panel = document.createElement('div');
+    panel.className = 'panel';
+    panel.innerHTML = html;
+    overlay.appendChild(panel);
+    overlay._panel = panel;
+  }
+  function removePanel() {
+    if (overlay._panel) { overlay._panel.remove(); overlay._panel = null; }
+    loaderBox.style.display = '';
+  }
+  function showError(icon, title, msg, actionsHtml) {
+    showPanel(
+      '<div class="p-icon">' + icon + '</div>'
+      + '<h2>' + escapeHtml(title) + '</h2>'
+      + '<p>' + escapeHtml(msg) + '</p>'
+      + '<div class="p-actions">' + actionsHtml + '</div>'
+      + '<div class="pick-tip">也可以把 ZIP 文件下载后，点击下方按钮在本地浏览（文件不会上传）</div>'
+      + '<div class="p-actions" style="margin-top:10px"><button class="p-btn ghost" id="panelPickBtn">选择本地 ZIP 文件</button></div>'
+    );
+    bindPanelActions();
+  }
+  function bindPanelActions() {
+    var pick = document.getElementById('panelPickBtn');
+    if (pick) pick.addEventListener('click', function () { localPicker.click(); });
+    var retry = document.getElementById('panelRetryBtn');
+    if (retry) retry.addEventListener('click', function () {
+      removePanel();
+      startRemote(zipParam);
+    });
+    var dl = document.getElementById('panelDownloadBtn');
+    if (dl) dl.href = normalizeZipUrl(zipParam);
+  }
+
+  /* ---------- 第 1 阶段：流式下载（不阻塞 UI） ---------- */
+  function downloadZip(url) {
+    abortController = new AbortController();
+    setPhase('正在下载作品文件…', url);
+    setProgress(0, '0 B');
+
+    return fetch(url, { signal: abortController.signal, credentials: 'omit' })
+      .then(function (res) {
+        if (!res.ok) {
+          var err = new Error('HTTP ' + res.status + ' ' + res.statusText);
+          err.httpStatus = res.status;
+          throw err;
+        }
+        var total = parseInt(res.headers.get('content-length') || '0', 10);
+        if (total > MAX_SIZE) {
+          throw makeSizeError(total);
+        }
+
+        var reader = res.body.getReader();
+        var chunks = [];
+        var received = 0;
+
+        function pump() {
+          return reader.read().then(function (r) {
+            if (cancelled) {
+              reader.cancel();
+              throw new Error('__CANCELLED__');
+            }
+            if (r.done) return;
+            received += r.value.length;
+            if (received > MAX_SIZE) {
+              reader.cancel();
+              throw makeSizeError(received);
+            }
+            chunks.push(r.value);
+            // 下载占总进度 75%
+            var pct = total ? (received / total) * 75 : Math.min(70, received / MAX_SIZE * 70);
+            setProgress(pct, formatSize(received) + (total ? ' / ' + formatSize(total) : ''));
+            return pump();
+          });
+        }
+        return pump().then(function () {
+          return new Blob(chunks, { type: 'application/zip' });
+        });
+      });
+  }
+
+  function makeSizeError(size) {
+    var err = new Error('附件大小 ' + formatSize(size) + '，超过 10MB 限制');
+    err.oversize = true;
+    return err;
+  }
+
+  /* ---------- 第 2 阶段：zip.js + Web Worker 后台解压 ---------- */
+  function extractZip(blob) {
+    setPhase('正在后台解压…', 'Web Worker 解压中，界面可正常响应');
+    if (window.zip && typeof zip.configure === 'function') {
+      zip.configure({ useWebWorkers: true });
+    }
+    return doExtract(blob, false);
+  }
+
+  function doExtract(blob, workerDisabled) {
+    zipReader = new zip.ZipReader(new zip.BlobReader(blob));
+    var files = [];
+
+    return zipReader.getEntries().then(function (entries) {
+      var fileEntries = entries.filter(function (e) { return !e.directory; });
+      if (!fileEntries.length) throw new Error('压缩包中没有任何文件');
+
+      var idx = 0;
+      function next() {
+        if (cancelled) throw new Error('__CANCELLED__');
+        if (idx >= fileEntries.length) return Promise.resolve();
+        var entry = fileEntries[idx++];
+        var ext = getExt(entry.filename);
+        var mime = MIME[ext] || 'application/octet-stream';
+        var writer = new zip.BlobWriter(mime);
+
+        return entry.getData(writer, {
+          onprogress: function (done, total) {
+            // 解压占总进度 75% → 96%
+            var filePct = total ? done / total : 0;
+            var pct = 75 + ((idx - 1 + filePct) / fileEntries.length) * 21;
+            setProgress(pct, '解压中 ' + idx + ' / ' + fileEntries.length);
+          }
+        }).then(function (dataBlob) {
+          files.push({
+            path: entry.filename.replace(/\\/g, '/').replace(/^\.\//, '').replace(/^\/+/, ''),
+            name: entry.filename.split('/').pop(),
+            ext: ext,
+            mime: mime,
+            size: dataBlob.size,
+            blob: dataBlob
+          });
+          phaseSub.textContent = 'Web Worker 解压中：' + idx + ' / ' + fileEntries.length + ' 个文件';
+          return next();
+        });
+      }
+      return next();
+    }).then(function () {
+      return zipReader.close().catch(function () {}).then(function () {
+        zipReader = null;
+        return files;
+      });
+    }).catch(function (err) {
+      // 个别浏览器在 file:// 下无法创建 Blob Worker：自动回退主线程，重试一次
+      if (!workerDisabled && err && /worker|blob/i.test(String(err.message || err)) && window.zip) {
+        if (zipReader) { zipReader.close().catch(function () {}); zipReader = null; }
+        zip.configure({ useWebWorkers: false });
+        return doExtract(blob, true);
+      }
+      throw err;
+    });
+  }
+
+  /* ---------- 第 3 阶段：路径解析与资源重写，按文件类型渲染 ---------- */
+  function pathSegments(p) {
+    var out = [];
+    p.split('/').forEach(function (seg) {
+      if (seg === '' || seg === '.') return;
+      if (seg === '..') { out.pop(); return; }
+      out.push(seg);
+    });
+    return out;
+  }
+  function decodePath(p) {
+    try { return decodeURIComponent(p); } catch (e) { return p; }
+  }
+
+  // 依据引用所在目录，把压缩包内相对路径映射到 Blob URL
+  function makeLookup(index) {
+    return function (ref, baseDir) {
+      if (!ref) return null;
+      ref = ref.trim();
+      if (!ref || ref.charAt(0) === '#') return null;
+      if (/^[a-z][a-z0-9+.-]*:/i.test(ref)) return null; // http/data/blob/javascript 等
+      if (ref.indexOf('//') === 0) return null;
+
+      var suffix = '';
+      var cut = ref.search(/[?#]/);
+      var pathPart = ref;
+      if (cut !== -1) { pathPart = ref.slice(0, cut); suffix = ref.slice(cut); }
+      pathPart = pathPart.split('\\').join('/');
+
+      var key;
+      if (pathPart.charAt(0) === '/') {
+        key = pathSegments(pathPart).join('/');
+      } else {
+        var base = baseDir ? baseDir.split('/') : [];
+        key = pathSegments(base.concat([pathPart]).join('/')).join('/');
+      }
+      key = decodePath(key).toLowerCase();
+      var f = index.get(key);
+      // HTML/HTM 之间的互链不在 rewrite 中处理（<a href> 跳过），保留原始相对路径让运行时点击拦截器解析
+      if (f && (f.ext === 'html' || f.ext === 'htm')) return null;
+      return f ? f.url + suffix : null;
+    };
+  }
+
+  function rewriteCss(css, fileDir, lookup) {
+    css = css.replace(/@import\s+(?:url\(\s*)?(['"])([^'"]+)\1\s*\)?\s*;/gi,
+      function (m, q, u) {
+        var r = lookup(u, fileDir);
+        return r ? '@import "' + r + '";' : m;
+      });
+    css = css.replace(/url\(\s*(['"]?)([^'")]+?)\1\s*\)/gi, function (m, q, u) {
+      var r = lookup(u, fileDir);
+      return r ? 'url("' + r + '")' : m;
+    });
+    return css;
+  }
+
+  function rewriteSrcset(value, fileDir, lookup) {
+    return value.split(',').map(function (part) {
+      var seg = part.trim();
+      if (!seg) return part;
+      var sp = seg.search(/\s+/);
+      var url = sp === -1 ? seg : seg.slice(0, sp);
+      var desc = sp === -1 ? '' : seg.slice(sp);
+      var r = lookup(url, fileDir);
+      return r ? r + desc : part;
+    }).join(', ');
+  }
+
+  function rewriteHtml(html, fileDir, lookup, baseHref) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+
+    // 注入 <base href="origin/"> —— 让 Blob URL 上下文里的 fetch('/api/xxx') / <form action="/xxx"> 正确解析
+    // 到 Flask 服务器，而不是 blob: 协议的不存在路径
+    if (baseHref) {
+      var head = doc.head || doc.getElementsByTagName('head')[0];
+      if (!head) {
+        head = doc.createElement('head');
+        if (doc.documentElement) doc.documentElement.insertBefore(head, doc.documentElement.firstChild);
+      }
+      // 如果已有 <base> 标签，替换它；否则在 <head> 开头插入
+      var existing = head.querySelector('base');
+      var base = doc.createElement('base');
+      base.setAttribute('href', baseHref);
+      if (existing) {
+        head.replaceChild(base, existing);
+      } else {
+        head.insertBefore(base, head.firstChild);
+      }
+    }
+
+    // src / href / poster / data 等属性
+    var nodes = doc.querySelectorAll('[src],[href],[poster],[data]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var tag = el.tagName.toLowerCase();
+
+      if (el.hasAttribute('srcset')) {
+        var ss = rewriteSrcset(el.getAttribute('srcset'), fileDir, lookup);
+        el.setAttribute('srcset', ss);
+      }
+      ['src', 'href', 'poster', 'data'].forEach(function (attr) {
+        if (!el.hasAttribute(attr)) return;
+        // 跳过 <a> 和 <area> 的 href —— 导航链接保持原始相对路径，在点击时运行时解析
+        if ((tag === 'a' || tag === 'area') && attr === 'href') return;
+        var raw = el.getAttribute(attr);
+        var r = lookup(raw, fileDir);
+        if (r) {
+          el.setAttribute(attr, r);
+        }
+      });
+    }
+
+    // 内联 style 属性
+    var styled = doc.querySelectorAll('[style]');
+    for (i = 0; i < styled.length; i++) {
+      var v = styled[i].getAttribute('style');
+      var nv = v.replace(/url\(\s*(['"]?)([^'")]+?)\1\s*\)/gi, function (m, q, u) {
+        var r = lookup(u, fileDir);
+        return r ? 'url("' + r + '")' : m;
+      });
+      if (nv !== v) styled[i].setAttribute('style', nv);
+    }
+
+    // <style> 与 <script type=module">
+    var blocks = doc.querySelectorAll('style');
+    for (i = 0; i < blocks.length; i++) {
+      blocks[i].textContent = rewriteCss(blocks[i].textContent || '', fileDir, lookup);
+    }
+    var mods = doc.querySelectorAll('script[type="module"]');
+    for (i = 0; i < mods.length; i++) {
+      var code = mods[i].textContent || '';
+      code = code.replace(/(from|import\s*)\s*\(?\s*(['"])([^'"]+)\2/g, function (m, kw, q, spec) {
+        var r = lookup(spec, fileDir);
+        return r ? kw.replace(/\s+$/, '') + ' "' + r + '"' : m;
+      });
+      mods[i].textContent = code;
+    }
+
+    return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+  }
+
+  function fileKind(f) {
+    if (f.ext === 'html' || f.ext === 'htm') return 'html';
+    if (f.ext === 'css') return 'css';
+    if (f.ext === 'js' || f.ext === 'mjs') return 'js';
+    if (f.ext === 'json' || f.ext === 'xml') return 'json';
+    if (['png','jpg','jpeg','gif','webp','avif','ico','bmp','svg'].indexOf(f.ext) !== -1) return 'img';
+    if (['woff','woff2','ttf','otf'].indexOf(f.ext) !== -1) return 'font';
+    if (['mp3','wav','ogg','m4a','mp4','webm','mov'].indexOf(f.ext) !== -1) return 'media';
+    return 'file';
+  }
+
+  function buildFallbackIndex(files) {
+    var imgs = files.filter(function (f) { return fileKind(f) === 'img'; });
+    var media = files.filter(function (f) { return fileKind(f) === 'media'; });
+    var others = files.filter(function (f) {
+      return fileKind(f) !== 'img' && fileKind(f) !== 'media';
+    });
+
+    function rows(list) {
+      return list.map(function (f) {
+        return '<tr><td><span class="ext">' + (f.ext || '?').toUpperCase() + '</span></td>'
+          + '<td class="fn">' + escapeHtml(f.path) + '</td>'
+          + '<td>' + formatSize(f.size) + '</td>'
+          + '<td><a href="' + f.url + '" download="' + escapeHtml(f.name) + '" target="_blank" rel="noopener">下载</a></td></tr>';
+      }).join('');
+    }
+
+    var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">'
+      + '<meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<title>压缩包文件</title><style>'
+      + 'body{font-family:-apple-system,"PingFang SC",sans-serif;background:#f6f6fc;color:#2d2b55;margin:0;padding:32px;}'
+      + '.box{max-width:900px;margin:0 auto;background:#fff;border-radius:14px;padding:34px;box-shadow:0 10px 30px rgba(50,40,100,.1);}'
+      + 'h1{font-size:22px;margin-bottom:6px;}.tip{color:#8a8aa3;font-size:13px;margin-bottom:24px;}'
+      + 'h2{font-size:16px;margin:26px 0 12px;}'
+      + '.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;}'
+      + '.gitem{border:1px solid #eeeef6;border-radius:10px;padding:10px;text-align:center;word-break:break-all;}'
+      + '.gitem img{max-width:100%;height:120px;object-fit:contain;border-radius:6px;}'
+      + '.gitem .n{font-size:12px;color:#6b6b88;margin-top:8px;}'
+      + 'video,audio{width:100%;margin-bottom:10px;}'
+      + 'table{width:100%;border-collapse:collapse;font-size:13px;}'
+      + 'th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #f0f0f7;}'
+      + 'th{color:#8a8aa3;font-weight:600;}.ext{font-size:11px;background:#efeaff;color:#7b3ff2;border-radius:5px;padding:2px 7px;}'
+      + '.fn{word-break:break-all;}a{color:#6658c9;}'
+      + '</style></head><body><div class="box">'
+      + '<h1>该压缩包内没有 HTML 网页文件</h1>'
+      + '<div class="tip">以下为压缩包内的全部资源，共 ' + files.length + ' 个文件</div>';
+
+    if (imgs.length) {
+      html += '<h2>图片（' + imgs.length + '）</h2><div class="gallery">'
+        + imgs.map(function (f) {
+          return '<div class="gitem"><a href="' + f.url + '" target="_blank" rel="noopener"><img src="' + f.url + '" alt=""></a><div class="n">' + escapeHtml(f.name) + '</div></div>';
+        }).join('') + '</div>';
+    }
+    if (media.length) {
+      html += '<h2>音视频（' + media.length + '）</h2>';
+      media.forEach(function (f) {
+        if (f.ext === 'mp3' || f.ext === 'wav' || f.ext === 'ogg' || f.ext === 'm4a') {
+          html += '<audio controls preload="metadata" src="' + f.url + '"></audio>';
+        } else {
+          html += '<video controls preload="metadata" src="' + f.url + '"></video>';
+        }
+      });
+    }
+    html += '<h2>全部文件</h2><table><thead><tr><th>类型</th><th>路径</th><th>大小</th><th></th></tr></thead><tbody>'
+      + rows(others) + rows(imgs) + rows(media)
+      + '</tbody></table></div></body></html>';
+    return html;
+  }
+
+  function renderFiles(files) {
+    setPhase('正在渲染作品…', '按文件类型重建页面资源');
+    setProgress(97);
+
+    // 建立索引
+    var index = new Map();
+    files.forEach(function (f) {
+      var seg = f.path.split('/');
+      f.name = seg.pop();
+      f.dir = seg.join('/');
+      index.set(f.path.toLowerCase(), f);
+    });
+
+    var lookup = makeLookup(index);
+
+    // CSS 先重写（HTML 可能引用它）
+    var textJobs = files.filter(function (f) { return TEXT_EXTS[f.ext]; })
+      .map(function (f) {
+        return f.blob.text().then(function (text) { f.text = text; });
+      });
+
+    function replaceUrl(f, blob) {
+      var old = f.url;
+      f.blob = blob;
+      f.url = URL.createObjectURL(blob);
+      // 不 revoke 旧 Blob URL —— 因为两遍 buildHtml 时 index.html 里可能还引用旧 URL
+      // 多几个 Blob URL 不影响，objectUrls 会统一引用住防止 GC
+      objectUrls.push(f.url);
+    }
+
+    return Promise.all(textJobs).then(function () {
+      files.forEach(function (f) { f.origText = f.text; });
+
+      // 1) 先为静态资源生成 Blob URL（图片/字体/音视频/JS 等，内容无需改写）
+      files.forEach(function (f) {
+        if (f.ext !== 'css' && f.ext !== 'html' && f.ext !== 'htm') {
+          f.url = URL.createObjectURL(f.blob);
+          objectUrls.push(f.url);
+        }
+      });
+
+      // 2) CSS 改写两遍：第二遍修复 @import 指向其他 CSS 的前向引用
+      var cssFiles = files.filter(function (f) { return f.ext === 'css'; });
+      function buildCss() {
+        cssFiles.forEach(function (f) {
+          var out = rewriteCss(f.origText || '', f.dir, lookup);
+          replaceUrl(f, new Blob([out], { type: 'text/css;charset=utf-8' }));
+        });
+      }
+      buildCss();
+      buildCss();
+
+      // 3) HTML 改写：rewriteHtml 只处理 CSS/图片/JS 的 src/link（<a href> 跳过，运行时解析）
+      var htmlFiles = files.filter(function (f) { return f.ext === 'html' || f.ext === 'htm'; });
+      // 注入 <base href=origin/> —— 让 Blob URL 里的 fetch('/api/xxx') 等正确解析到 Flask 服务器
+      var baseOrigin = window.location.origin + '/';
+
+      // 3a) rewriteHtml：此时非 HTML 文件（CSS/图片/JS）的 Blob URL 已经在前面创建好
+      //     CSS 也已经被 buildCss 改写过并更新了 URL
+      //     HTML 之间的互链（<a href>）被跳过，保留原始相对路径
+      htmlFiles.forEach(function (f) {
+        f._rewritten = rewriteHtml(f.origText || '', f.dir, lookup, baseOrigin);
+      });
+
+      // 3b) 直接创建最终 Blob URL（不需要多轮替换，因为没有 HTML 互链的 Blob URL 了）
+      htmlFiles.forEach(function (f) {
+        var newBlob = new Blob([f._rewritten], { type: 'text/html;charset=utf-8' });
+        f.blob = newBlob;
+        f.url = URL.createObjectURL(newBlob);
+        objectUrls.push(f.url);
+      });
+
+      // 严格校验：根目录下必须有 index.html / index.htm 作为入口
+      var rootIndex = files.find(function (f) {
+        return /^index\.html?$/i.test(f.name) && (!f.dir || f.dir === '');
+      });
+
+      if (!rootIndex) {
+        // 收集所有 HTML 文件，用于友好提示
+        var allHtml = htmlFiles.map(function (f) { return f.path; });
+        var tipList = allHtml.length
+          ? '<div style="margin-top:16px;text-align:left;font-size:12px;color:#8a8aa3;max-height:200px;overflow-y:auto;background:#f6f6fc;border-radius:8px;padding:12px;">该 ZIP 中存在以下 HTML 文件：<br>'
+            + allHtml.map(function (p) { return '<code style="display:block;margin-top:4px;color:#55557a;word-break:break-all;">' + escapeHtml(p) + '</code>'; }).join('')
+            + '</div>'
+          : '';
+        showError('&#128269;', '未找到入口文件 index.html',
+          'ZIP 解压后第一层目录下必须存在一个名为 "index.html"（或 "index.htm"）的网页文件作为入口。'
+          + '当前压缩包根目录未检测到该文件。' + tipList,
+          zipParam ? '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(normalizeZipUrl(zipParam)) + '" download>下载原 ZIP</a>'
+                   : '<button class="p-btn primary" id="panelPickBtn">选择其他 ZIP</button>'
+        );
+        return;
+      }
+
+      mainFile = rootIndex;
+
+      // 防止 GC 回收 files 数组里的 Blob 对象（其他 HTML 页面也需要被引用住）
+      window.__zipFiles = files;
+
+      setProgress(99);
+      preview.style.display = 'block';
+      preview.src = mainFile.url;
+
+      // 拦截 iframe 内部的 Blob URL 链接点击 —— 通过 postMessage 让父页面切换 iframe.src
+      bindIframeNav(preview);
+
+      buildDrawer(files);
+      setProgress(100);
+      setTimeout(function () { overlay.classList.add('hidden'); }, 350);
+    });
+  }
+
+  function bindIframeNav(iframe) {
+    // 每次 iframe 加载新 HTML 后，往 contentDocument 里注入 click 拦截器
+    function inject() {
+      try {
+        var doc = iframe.contentDocument;
+        if (!doc) return;
+        if (doc.__viewerNavBound) return;
+        doc.__viewerNavBound = true;
+        doc.addEventListener('click', function (e) {
+          var target = e.target;
+          while (target && target.tagName && target.tagName.toLowerCase() !== 'a' && target.tagName.toLowerCase() !== 'area') {
+            if (target === doc) return;
+            target = target.parentNode;
+          }
+          if (!target) return;
+          var href = target.getAttribute('href');
+          if (!href) return;
+          // 拦截：Blob URL / 纯锚点 / 相对路径（sandbox 里 iframe 自己处理不了这些导航）
+          // 外部网址（http/https/mailto/javascript）不拦截，iframe 自己处理
+          var isBlob = /^blob:/.test(href);
+          var isHash = /^#/.test(href);
+          var isExternal = /^(https?:|mailto:|javascript:|data:|\/\/)/i.test(href);
+          var isRelative = !isBlob && !isHash && !isExternal;
+
+          if (isBlob || isHash || isRelative) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isHash) {
+              window.parent.postMessage({ type: 'viewer-hash', hash: href }, '*');
+            } else if (isRelative) {
+              window.parent.postMessage({ type: 'viewer-nav-rel', path: href }, '*');
+            } else {
+              window.parent.postMessage({ type: 'viewer-nav', url: href }, '*');
+            }
+          }
+        }, true);
+      } catch (err) { /* 跨域或 sandbox 限制时静默跳过 */ }
+    }
+    iframe.addEventListener('load', inject);
+    inject();
+  }
+
+  // 监听 iframe 内部 postMessage 发来的导航请求
+  window.addEventListener('message', function (e) {
+    var iframe = document.getElementById('preview');
+    if (!iframe) return;
+    var data = e.data || {};
+    if (data.type === 'viewer-nav' && /^blob:/.test(data.url)) {
+      iframe.src = data.url;
+    } else if (data.type === 'viewer-hash' && /^#/.test(data.hash)) {
+      // 先把旧 hash 去掉，再拼上新 hash
+      var base = iframe.src.split('#')[0];
+      iframe.src = base + data.hash;
+    } else if (data.type === 'viewer-nav-rel' && data.path) {
+      // 相对路径：用当前 iframe.src 反查当前文件，再用它的 dir 解析路径
+      var curUrl = iframe.src;
+      var allFiles = window.__zipFiles || [];
+      var curFile = allFiles.find(function (f) { return f.url === curUrl; });
+      var baseDir = curFile ? curFile.dir : '';
+      var suffix = '';
+      var cut = data.path.search(/[?#]/);
+      var pathPart = data.path;
+      if (cut !== -1) { pathPart = data.path.slice(0, cut); suffix = data.path.slice(cut); }
+      pathPart = pathPart.split('\\').join('/');
+      var key;
+      if (pathPart.charAt(0) === '/') {
+        key = pathSegments(pathPart).join('/');
+      } else {
+        var base = baseDir ? baseDir.split('/') : [];
+        key = pathSegments(base.concat([pathPart]).join('/')).join('/');
+      }
+      key = decodePath(key).toLowerCase();
+      var target = allFiles.find(function (f) { return (f.path || '').toLowerCase() === key; });
+      if (target && target.url) {
+        iframe.src = target.url + suffix;
+      }
+    }
+  });
+
+  function buildDrawer(files) {
+    drawerCount.textContent = files.length;
+    drawerList.innerHTML = files.map(function (f, i) {
+      var kind = fileKind(f);
+      var iconText = f.ext ? f.ext.slice(0, 4).toUpperCase() : '?';
+      return '<div class="file-item' + (f === mainFile ? ' active' : '') + '" data-i="' + i + '">'
+        + '<div class="ficon t-' + kind + '">' + escapeHtml(iconText) + '</div>'
+        + '<div class="finfo"><div class="fname">' + escapeHtml(f.name) + '</div>'
+        + '<div class="fpath">' + escapeHtml(f.dir || '根目录') + ' · ' + formatSize(f.size) + '</div></div>'
+        + '</div>';
+    }).join('');
+
+    var items = drawerList.querySelectorAll('.file-item');
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener('click', function () {
+        var f = files[+this.getAttribute('data-i')];
+        if (f.ext === 'html' || f.ext === 'htm') {
+          preview.src = f.url;
+          var all = drawerList.querySelectorAll('.file-item');
+          for (var j = 0; j < all.length; j++) all[j].classList.remove('active');
+          this.classList.add('active');
+        } else {
+          window.open(f.url, '_blank');
+        }
+      });
+    }
+  }
+
+  /* ---------- 主流程 ---------- */
+  function startWithBlob(blob, sourceName, remoteUrl) {
+    currentSourceName = sourceName;
+    cancelled = false;
+    overlay.classList.remove('hidden');
+    removePanel();
+
+    if (blob.size > MAX_SIZE) {
+      showError('&#9981;', '文件超过大小限制',
+        '该附件大小为 ' + formatSize(blob.size) + '，超过 10MB 的限制，无法在线浏览。',
+        '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(remoteUrl || '#') + '" download>下载原文件</a>'
+        + '<button class="p-btn ghost" id="panelPickBtn">选择其他文件</button>');
+      return;
+    }
+
+    Promise.resolve()
+      .then(function () { return extractZip(blob); })
+      .then(function (files) {
+        extractedFiles = files;
+        return renderFiles(files);
+      })
+      .catch(function (err) {
+        handleFatal(err, remoteUrl);
+      });
+  }
+
+  function startRemote(rawUrl) {
+    var url = normalizeZipUrl(rawUrl);
+    if (!url) {
+      showError('&#128229;', '未指定 ZIP 文件',
+        '请通过作品列表进入本页面，或直接选择一个本地 ZIP 文件浏览。',
+        '<button class="p-btn primary" id="panelPickBtn">选择本地 ZIP 文件</button>');
+      return;
+    }
+    var name = decodeURIComponent(url.split('/').pop().split('?')[0] || 'zip作品');
+    cancelled = false;
+    overlay.classList.remove('hidden');
+    removePanel();
+
+    downloadZip(url).then(function (blob) {
+      if (cancelled) return;
+      startWithBlob(blob, name, url);
+    }).catch(function (err) {
+      if (cancelled || (err && err.message === '__CANCELLED__')) {
+        showCancelled(url);
+        return;
+      }
+      handleDownloadError(err, url);
+    });
+  }
+
+  function handleDownloadError(err, url) {
+    if (err && err.oversize) {
+      showError('&#9981;', '文件超过 10MB 限制', err.message,
+        '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(url) + '" download>仍然下载原文件</a>');
+      return;
+    }
+    var msg = String((err && err.message) || err);
+    if (err instanceof TypeError || /Failed to fetch|NetworkError|load failed/i.test(msg)) {
+      showError('&#127760;', '无法直接读取该 ZIP',
+        '浏览器的跨域安全策略阻止了当前页面直接读取附件（附件服务器未返回跨域许可）。'
+        + '将本网页部署到与附件相同的站点下即可直接浏览；当前可先下载后用“选择本地 ZIP 文件”浏览。',
+        '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(url) + '" download>下载 ZIP 文件</a>'
+        + '<button class="p-btn ghost" id="panelRetryBtn">重试</button>');
+      return;
+    }
+    if (err && err.httpStatus) {
+      showError('&#128270;', '附件不存在或无法访问',
+        '服务器返回 ' + err.message + '，可能作品文件已被移除。',
+        '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(url) + '" download>尝试下载</a>'
+        + '<button class="p-btn ghost" id="panelRetryBtn">重试</button>');
+      return;
+    }
+    handleFatal(err, url);
+  }
+
+  function handleFatal(err, url) {
+    if (err && err.message === '__CANCELLED__') { showCancelled(url); return; }
+    showError('&#128193;', '文件解析失败',
+      '无法解压或渲染该文件：' + ((err && err.message) || err) + '。请确认它是有效的 ZIP 压缩包。',
+      url ? '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(url) + '" download>下载原文件</a>'
+          + '<button class="p-btn ghost" id="panelPickBtn">选择其他 ZIP</button>'
+        : '<button class="p-btn primary" id="panelPickBtn">选择本地 ZIP 文件</button>');
+  }
+
+  function showCancelled(url) {
+    showError('&#9209;', '已取消浏览', '下载/解压已取消。',
+      '<button class="p-btn primary" id="panelRetryBtn">重新开始</button>'
+      + '<a class="p-btn ghost" id="panelDownloadBtn" href="' + escapeHtml(url) + '" download>直接下载</a>');
+  }
+
+  /* ---------- 事件 ---------- */
+  cancelBtn.addEventListener('click', function () {
+    cancelled = true;
+    if (abortController) tryAbort();
+    if (zipReader) { zipReader.close().catch(function () {}); zipReader = null; }
+    setPhase('正在取消…');
+    setTimeout(function () {
+      showCancelled(normalizeZipUrl(zipParam));
+    }, 100);
+  });
+  function tryAbort() {
+    try { abortController.abort(); } catch (e) {}
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerMask.classList.remove('open');
+  }
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerMask.addEventListener('click', closeDrawer);
+
+  localPicker.addEventListener('change', function () {
+    var file = localPicker.files && localPicker.files[0];
+    localPicker.value = '';
+    if (!file) return;
+    if (originalBlobUrl) URL.revokeObjectURL(originalBlobUrl);
+    originalBlobUrl = URL.createObjectURL(file);
+    if (file.size > MAX_SIZE) {
+      showError('&#9981;', '文件超过 10MB 限制',
+        '所选文件大小为 ' + formatSize(file.size) + '，超过 10MB 限制。',
+        '<button class="p-btn primary" id="panelPickBtn">重新选择</button>');
+      return;
+    }
+    startWithBlob(file, file.name, '');
+  });
+
+  window.addEventListener('beforeunload', function () {
+    objectUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+    if (originalBlobUrl) URL.revokeObjectURL(originalBlobUrl);
+  });
+
+  /* ---------- 启动 ---------- */
+  if (!window.zip) {
+    showError('&#9888;', '解压组件未加载',
+      'zip.js 组件（js/zip-full.min.js）加载失败，请检查网络或文件完整性。',
+      zipParam ? '<a class="p-btn primary" id="panelDownloadBtn" href="' + escapeHtml(normalizeZipUrl(zipParam)) + '" download>直接下载 ZIP</a>'
+               : '<button class="p-btn primary" id="panelPickBtn">选择本地 ZIP 文件</button>');
+    return;
+  }
+  startRemote(zipParam);
+})();
+</script>
+</body>
+</html>
