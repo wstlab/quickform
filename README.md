@@ -32,7 +32,7 @@ QuickForm文档：https://docs.quickform.cc/
 
 1.教师版（teacher）
 
-开源，单用户，最新版本为2.5。
+开源，单用户，最新版本为3.0。
 
 关于QuickForm的本地部署：https://quickform.readthedocs.io/zh-cn/latest/guide/5.deploy.html
 
