@@ -1,11 +1,18 @@
 # Chinese (Simplified) translations for QuickForm
 msgid ""
 msgstr ""
-"Project-Id-Version: QuickForm\n"
+"Project-Id-Version:  QuickForm\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-27 14:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Dashboard"
 msgstr "数据任务"
@@ -391,9 +398,6 @@ msgstr "吗？此操作无法撤销，相关的所有提交数据也将被删除
 msgid "取消"
 msgstr "取消"
 
-msgid "确认删除"
-msgstr "确认删除"
-
 msgid "还没有创建任何数据任务"
 msgstr "还没有创建任何数据任务"
 
@@ -514,9 +518,6 @@ msgstr "数据管理和分析工具"
 msgid "导出数据功能"
 msgstr "导出数据功能"
 
-msgid "取消"
-msgstr "取消"
-
 msgid "使用指南"
 msgstr "使用指南"
 
@@ -582,9 +583,6 @@ msgstr "选择AI模型"
 
 msgid "DeepSeek 配置"
 msgstr "DeepSeek 配置"
-
-msgid "API Key"
-msgstr "API Key"
 
 msgid "请输入您的DeepSeek API密钥"
 msgstr "请输入您的DeepSeek API密钥"
@@ -652,14 +650,15 @@ msgstr "QF在线版的密码"
 msgid "保存"
 msgstr "保存"
 
-msgid "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
-msgstr "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
+msgid ""
+"在\"<a href=\"https://quickform.cn/\" target=\"_blank\" "
+"rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
+msgstr ""
+"在\"<a href=\"https://quickform.cn/\" target=\"_blank\" "
+"rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
 
 msgid "修改用户名"
 msgstr "修改用户名"
-
-msgid "用户名"
-msgstr "用户名"
 
 msgid "保存用户名"
 msgstr "保存用户名"
@@ -715,9 +714,6 @@ msgstr "可选：通过API上传的附件"
 msgid "确认导出"
 msgstr "确认导出"
 
-msgid "数据分析"
-msgstr "数据分析"
-
 msgid "编辑任务"
 msgstr "编辑任务"
 
@@ -735,9 +731,6 @@ msgstr "提交数量："
 
 msgid "API地址："
 msgstr "API地址："
-
-msgid "复制"
-msgstr "复制"
 
 msgid "任务描述："
 msgstr "任务描述："
@@ -797,7 +790,7 @@ msgid "访问QF在线版"
 msgstr "访问QF在线版"
 
 msgid "虚谷计划"
-msgstr "
+msgstr ""
 
 msgid "免责声明"
 msgstr "免责声明"
@@ -828,12 +821,6 @@ msgstr "条"
 
 msgid "删除全部"
 msgstr "删除全部"
-
-msgid "提交时间"
-msgstr "提交时间"
-
-msgid "数据内容"
-msgstr "数据内容"
 
 msgid "分页"
 msgstr "分页"
@@ -916,9 +903,6 @@ msgstr "正在生成分析报告..."
 msgid "这可能需要几分钟时间，请耐心等待..."
 msgstr "这可能需要几分钟时间，请耐心等待..."
 
-msgid "数据分析"
-msgstr "数据分析"
-
 msgid "返回详情"
 msgstr "返回详情"
 
@@ -967,26 +951,14 @@ msgstr "查看数据"
 msgid "导入"
 msgstr "导入"
 
-msgid "删除"
-msgstr "删除"
-
 msgid "提交数据详情"
 msgstr "提交数据详情"
-
-msgid "关闭"
-msgstr "关闭"
 
 msgid "批量删除选中项"
 msgstr "批量删除选中项"
 
-msgid "共"
-msgstr "共"
-
 msgid "条记录"
 msgstr "条记录"
-
-msgid "暂无提交数据"
-msgstr "暂无提交数据"
 
 msgid "当用户通过表单提交数据后，将在这里显示"
 msgstr "当用户通过表单提交数据后，将在这里显示"
@@ -1017,9 +989,6 @@ msgstr "智能分析"
 
 msgid "错误"
 msgstr "错误"
-
-msgid "前往配置页面"
-msgstr "前往配置页面"
 
 msgid "已回收数据条数"
 msgstr "已回收数据条数"
@@ -1078,20 +1047,8 @@ msgstr "生成时间："
 msgid "下载报告"
 msgstr "下载报告"
 
-msgid "编辑任务"
-msgstr "编辑任务"
-
 msgid "编辑数据任务"
 msgstr "编辑数据任务"
-
-msgid "返回任务详情"
-msgstr "返回任务详情"
-
-msgid "任务标题"
-msgstr "任务标题"
-
-msgid "任务描述（可选）"
-msgstr "任务描述（可选）"
 
 msgid "已有附件"
 msgstr "已有附件"
@@ -1108,9 +1065,6 @@ msgstr "添加新附件（可选）"
 msgid "支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。"
 msgstr "支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。"
 
-msgid "取消"
-msgstr "取消"
-
 msgid "保存修改"
 msgstr "保存修改"
 
@@ -1122,9 +1076,6 @@ msgstr "删除失败"
 
 msgid "删除出错"
 msgstr "删除出错"
-
-msgid "导入任务"
-msgstr "导入任务"
 
 msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
 msgstr "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
@@ -1165,9 +1116,6 @@ msgstr "任务描述"
 msgid "API ID"
 msgstr "API ID"
 
-msgid "操作"
-msgstr "操作"
-
 msgid "API上传文件设置"
 msgstr "API上传文件设置"
 
@@ -1177,9 +1125,6 @@ msgstr "QuickForm.cn 密码"
 msgid "QuickForm.cn 用户名"
 msgstr "QuickForm.cn 用户名"
 
-msgid "QuickForm：打通AI赋能教育的\"最后一公里\""
-msgstr "QuickForm：打通AI赋能教育的\"最后一公里\""
-
 msgid "一个唯一的API地址，用于接收表单数据"
 msgstr "一个唯一的API地址，用于接收表单数据"
 
@@ -1188,9 +1133,6 @@ msgstr "上传文件设置"
 
 msgid "使用 QuickForm.cn 登录"
 msgstr "使用 QuickForm.cn 登录"
-
-msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
-msgstr "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
 
 msgid "保存中..."
 msgstr "保存中..."
@@ -1231,9 +1173,6 @@ msgstr "复制提示词"
 msgid "如何在您的网页中使用提交URL："
 msgstr "如何在您的网页中使用提交URL："
 
-msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
-msgstr "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
-
 msgid "密码"
 msgstr "密码"
 
@@ -1264,12 +1203,6 @@ msgstr "文件大小"
 msgid "是"
 msgstr "是"
 
-msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
-msgstr "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
-
-msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"，并删除前4个任务外的所有数据和附件。此操作不可恢复！"
-msgstr "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"，并删除前4个任务外的所有数据和附件。此操作不可恢复！"
-
 msgid "登录"
 msgstr "登录"
 
@@ -1291,8 +1224,327 @@ msgstr "表单示例"
 msgid "记住我"
 msgstr "记住我"
 
-msgid "请点击\"智能分析\"按钮生成新的分析报告。"
-msgstr "请点击\"智能分析\"按钮生成新的分析报告。"
-
 msgid "退出登录"
 msgstr "退出登录"
+
+msgid ""
+"把下面这些\"提示词\"复制给任意 AI 助手（WorkBuddy、ChatGPT、文心一言等），它就能为你编写出向 QuickForm "
+"提交数据的前端页面。"
+msgstr ""
+"把下面这些\"提示词\"复制给任意 AI 助手（WorkBuddy、ChatGPT、文心一言等），它就能为你编写出向 QuickForm "
+"提交数据的前端页面。"
+
+msgid "共三种写法：普通数据提交、多模态数据提交、实时交互数据提交"
+msgstr "共三种写法：普通数据提交、多模态数据提交、实时交互数据提交"
+
+msgid ""
+"——按你的课堂需求选用即可。提示词中的 API 地址来自每个数据任务的详情页。数据提交后，用 GET 方式访问 API 地址即可取回数据（见第 4"
+" 节）。"
+msgstr ""
+"——按你的课堂需求选用即可。提示词中的 API 地址来自每个数据任务的详情页。数据提交后，用 GET 方式访问 API 地址即可取回数据（见第 4"
+" 节）。"
+
+msgid "普通数据提交"
+msgstr "普通数据提交"
+
+msgid "适用场景：投票、答题、签到、问卷"
+msgstr "适用场景：投票、答题、签到、问卷"
+
+msgid ""
+"学生提交姓名、选项、得分等<strong>纯文本/数字</strong>字段，后端原样存储。这是最简单、最常用的写法：告诉 AI 用 POST "
+"方式把 JSON 数据发到任务的 API 地址即可。"
+msgstr ""
+"学生提交姓名、选项、得分等<strong>纯文本/数字</strong>字段，后端原样存储。这是最简单、最常用的写法：告诉 AI 用 POST "
+"方式把 JSON 数据发到任务的 API 地址即可。"
+
+#, python-brace-format
+msgid "要点：字段名可自定义；提交成功会返回 {\"message\": \"提交成功\", \"status\": \"success\"}。"
+msgstr "要点：字段名可自定义；提交成功会返回 {\"message\": \"提交成功\", \"status\": \"success\"}。"
+
+msgid "多模态数据提交（含文件上传）"
+msgstr "多模态数据提交（含文件上传）"
+
+msgid "适用场景：作品提交、语音作业、图片收集"
+msgstr "适用场景：作品提交、语音作业、图片收集"
+
+msgid ""
+"学生上传<strong>图片、音频、视频、文档</strong>等文件，可与文本字段混合提交。用 <code>multipart/form-"
+"data</code> 格式，文件放在 file 字段；保存后的访问路径会写入返回数据的 <code>attachment</code> 字段。"
+msgstr ""
+"学生上传<strong>图片、音频、视频、文档</strong>等文件，可与文本字段混合提交。用 <code>multipart/form-"
+"data</code> 格式，文件放在 file 字段；保存后的访问路径会写入返回数据的 <code>attachment</code> 字段。"
+
+msgid "要点：不要手动设置 Content-Type，浏览器会自动带上文件边界；多文件可重复 append。"
+msgstr "要点：不要手动设置 Content-Type，浏览器会自动带上文件边界；多文件可重复 append。"
+
+msgid "实时交互数据提交"
+msgstr "实时交互数据提交"
+
+msgid "适用场景：课堂抢答、实时投票、数据大屏"
+msgstr "适用场景：课堂抢答、实时投票、数据大屏"
+
+msgid ""
+"学生端照常 POST 提交；<strong>教师端/大屏页面用原生 WebSocket 订阅</strong>——每条新提交实时推送一条 "
+"JSON，无需轮询。告诉 AI 两个地址即可：提交地址（POST）和订阅地址（WebSocket）。"
+msgstr ""
+"学生端照常 POST 提交；<strong>教师端/大屏页面用原生 WebSocket 订阅</strong>——每条新提交实时推送一条 "
+"JSON，无需轮询。告诉 AI 两个地址即可：提交地址（POST）和订阅地址（WebSocket）。"
+
+msgid "要点：订阅地址就是把提交地址的 http:// 换成 ws://（https:// 换成 wss://），路径从 /api/ 换成 /ws/。"
+msgstr "要点：订阅地址就是把提交地址的 http:// 换成 ws://（https:// 换成 wss://），路径从 /api/ 换成 /ws/。"
+
+msgid "数据获取（GET 查询）"
+msgstr "数据获取（GET 查询）"
+
+msgid "适用场景：查看提交结果、教师端数据展示、轮询获取数据"
+msgstr "适用场景：查看提交结果、教师端数据展示、轮询获取数据"
+
+msgid ""
+"提交数据用 POST，取回数据更简单——<strong>用 GET 方式访问任务的 API "
+"地址即可</strong>，无需登录、无需密钥，浏览器直接打开就能查看。同一个地址加不加 "
+"<code>/all</code>，区别在于返回的数据量："
+msgstr ""
+"提交数据用 POST，取回数据更简单——<strong>用 GET 方式访问任务的 API "
+"地址即可</strong>，无需登录、无需密钥，浏览器直接打开就能查看。同一个地址加不加 "
+"<code>/all</code>，区别在于返回的数据量："
+
+msgid "GET 访问地址"
+msgstr "GET 访问地址"
+
+msgid "返回的数据"
+msgstr "返回的数据"
+
+msgid "适用场景"
+msgstr "适用场景"
+
+msgid "最新 <strong>3 条</strong>提交"
+msgstr "最新 <strong>3 条</strong>提交"
+
+msgid "快速预览最近的提交，响应体小"
+msgstr "快速预览最近的提交，响应体小"
+
+msgid "<strong>全部</strong>提交记录"
+msgstr "<strong>全部</strong>提交记录"
+
+msgid "教师端完整展示、数据分析、导出全部数据"
+msgstr "教师端完整展示、数据分析、导出全部数据"
+
+msgid "仅返回总条数"
+msgstr "仅返回总条数"
+
+msgid "轻量轮询，条数变化时再取全量"
+msgstr "轻量轮询，条数变化时再取全量"
+
+msgid ""
+"要点：submissions 按提交时间<strong>从旧到新</strong>排列，每条自动附带 submitted_at "
+"字段；教师端需要全部数据时，务必使用带 /all 的地址。"
+msgstr ""
+"要点：submissions 按提交时间<strong>从旧到新</strong>排列，每条自动附带 submitted_at "
+"字段；教师端需要全部数据时，务必使用带 /all 的地址。"
+
+msgid "更多内容"
+msgstr "更多内容"
+
+msgid "QuickForm 官方开源教程"
+msgstr "QuickForm 官方开源教程"
+
+msgid "任务创建、数据导入导出、QFLink 互联、CLI 工具等完整文档"
+msgstr "任务创建、数据导入导出、QFLink 互联、CLI 工具等完整文档"
+
+msgid "前往查看更多教程"
+msgstr "前往查看更多教程"
+
+msgid "已复制提示词"
+msgstr "已复制提示词"
+
+msgid "技能应用"
+msgstr "技能应用"
+
+msgid "QuickForm助手（QFTools） ：一键创建课堂互动工具"
+msgstr "QuickForm助手（QFTools） ：一键创建课堂互动工具"
+
+msgid ""
+"QuickForm助手（QFTools，fork 自 buBailai/quickform-teaching-tool）：让 AI "
+"助手（如WorkBuddy、豆包等）自动完成需求收集、任务创建、教学页面开发、测试数据提交与数据可视化大屏的全流程。一次安装，同时支持在线版和教师版。"
+msgstr ""
+"QuickForm助手（QFTools，fork 自 buBailai/quickform-teaching-tool）：让 AI "
+"助手（如WorkBuddy、豆包等）自动完成需求收集、任务创建、教学页面开发、测试数据提交与数据可视化大屏的全流程。一次安装，同时支持在线版和教师版。"
+
+msgid "资源"
+msgstr "资源"
+
+msgid "说明"
+msgstr "说明"
+
+msgid "下载 Skill 安装包（ZIP）"
+msgstr "下载 Skill 安装包（ZIP）"
+
+msgid "解压到 WorkBuddy 全局 skills 目录 ~/.trae-cn/skills/ 即可被识别"
+msgstr "解压到 WorkBuddy 全局 skills 目录 ~/.trae-cn/skills/ 即可被识别"
+
+msgid "查看 SKILL.md（技能说明）"
+msgstr "查看 SKILL.md（技能说明）"
+
+msgid "8 步工作流：需求收集 → 创建任务 → 教学页面 → 测试数据 → 可视化大屏"
+msgstr "8 步工作流：需求收集 → 创建任务 → 教学页面 → 测试数据 → 可视化大屏"
+
+msgid "查看 CLI 参考文档"
+msgstr "查看 CLI 参考文档"
+
+msgid "qf 命令总览、--base-url 规则、官网版 / 本地版差异、数据接口说明"
+msgstr "qf 命令总览、--base-url 规则、官网版 / 本地版差异、数据接口说明"
+
+msgid "智能安装（把下面地址发给 AI 助手，让它自动完成安装）："
+msgstr "智能安装（把下面地址发给 AI 助手，让它自动完成安装）："
+
+msgid "使用前必读：先配置 QFLink 授权码"
+msgstr "使用前必读：先配置 QFLink 授权码"
+
+msgid "QFTools 技能可同时连接"
+msgstr "QFTools 技能可同时连接"
+
+msgid "本地教师版"
+msgstr "本地教师版"
+
+msgid "与"
+msgstr "与"
+
+msgid "在线版（quickform.cn）"
+msgstr "在线版（quickform.cn）"
+
+msgid "。本地版以 QFLink 授权码作为功能开关——未配置时系统会拒绝所有 CLI 请求（403），技能将无法创建任务、提交数据。"
+msgstr "。本地版以 QFLink 授权码作为功能开关——未配置时系统会拒绝所有 CLI 请求（403），技能将无法创建任务、提交数据。"
+
+msgid "登录本系统后，点击右上角用户菜单 →「设置」，切换到「QFLink授权码」标签页。"
+msgstr "登录本系统后，点击右上角用户菜单 →「设置」，切换到「QFLink授权码」标签页。"
+
+msgid "填写用途（例如：教师版 QFLink），点击「生成 QFLink 授权码」。"
+msgstr "填写用途（例如：教师版 QFLink），点击「生成 QFLink 授权码」。"
+
+msgid "把生成的授权码填入 QFLink 配置并保存，技能即可正常使用。"
+msgstr "把生成的授权码填入 QFLink 配置并保存，技能即可正常使用。"
+
+msgid "注意：QFLink 互联仅已认证教师可用。未完成教师身份认证时，即使使用账号密码或授权码请求在线服务器，也会返回"
+msgstr "注意：QFLink 互联仅已认证教师可用。未完成教师身份认证时，即使使用账号密码或授权码请求在线服务器，也会返回"
+
+msgid "。"
+msgstr "。"
+
+msgid "QFLink 授权码配置界面截图"
+msgstr "QFLink 授权码配置界面截图"
+
+msgid "前往设置 QFLink 授权码"
+msgstr "前往设置 QFLink 授权码"
+
+msgid "点击图片放大查看"
+msgstr "点击图片放大查看"
+
+msgid "如何使用 ：说一句话，生成全套交互网页"
+msgstr "如何使用 ：说一句话，生成全套交互网页"
+
+msgid "不需要会写代码，也不需要配置接口。"
+msgstr "不需要会写代码，也不需要配置接口。"
+
+msgid "安装好之后，只要对 AI 助手说出你的教学想法，"
+msgstr "安装好之后，只要对 AI 助手说出你的教学想法，"
+
+msgid "QuickForm助手就会自动完成「创建数据任务 → 生成交互页面 → 收集数据 → 画出分析图表」的全过程。你专注教学，剩下的交给它。"
+msgstr "QuickForm助手就会自动完成「创建数据任务 → 生成交互页面 → 收集数据 → 画出分析图表」的全过程。你专注教学，剩下的交给它。"
+
+msgid "课堂签到"
+msgstr "课堂签到"
+
+msgid "你说："
+msgstr "你说："
+
+msgid "“帮我做一个课堂签到表，学生扫码签到。”"
+msgstr "“帮我做一个课堂签到表，学生扫码签到。”"
+
+msgid "AI 自动完成："
+msgstr "AI 自动完成："
+
+msgid "创建数据任务、生成签到网页、绑定分享二维码。"
+msgstr "创建数据任务、生成签到网页、绑定分享二维码。"
+
+msgid "你得到："
+msgstr "你得到："
+
+msgid "学生签到页 + 实时签到数据大屏。"
+msgstr "学生签到页 + 实时签到数据大屏。"
+
+msgid "随堂练习"
+msgstr "随堂练习"
+
+msgid "“做一个三年级数学加减法随堂练习，5 道选择题。”"
+msgstr "“做一个三年级数学加减法随堂练习，5 道选择题。”"
+
+msgid "创建任务、生成在线答题页面、自动提交测试数据验证。"
+msgstr "创建任务、生成在线答题页面、自动提交测试数据验证。"
+
+msgid "答题页 + 正确率统计图表。"
+msgstr "答题页 + 正确率统计图表。"
+
+msgid "小组互评"
+msgstr "小组互评"
+
+msgid "“做一个小组互评投票，学生给各组作品打分。”"
+msgstr "“做一个小组互评投票，学生给各组作品打分。”"
+
+msgid "创建任务、生成评分页面、生成可视化大屏。"
+msgstr "创建任务、生成评分页面、生成可视化大屏。"
+
+msgid "评分页 + 得分排行与雷达图。"
+msgstr "评分页 + 得分排行与雷达图。"
+
+msgid "不知道怎么说？点击下面任意一句试试（会自动复制）："
+msgstr "不知道怎么说？点击下面任意一句试试（会自动复制）："
+
+msgid "帮我做一个课堂签到表，学生扫码签到，我要看实时签到人数"
+msgstr "帮我做一个课堂签到表，学生扫码签到，我要看实时签到人数"
+
+msgid "做一个三年级数学随堂练习，5 道选择题，做完自动统计正确率"
+msgstr "做一个三年级数学随堂练习，5 道选择题，做完自动统计正确率"
+
+msgid "做一个小组互评投票工具，学生对各组作品打分，最后出排行榜"
+msgstr "做一个小组互评投票工具，学生对各组作品打分，最后出排行榜"
+
+msgid "用 QuickForm 做一个课堂抢答器，记录每个学生的抢答次数"
+msgstr "用 QuickForm 做一个课堂抢答器，记录每个学生的抢答次数"
+
+msgid "你会得到："
+msgstr "你会得到："
+
+msgid "交互式 HTML 页面"
+msgstr "交互式 HTML 页面"
+
+msgid "一键分享链接 / 二维码"
+msgstr "一键分享链接 / 二维码"
+
+msgid "实时数据采集"
+msgstr "实时数据采集"
+
+msgid "可视化分析大屏"
+msgstr "可视化分析大屏"
+
+msgid "自动验证测试数据"
+msgstr "自动验证测试数据"
+
+msgid "QuickForm CLI — 命令行工具"
+msgstr "QuickForm CLI — 命令行工具"
+
+msgid ""
+"CLI（quickform-cli，命令 "
+"qf）可以在终端中管理本系统的数据任务：创建任务、查看/导出数据、绑定任务页面、提交与查询表单数据。官方文档包含完整的命令参考、安装说明与示例："
+msgstr ""
+"CLI（quickform-cli，命令 "
+"qf）可以在终端中管理本系统的数据任务：创建任务、查看/导出数据、绑定任务页面、提交与查询表单数据。官方文档包含完整的命令参考、安装说明与示例："
+
+msgid "QuickForm CLI 官方文档"
+msgstr "QuickForm CLI 官方文档"
+
+msgid "QFLink 授权码配置界面"
+msgstr "QFLink 授权码配置界面"
+
+msgid "已复制，去 AI 助手粘贴即可"
+msgstr "已复制，去 AI 助手粘贴即可"
+

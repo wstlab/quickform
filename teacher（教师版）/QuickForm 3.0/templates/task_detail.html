@@ -161,6 +161,32 @@
                         resize: vertical;
                         min-height: 92px;
                     }
+                    /* 最简/典型 切换开关 */
+                    .prompt-variant-switch {
+                        display: inline-flex;
+                        background-color: #f3f4f6;
+                        border-radius: 6px;
+                        padding: 2px;
+                        margin-bottom: 0.65rem;
+                        gap: 2px;
+                    }
+                    .prompt-variant-switch .variant-btn {
+                        border: none;
+                        background: transparent;
+                        color: #6b7280;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                        padding: 0.3rem 0.85rem;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.15s ease, color 0.15s ease;
+                    }
+                    .prompt-variant-switch .variant-btn:hover { color: #8a6d43; }
+                    .prompt-variant-switch .variant-btn.active {
+                        background-color: #fff;
+                        color: #8a6d43;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+                    }
                 </style>
                 <!-- 三种提交模式提示词 -->
                 <ul class="nav nav-tabs mb-3" id="submitModeTabs" role="tablist">
@@ -178,7 +204,15 @@
                     <!-- 1. 普通数据提交 -->
                     <div class="tab-pane fade show active" id="pane-normal" role="tabpanel">
                         <p style="color: #6b7280; margin-bottom: 0.75rem;">适用于投票、答题、签到等<strong>纯文本/数字数据</strong>的收集场景。学生提交姓名、选项、得分等字段，后端原样存储。</p>
-                        <div class="input-group">
+                        <div class="prompt-variant-switch" role="tablist">
+                            <button type="button" class="variant-btn active" data-target="normal-minimal">最简</button>
+                            <button type="button" class="variant-btn" data-target="normal-classic">典型</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-normal-minimal">
+                            <textarea class="form-control prompt-textarea" readonly rows="3" id="simple-instruction-minimal">创建完应用后，以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送JSON数据。</textarea>
+                            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('simple-instruction-minimal')">复制</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-normal-classic" style="display:none;">
                             <textarea class="form-control prompt-textarea" readonly rows="4" id="simple-instruction">创建完应用后，以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送JSON数据（如姓名、选项、得分等字段，字段名可自定义），提交成功后返回 {'message': '提交成功', 'status': 'success'}</textarea>
                             <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('simple-instruction')">复制</button>
                         </div>
@@ -186,7 +220,15 @@
                     <!-- 2. 多模态数据提交 -->
                     <div class="tab-pane fade" id="pane-multimodal" role="tabpanel">
                         <p style="color: #6b7280; margin-bottom: 0.75rem;">适用于<strong>图片、音频、视频、文档等文件上传</strong>场景（如作品提交、语音作业、图片收集）。文件与普通字段可混合提交，文件保存后的访问路径会写入 <code>attachment</code> 字段。</p>
-                        <div class="input-group">
+                        <div class="prompt-variant-switch" role="tablist">
+                            <button type="button" class="variant-btn active" data-target="multimodal-minimal">最简</button>
+                            <button type="button" class="variant-btn" data-target="multimodal-classic">典型</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-multimodal-minimal">
+                            <textarea class="form-control prompt-textarea" readonly rows="3" id="multimodal-instruction-minimal">创建完应用后，以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送 multipart/form-data 表单数据（文本字段 + file 字段上传文件）。</textarea>
+                            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('multimodal-instruction-minimal')">复制</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-multimodal-classic" style="display:none;">
                             <textarea class="form-control prompt-textarea" readonly rows="4" id="multimodal-instruction">创建完应用后，以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送 multipart/form-data 表单数据：普通字段（姓名、说明等）为文本，文件放在 file 字段（支持多文件，单个不超过20MB，支持常见图片/音视频/文档类型）；文件保存后路径会写入返回数据的 attachment 字段</textarea>
                             <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('multimodal-instruction')">复制</button>
                         </div>
@@ -194,7 +236,15 @@
                     <!-- 3. 实时交互数据提交 -->
                     <div class="tab-pane fade" id="pane-realtime" role="tabpanel">
                         <p style="color: #6b7280; margin-bottom: 0.75rem;">适用于<strong>课堂抢答、实时投票、大屏同步</strong>等场景。学生端照常 POST 提交；教师端/大屏页面通过 WebSocket 订阅，<strong>每条新提交实时推送，无需轮询</strong>。</p>
-                        <div class="input-group">
+                        <div class="prompt-variant-switch" role="tablist">
+                            <button type="button" class="variant-btn active" data-target="realtime-minimal">最简</button>
+                            <button type="button" class="variant-btn" data-target="realtime-classic">典型</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-realtime-minimal">
+                            <textarea class="form-control prompt-textarea" readonly rows="4" id="realtime-instruction-minimal">创建完应用后，学生端以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送JSON数据；教师端用原生 WebSocket 连接 '{{ request.host_url.replace('http://','ws://').replace('https://','wss://') }}ws/{{ task.task_id }}' 订阅实时推送。</textarea>
+                            <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('realtime-instruction-minimal')">复制</button>
+                        </div>
+                        <div class="input-group prompt-pane" id="pane-realtime-classic" style="display:none;">
                             <textarea class="form-control prompt-textarea" readonly rows="6" id="realtime-instruction">创建完应用后，学生端以POST方式向 '{{ request.host_url }}api/{{ task.task_id }}' 发送JSON数据；教师端实时展示页面通过 WebSocket 连接 '{{ request.host_url.replace('http://','ws://').replace('https://','wss://') }}ws/{{ task.task_id }}' 订阅数据推送（原生 new WebSocket 即可，连接成功会先收到 type=connected 的确认消息，之后每条新提交实时推送一条JSON，含全部字段与 _submitted_at 提交时间；断开后每3秒自动重连，不支持WebSocket时改用每5秒GET '{{ request.host_url }}api/{{ task.task_id }}/all' 轮询）</textarea>
                             <button class="btn" style="background-color: #f3f4f6; color: #374151; font-weight: 500; border-radius: 0 8px 8px 0;" onclick="copyToClipboard('realtime-instruction')">复制</button>
                         </div>
@@ -397,6 +447,21 @@
             btn.innerHTML = originalText;
         }, 2000);
     }
+
+    // 最简/典型 切换：点按钮隐藏同 tab 下另一个 prompt-pane
+    document.querySelectorAll('.prompt-variant-switch .variant-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var switchEl = btn.parentElement;
+            var targetId = 'pane-' + btn.getAttribute('data-target');
+            var parentTabPane = switchEl.closest('.tab-pane');
+            parentTabPane.querySelectorAll('.prompt-pane').forEach(function(p) {
+                p.style.display = (p.id === targetId) ? '' : 'none';
+            });
+            switchEl.querySelectorAll('.variant-btn').forEach(function(b) {
+                b.classList.toggle('active', b === btn);
+            });
+        });
+    });
 
     function confirmDelete() {
         return confirm(i18nConfirmDelete);

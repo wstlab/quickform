@@ -1,11 +1,18 @@
 # English translations for QuickForm
 msgid ""
 msgstr ""
-"Project-Id-Version: QuickForm\n"
+"Project-Id-Version:  QuickForm\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-27 14:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Dashboard"
 msgstr "Data Tasks"
@@ -389,13 +396,12 @@ msgid "确定要删除任务"
 msgstr "Are you sure you want to delete task"
 
 msgid "吗？此操作无法撤销，相关的所有提交数据也将被删除。"
-msgstr "? This action cannot be undone. All related submission data will also be deleted."
+msgstr ""
+"? This action cannot be undone. All related submission data will also be "
+"deleted."
 
 msgid "取消"
 msgstr "Cancel"
-
-msgid "确认删除"
-msgstr "Confirm Delete"
 
 msgid "还没有创建任何数据任务"
 msgstr "No data tasks have been created yet"
@@ -413,7 +419,9 @@ msgid "欢迎使用 QuickForm"
 msgstr "Welcome to QuickForm"
 
 msgid "简易高效的数据回收系统，专为大模型生成的交互网页设计"
-msgstr "Simple and efficient data collection system, designed for AI-generated interactive web pages"
+msgstr ""
+"Simple and efficient data collection system, designed for AI-generated "
+"interactive web pages"
 
 msgid "快速开始"
 msgstr "Quick Start"
@@ -517,9 +525,6 @@ msgstr "Data management and analysis tools"
 msgid "导出数据功能"
 msgstr "Data export functionality"
 
-msgid "取消"
-msgstr "Cancel"
-
 msgid "使用指南"
 msgstr "Usage Guide"
 
@@ -571,9 +576,6 @@ msgstr "Settings"
 msgid "AI配置"
 msgstr "AI Configuration"
 
-msgid "QFLink"
-msgstr "QFLink"
-
 msgid "用户信息修改"
 msgstr "User Info Modification"
 
@@ -585,9 +587,6 @@ msgstr "Select AI Model"
 
 msgid "DeepSeek 配置"
 msgstr "DeepSeek Configuration"
-
-msgid "API Key"
-msgstr "API Key"
 
 msgid "请输入您的DeepSeek API密钥"
 msgstr "Please enter your DeepSeek API key"
@@ -620,7 +619,9 @@ msgid "模型名称"
 msgstr "Model Name"
 
 msgid "请输入要使用的模型名称，如：Qwen/Qwen2.5-72B-Instruct、Qwen/QwQ-32B 等"
-msgstr "Please enter the model name, e.g.: Qwen/Qwen2.5-72B-Instruct, Qwen/QwQ-32B, etc."
+msgstr ""
+"Please enter the model name, e.g.: Qwen/Qwen2.5-72B-Instruct, Qwen/QwQ-"
+"32B, etc."
 
 msgid "Ollama (本地) 配置"
 msgstr "Ollama (Local) Configuration"
@@ -632,7 +633,9 @@ msgid "请输入您的Ollama服务地址（默认：http://localhost:11434）"
 msgstr "Please enter your Ollama service address (default: http://localhost:11434)"
 
 msgid "请输入要使用的模型名称，如：llama3、qwen3-coder:30b、deepseek-r1:7b 等"
-msgstr "Please enter the model name, e.g.: llama3, qwen3-coder:30b, deepseek-r1:7b, etc."
+msgstr ""
+"Please enter the model name, e.g.: llama3, qwen3-coder:30b, "
+"deepseek-r1:7b, etc."
 
 msgid "测试连接"
 msgstr "Test Connection"
@@ -644,7 +647,10 @@ msgid "说明："
 msgstr "Note:"
 
 msgid "配置完成AI模型后，您可以在任务分析页面使用智能分析功能。智能分析将根据您的表单数据和附件内容，生成详细的分析报告。请注意保护您的API密钥安全，避免泄露。"
-msgstr "After configuring the AI model, you can use the Smart Analysis feature on the task analysis page. Smart Analysis generates detailed reports based on your form data and attachments. Please keep your API key secure."
+msgstr ""
+"After configuring the AI model, you can use the Smart Analysis feature on"
+" the task analysis page. Smart Analysis generates detailed reports based "
+"on your form data and attachments. Please keep your API key secure."
 
 msgid "QF在线版的用户名"
 msgstr "QF Online Username"
@@ -655,14 +661,18 @@ msgstr "QF Online Password"
 msgid "保存"
 msgstr "Save"
 
-msgid "在\"<a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
-msgstr "Debugging data tasks on <a href=\"https://quickform.cn/\" target=\"_blank\" rel=\"noopener\">QuickForm Online</a> (quickform.cn) tends to be easier, especially for the \"Data Dashboard\" feature. We recommend creating a new data task on the online version, then importing it to the Campus or Teacher edition."
+msgid ""
+"在\"<a href=\"https://quickform.cn/\" target=\"_blank\" "
+"rel=\"noopener\">QuickForm在线版</a>\"（quickform.cn）中调试数据任务容易成功，尤其是\"数据大屏\"功能。我们推荐用在线版新建数据任务，再导入到校园版或者教师版。"
+msgstr ""
+"Debugging data tasks on <a href=\"https://quickform.cn/\" "
+"target=\"_blank\" rel=\"noopener\">QuickForm Online</a> (quickform.cn) "
+"tends to be easier, especially for the \"Data Dashboard\" feature. We "
+"recommend creating a new data task on the online version, then importing "
+"it to the Campus or Teacher edition."
 
 msgid "修改用户名"
 msgstr "Change Username"
-
-msgid "用户名"
-msgstr "Username"
 
 msgid "保存用户名"
 msgstr "Save Username"
@@ -686,13 +696,20 @@ msgid "保存密码"
 msgstr "Save Password"
 
 msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
-msgstr "If the password is incorrect, use the startup page to reset username to 'wst' and password to 'quickform'."
+msgstr ""
+"If the password is incorrect, use the startup page to reset username to "
+"'wst' and password to 'quickform'."
 
 msgid "警告："
 msgstr "Warning:"
 
 msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"、重置SECRET_KEY安全密钥，并删除前4个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！"
-msgstr "This will clear all AI configs (except Ollama), clear QFLink config, reset username to \\'wst\\', password to \\'quickform\\', and reset SECRET_KEY. All users will need to re-login after reset. All data and attachments except the first 4 tasks will be deleted. This cannot be undone!"
+msgstr ""
+"This will clear all AI configs (except Ollama), clear QFLink config, "
+"reset username to \\'wst\\', password to \\'quickform\\', and reset "
+"SECRET_KEY. All users will need to re-login after reset. All data and "
+"attachments except the first 4 tasks will be deleted. This cannot be "
+"undone!"
 
 msgid "执行系统初始化"
 msgstr "Execute System Init"
@@ -718,9 +735,6 @@ msgstr "Optional: Attachments uploaded via API"
 msgid "确认导出"
 msgstr "Confirm Export"
 
-msgid "数据分析"
-msgstr "Data Analysis"
-
 msgid "编辑任务"
 msgstr "Edit Task"
 
@@ -738,9 +752,6 @@ msgstr "Submissions:"
 
 msgid "API地址："
 msgstr "API Address:"
-
-msgid "复制"
-msgstr "Copy"
 
 msgid "任务描述："
 msgstr "Task Description:"
@@ -767,7 +778,10 @@ msgid "💡 数据接口（API）说明："
 msgstr "💡 API Info:"
 
 msgid "访问下方 URL，即GET方式即可查看已收集的数据；制作实时统计页面时可向大模型提供该 URL 及数据样例。点击这里"
-msgstr "Access the URL below via GET to view collected data; provide this URL and data samples to the AI model when creating real-time dashboards. Click here"
+msgstr ""
+"Access the URL below via GET to view collected data; provide this URL and"
+" data samples to the AI model when creating real-time dashboards. Click "
+"here"
 
 msgid "可以看到全部已经回收的数据。"
 msgstr "to view all collected data."
@@ -800,7 +814,7 @@ msgid "访问QF在线版"
 msgstr "Visit QF Online"
 
 msgid "虚谷计划"
-msgstr "
+msgstr ""
 
 msgid "免责声明"
 msgstr "Disclaimer"
@@ -832,12 +846,6 @@ msgstr "records"
 msgid "删除全部"
 msgstr "Delete All"
 
-msgid "提交时间"
-msgstr "Submitted At"
-
-msgid "数据内容"
-msgstr "Data Content"
-
 msgid "分页"
 msgstr "Pagination"
 
@@ -860,7 +868,9 @@ msgid "确定要删除这条提交记录吗？"
 msgstr "Are you sure you want to delete this submission?"
 
 msgid "确定要清空该任务的全部提交数据吗？此操作不可恢复。"
-msgstr "Are you sure you want to clear all submission data for this task? This cannot be undone."
+msgstr ""
+"Are you sure you want to clear all submission data for this task? This "
+"cannot be undone."
 
 msgid "清空失败"
 msgstr "Clear failed"
@@ -881,10 +891,14 @@ msgid "暂无分析报告"
 msgstr "No analysis report"
 
 msgid "此任务尚未生成分析报告或报告文件丢失。"
-msgstr "This task has not generated an analysis report or the report file is missing."
+msgstr ""
+"This task has not generated an analysis report or the report file is "
+"missing."
 
 msgid "请点击\"智能分析\"按钮生成新的分析报告。"
-msgstr "Please click the 'Smart Analysis' button to generate a new analysis report."
+msgstr ""
+"Please click the 'Smart Analysis' button to generate a new analysis "
+"report."
 
 msgid "数据分析报告"
 msgstr "Data Analysis Report"
@@ -918,9 +932,6 @@ msgstr "Generating analysis report..."
 
 msgid "这可能需要几分钟时间，请耐心等待..."
 msgstr "This may take a few minutes, please be patient..."
-
-msgid "数据分析"
-msgstr "Data Analysis"
 
 msgid "返回详情"
 msgstr "Back to Details"
@@ -962,7 +973,9 @@ msgid "导出为CSV文件"
 msgstr "Export as CSV"
 
 msgid "CSV文件可以用Excel、Google Sheets或其他电子表格软件打开"
-msgstr "CSV files can be opened with Excel, Google Sheets or other spreadsheet software"
+msgstr ""
+"CSV files can be opened with Excel, Google Sheets or other spreadsheet "
+"software"
 
 msgid "查看数据"
 msgstr "View Data"
@@ -970,26 +983,14 @@ msgstr "View Data"
 msgid "导入"
 msgstr "Import"
 
-msgid "删除"
-msgstr "Delete"
-
 msgid "提交数据详情"
 msgstr "Submission Details"
-
-msgid "关闭"
-msgstr "Close"
 
 msgid "批量删除选中项"
 msgstr "Batch Delete Selected"
 
-msgid "共"
-msgstr "Total"
-
 msgid "条记录"
 msgstr "records"
-
-msgid "暂无提交数据"
-msgstr "No submission data"
 
 msgid "当用户通过表单提交数据后，将在这里显示"
 msgstr "Submissions will appear here after users submit data via forms"
@@ -1021,9 +1022,6 @@ msgstr "Smart Analysis"
 msgid "错误"
 msgstr "Error"
 
-msgid "前往配置页面"
-msgstr "Go to Configuration Page"
-
 msgid "已回收数据条数"
 msgstr "Collected Data Count"
 
@@ -1034,13 +1032,17 @@ msgid "制作实时数据大屏"
 msgstr "Create Real-time Dashboard"
 
 msgid "制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。具体做法参考\"在线版\"。"
-msgstr "Create a real-time data dashboard. Provide appropriate prompts for the AI model. Coze is recommended. See the Online Version for details."
+msgstr ""
+"Create a real-time data dashboard. Provide appropriate prompts for the AI"
+" model. Coze is recommended. See the Online Version for details."
 
 msgid "手动分析数据"
 msgstr "Manual Data Analysis"
 
 msgid "将回收的数据导出为CSV或者JSON格式，使用你熟悉的AI工具（deepseek、豆包、扣子编程等）进行分析。"
-msgstr "Export collected data as CSV or JSON, and use your preferred AI tools (DeepSeek, Doubao, Coze, etc.) for analysis."
+msgstr ""
+"Export collected data as CSV or JSON, and use your preferred AI tools "
+"(DeepSeek, Doubao, Coze, etc.) for analysis."
 
 msgid "导出CSV格式数据"
 msgstr "Export CSV Data"
@@ -1052,7 +1054,9 @@ msgid "自动生成分析报告"
 msgstr "Auto-generate Analysis Report"
 
 msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
-msgstr "To use QuickForm\u2019s built-in AI analysis, fill in your APIKEY in Personal Settings (purchased from AI model providers)."
+msgstr ""
+"To use QuickForm\\u2019s built-in AI analysis, fill in your APIKEY in "
+"Personal Settings (purchased from AI model providers)."
 
 msgid "你还没有填写APIKEY，"
 msgstr "You haven't filled in your API key yet,"
@@ -1081,20 +1085,8 @@ msgstr "Generated At:"
 msgid "下载报告"
 msgstr "Download Report"
 
-msgid "编辑任务"
-msgstr "Edit Task"
-
 msgid "编辑数据任务"
 msgstr "Edit Data Task"
-
-msgid "返回任务详情"
-msgstr "Back to Task Detail"
-
-msgid "任务标题"
-msgstr "Task Title"
-
-msgid "任务描述（可选）"
-msgstr "Task Description (Optional)"
 
 msgid "已有附件"
 msgstr "Existing Attachments"
@@ -1109,10 +1101,9 @@ msgid "添加新附件（可选）"
 msgstr "Add New Attachments (Optional)"
 
 msgid "支持上传PDF、HTML、HTM、JPG和ZIP格式的文件，最大16MB。可以同时上传多个文件。"
-msgstr "Supports PDF, HTML, HTM, JPG and ZIP files, max 16MB. Multiple files can be uploaded at once."
-
-msgid "取消"
-msgstr "Cancel"
+msgstr ""
+"Supports PDF, HTML, HTM, JPG and ZIP files, max 16MB. Multiple files can "
+"be uploaded at once."
 
 msgid "保存修改"
 msgstr "Save Changes"
@@ -1126,11 +1117,10 @@ msgstr "Delete Failed"
 msgid "删除出错"
 msgstr "Delete Error"
 
-msgid "导入任务"
-msgstr "Import Task"
-
 msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
-msgstr "This feature imports task list from quickform.cn. Please ensure QFLink is configured in Settings."
+msgstr ""
+"This feature imports task list from quickform.cn. Please ensure QFLink is"
+" configured in Settings."
 
 msgid "QuickForm接口文档说明："
 msgstr "QuickForm API Documentation:"
@@ -1168,9 +1158,6 @@ msgstr "Task Description"
 msgid "API ID"
 msgstr "API ID"
 
-msgid "操作"
-msgstr "Actions"
-
 msgid "API上传文件设置"
 msgstr "API File Upload Settings"
 
@@ -1180,9 +1167,6 @@ msgstr "QuickForm.cn Password"
 msgid "QuickForm.cn 用户名"
 msgstr "QuickForm.cn Username"
 
-msgid "QuickForm：打通AI赋能教育的\"最后一公里\""
-msgstr "QuickForm: Bridging the \"Last Mile\" of AI-Powered Education"
-
 msgid "一个唯一的API地址，用于接收表单数据"
 msgstr "A unique API address for receiving form data"
 
@@ -1191,9 +1175,6 @@ msgstr "File Upload Settings"
 
 msgid "使用 QuickForm.cn 登录"
 msgstr "Login with QuickForm.cn"
-
-msgid "使用QuickForm内置的AI分析功能，需要在\"个人设置\"中填写APIKEY（向大模型企业购买）。"
-msgstr "To use QuickForm\\'s built-in AI analysis, please fill in your APIKEY in Personal Settings (purchased from AI model providers)."
 
 msgid "保存中..."
 msgstr "Saving..."
@@ -1214,7 +1195,9 @@ msgid "允许扩展名"
 msgstr "Allowed Extensions"
 
 msgid "制作一个可以实时分析统计的数据大屏，你需要提供合适的提示词给AI大模型，推荐扣子编程。"
-msgstr "Create a real-time data dashboard. You need to provide appropriate prompts for the AI model. Coze is recommended."
+msgstr ""
+"Create a real-time data dashboard. You need to provide appropriate "
+"prompts for the AI model. Coze is recommended."
 
 msgid "加载文件失败"
 msgstr "Failed to load file"
@@ -1233,9 +1216,6 @@ msgstr "Copy Prompt"
 
 msgid "如何在您的网页中使用提交URL："
 msgstr "How to use the API address in your webpage:"
-
-msgid "如果发现密码错误，可以使用启动页面来初始化用户名为\"wst\"、密码为\"quickform\"。"
-msgstr "If the password is incorrect, use the startup page to reset username to \\'wst\\' and password to \\'quickform\\'."
 
 msgid "密码"
 msgstr "Password"
@@ -1266,12 +1246,6 @@ msgstr "File Size"
 
 msgid "是"
 msgstr "Yes"
-
-msgid "本功能可以导入quickform.cn的任务列表，请确保已在\"设置\"中配置QFLink。"
-msgstr "This feature imports task list from quickform.cn. Please ensure QFLink is configured in Settings."
-
-msgid "此操作将清除所有AI配置（保留Ollama）、清除QFLink配置、用户名初始化为\"wst\"、密码初始化为\"quickform\"、重置SECRET_KEY安全密钥，并删除前4个任务外的所有数据和附件。重置后所有用户需重新登录。此操作不可恢复！"
-msgstr "This will clear all AI configs (except Ollama), clear QFLink config, reset username to \\'wst\\', password to \\'quickform\\', and reset SECRET_KEY. All users will need to re-login after reset. All data and attachments except the first 4 tasks will be deleted. This cannot be undone!"
 
 msgid "登录"
 msgstr "Login"
@@ -1305,9 +1279,6 @@ msgstr "Form Example"
 
 msgid "记住我"
 msgstr "Remember me"
-
-msgid "请点击\"智能分析\"按钮生成新的分析报告。"
-msgstr "Please click the \\'Smart Analysis\\' button to generate a new analysis report."
 
 msgid "退出登录"
 msgstr "Logout"
@@ -1363,9 +1334,6 @@ msgstr "No API URLs found to replace"
 msgid "找到以下API地址，将转换为相对路径："
 msgstr "Found the following API URLs, will convert to relative paths:"
 
-msgid "共"
-msgstr "Total"
-
 msgid "个地址，"
 msgstr "URL(s),"
 
@@ -1379,7 +1347,9 @@ msgid "数据备份"
 msgstr "Data Backup"
 
 msgid "备份数据库和所有上传文件，生成一个可下载的ZIP压缩包。"
-msgstr "Backup database and all uploaded files, generating a downloadable ZIP package."
+msgstr ""
+"Backup database and all uploaded files, generating a downloadable ZIP "
+"package."
 
 msgid "备份数据"
 msgstr "Backup Data"
@@ -1421,7 +1391,9 @@ msgid "点击下载"
 msgstr "Click to download"
 
 msgid "文件已保存在服务器 backups 目录下，不下载也不会丢失。"
-msgstr "The file is saved in the server's backups directory. It will not be lost even if you don't download it."
+msgstr ""
+"The file is saved in the server's backups directory. It will not be lost "
+"even if you don't download it."
 
 msgid "备份失败："
 msgstr "Backup failed: "
@@ -1458,3 +1430,389 @@ msgstr "QFLink Auth Code (Optional)"
 
 msgid "首次登录无需填写，后续可在设置中配置"
 msgstr "No need for first login, can be configured in settings later"
+
+msgid ""
+"把下面这些\"提示词\"复制给任意 AI 助手（WorkBuddy、ChatGPT、文心一言等），它就能为你编写出向 QuickForm "
+"提交数据的前端页面。"
+msgstr ""
+"Copy the \"prompt\" below to any AI assistant (WorkBuddy, ChatGPT, "
+"Wenxin, etc.), and it will generate a front-end page that submits data to"
+" QuickForm."
+
+msgid "共三种写法：普通数据提交、多模态数据提交、实时交互数据提交"
+msgstr ""
+"Three styles available: normal data submission, multimodal data "
+"submission, and real-time interactive data submission"
+
+msgid ""
+"——按你的课堂需求选用即可。提示词中的 API 地址来自每个数据任务的详情页。数据提交后，用 GET 方式访问 API 地址即可取回数据（见第 4"
+" 节）。"
+msgstr ""
+"— pick whichever fits your classroom needs. The API address in each "
+"prompt comes from the detail page of its data task. After submissions are"
+" made, use GET to retrieve data from the API address (see Section 4)."
+
+msgid "普通数据提交"
+msgstr "Normal Data Submission"
+
+msgid "适用场景：投票、答题、签到、问卷"
+msgstr "Use cases: polls, quizzes, check-ins, surveys"
+
+msgid ""
+"学生提交姓名、选项、得分等<strong>纯文本/数字</strong>字段，后端原样存储。这是最简单、最常用的写法：告诉 AI 用 POST "
+"方式把 JSON 数据发到任务的 API 地址即可。"
+msgstr ""
+"Students submit <strong>plain text/number</strong> fields such as name, "
+"choices, and scores; the backend stores them as-is. This is the simplest "
+"and most common style: tell the AI to POST JSON to the task API address."
+
+#, python-brace-format
+msgid "要点：字段名可自定义；提交成功会返回 {\"message\": \"提交成功\", \"status\": \"success\"}。"
+msgstr ""
+"Tip: field names are customizable; a successful submission returns "
+"{\"message\": \"提交成功\", \"status\": \"success\"}."
+
+msgid "多模态数据提交（含文件上传）"
+msgstr "Multimodal Data Submission (with File Upload)"
+
+msgid "适用场景：作品提交、语音作业、图片收集"
+msgstr "Use cases: artwork submission, voice assignments, image collection"
+
+msgid ""
+"学生上传<strong>图片、音频、视频、文档</strong>等文件，可与文本字段混合提交。用 <code>multipart/form-"
+"data</code> 格式，文件放在 file 字段；保存后的访问路径会写入返回数据的 <code>attachment</code> 字段。"
+msgstr ""
+"Students upload <strong>images, audio, video, documents</strong> and "
+"other files, which can be mixed with text fields. Use <code>multipart"
+"/form-data</code> format; place the file in the <code>file</code> field. "
+"The saved access path will be written to the <code>attachment</code> "
+"field of the response."
+
+msgid "要点：不要手动设置 Content-Type，浏览器会自动带上文件边界；多文件可重复 append。"
+msgstr ""
+"Tip: do not set Content-Type manually — the browser adds the file "
+"boundary automatically. For multiple files, call append repeatedly."
+
+msgid "实时交互数据提交"
+msgstr "Real-time Interactive Data Submission"
+
+msgid "适用场景：课堂抢答、实时投票、数据大屏"
+msgstr "Use cases: classroom buzzer polls, live voting, data dashboards"
+
+msgid ""
+"学生端照常 POST 提交；<strong>教师端/大屏页面用原生 WebSocket 订阅</strong>——每条新提交实时推送一条 "
+"JSON，无需轮询。告诉 AI 两个地址即可：提交地址（POST）和订阅地址（WebSocket）。"
+msgstr ""
+"Students still submit via POST; the <strong>teacher/dashboard page "
+"subscribes with native WebSocket</strong> — each new submission is pushed"
+" as JSON in real time, no polling needed. Give the AI two addresses: the "
+"POST URL and the WebSocket URL."
+
+msgid "要点：订阅地址就是把提交地址的 http:// 换成 ws://（https:// 换成 wss://），路径从 /api/ 换成 /ws/。"
+msgstr ""
+"Tip: derive the WebSocket URL by replacing <code>http://</code> with "
+"<code>ws://</code> (or <code>https://</code> with <code>wss://</code>) "
+"and <code>/api/</code> with <code>/ws/</code>."
+
+msgid "数据获取（GET 查询）"
+msgstr "Data Retrieval (GET Query)"
+
+msgid "适用场景：查看提交结果、教师端数据展示、轮询获取数据"
+msgstr "Use cases: viewing submission results, teacher-side data display, polling"
+
+msgid ""
+"提交数据用 POST，取回数据更简单——<strong>用 GET 方式访问任务的 API "
+"地址即可</strong>，无需登录、无需密钥，浏览器直接打开就能查看。同一个地址加不加 "
+"<code>/all</code>，区别在于返回的数据量："
+msgstr ""
+"Use POST to submit; retrieval is even simpler — <strong>just GET the task"
+" API address</strong>. No login, no API key, open it directly in a "
+"browser. The difference between adding <code>/all</code> and not is how "
+"much data comes back:"
+
+msgid "GET 访问地址"
+msgstr "GET URL"
+
+msgid "返回的数据"
+msgstr "Response Data"
+
+msgid "适用场景"
+msgstr "Use Case"
+
+msgid "最新 <strong>3 条</strong>提交"
+msgstr "Latest <strong>3</strong> submissions"
+
+msgid "快速预览最近的提交，响应体小"
+msgstr "Quick preview of recent submissions, small payload"
+
+msgid "<strong>全部</strong>提交记录"
+msgstr "<strong>All</strong> submissions"
+
+msgid "教师端完整展示、数据分析、导出全部数据"
+msgstr "Complete teacher-side display, data analysis, exporting all data"
+
+msgid "仅返回总条数"
+msgstr "Total count only"
+
+msgid "轻量轮询，条数变化时再取全量"
+msgstr "Lightweight polling; fetch all only when count changes"
+
+msgid ""
+"要点：submissions 按提交时间<strong>从旧到新</strong>排列，每条自动附带 submitted_at "
+"字段；教师端需要全部数据时，务必使用带 /all 的地址。"
+msgstr ""
+"Tip: submissions are ordered <strong>oldest first</strong>; each entry "
+"includes a <code>submitted_at</code> field. Teachers needing all data "
+"must use the URL with <code>/all</code>."
+
+msgid "更多内容"
+msgstr "More Resources"
+
+msgid "QuickForm 官方开源教程"
+msgstr "QuickForm Official Tutorials"
+
+msgid "任务创建、数据导入导出、QFLink 互联、CLI 工具等完整文档"
+msgstr ""
+"Full documentation: task creation, data import/export, QFLink "
+"connectivity, CLI tools, and more"
+
+msgid "前往查看更多教程"
+msgstr "Browse More Tutorials"
+
+msgid "已复制提示词"
+msgstr "Prompt copied"
+
+msgid "技能应用"
+msgstr "Skills Hub"
+
+msgid "QuickForm助手（QFTools） ：一键创建课堂互动工具"
+msgstr "QuickForm Assistant (QFTools): Build Classroom Tools in One Click"
+
+msgid ""
+"QuickForm助手（QFTools，fork 自 buBailai/quickform-teaching-tool）：让 AI "
+"助手（如WorkBuddy、豆包等）自动完成需求收集、任务创建、教学页面开发、测试数据提交与数据可视化大屏的全流程。一次安装，同时支持在线版和教师版。"
+msgstr ""
+"QuickForm Assistant (QFTools, forked from buBailai/quickform-teaching-"
+"tool): lets your AI assistant (WorkBuddy, Doubao, etc.) automate the full"
+" workflow — requirements gathering, task creation, teaching page "
+"development, test data submission, and visualization dashboards. One "
+"install, works with both the online version and the local teacher "
+"edition."
+
+msgid "资源"
+msgstr "Resource"
+
+msgid "说明"
+msgstr "Description"
+
+msgid "下载 Skill 安装包（ZIP）"
+msgstr "Download Skill Package (ZIP)"
+
+msgid "解压到 WorkBuddy 全局 skills 目录 ~/.trae-cn/skills/ 即可被识别"
+msgstr ""
+"Extract to the WorkBuddy global skills directory ~/.trae-cn/skills/ — it "
+"will be detected automatically"
+
+msgid "查看 SKILL.md（技能说明）"
+msgstr "View SKILL.md (Skill Documentation)"
+
+msgid "8 步工作流：需求收集 → 创建任务 → 教学页面 → 测试数据 → 可视化大屏"
+msgstr ""
+"8-step workflow: gather requirements → create task → build teaching page "
+"→ submit test data → visualization dashboard"
+
+msgid "查看 CLI 参考文档"
+msgstr "CLI Reference"
+
+msgid "qf 命令总览、--base-url 规则、官网版 / 本地版差异、数据接口说明"
+msgstr ""
+"qf command overview, --base-url rules, online vs local differences, data "
+"API reference"
+
+msgid "智能安装（把下面地址发给 AI 助手，让它自动完成安装）："
+msgstr ""
+"Smart install — send this URL to your AI assistant and let it handle "
+"everything:"
+
+msgid "使用前必读：先配置 QFLink 授权码"
+msgstr "Read This First: Configure Your QFLink Authorization Code"
+
+msgid "QFTools 技能可同时连接"
+msgstr "QFTools can connect to both"
+
+msgid "本地教师版"
+msgstr "local teacher edition"
+
+msgid "与"
+msgstr "and"
+
+msgid "在线版（quickform.cn）"
+msgstr "the online version (quickform.cn)"
+
+msgid "。本地版以 QFLink 授权码作为功能开关——未配置时系统会拒绝所有 CLI 请求（403），技能将无法创建任务、提交数据。"
+msgstr ""
+". The local edition uses the QFLink code as a feature switch — without "
+"it, all CLI requests are rejected (403), so the skill cannot create tasks"
+" or submit data."
+
+msgid "登录本系统后，点击右上角用户菜单 →「设置」，切换到「QFLink授权码」标签页。"
+msgstr ""
+"After logging in, click your profile menu in the top-right → 'Settings', "
+"then open the 'QFLink Authorization' tab."
+
+msgid "填写用途（例如：教师版 QFLink），点击「生成 QFLink 授权码」。"
+msgstr ""
+"Describe the purpose (e.g. 'Teacher edition QFLink'), then click "
+"'Generate QFLink Authorization Code'."
+
+msgid "把生成的授权码填入 QFLink 配置并保存，技能即可正常使用。"
+msgstr ""
+"Paste the generated code into your QFLink configuration and save — the "
+"skill is ready to go."
+
+msgid "注意：QFLink 互联仅已认证教师可用。未完成教师身份认证时，即使使用账号密码或授权码请求在线服务器，也会返回"
+msgstr ""
+"Note: QFLink connectivity is available only to verified teachers. Without"
+" teacher verification, requests to the online server — even with valid "
+"credentials or an auth code — will return"
+
+msgid "。"
+msgstr "."
+
+msgid "QFLink 授权码配置界面截图"
+msgstr "Screenshot of QFLink authorization configuration"
+
+msgid "前往设置 QFLink 授权码"
+msgstr "Go Configure QFLink Now"
+
+msgid "点击图片放大查看"
+msgstr "Click image to zoom"
+
+msgid "如何使用 ：说一句话，生成全套交互网页"
+msgstr "How It Works: One Sentence, A Complete Interactive Web App"
+
+msgid "不需要会写代码，也不需要配置接口。"
+msgstr "No coding. No API setup."
+
+msgid "安装好之后，只要对 AI 助手说出你的教学想法，"
+msgstr "Once installed, just tell your AI assistant what you want to teach —"
+
+msgid "QuickForm助手就会自动完成「创建数据任务 → 生成交互页面 → 收集数据 → 画出分析图表」的全过程。你专注教学，剩下的交给它。"
+msgstr ""
+"QuickForm Assistant takes care of everything: 'create a data task → build"
+" an interactive page → collect submissions → draw analysis charts'. You "
+"focus on teaching, it handles the rest."
+
+msgid "课堂签到"
+msgstr "Class Check-in"
+
+msgid "你说："
+msgstr "You say:"
+
+msgid "“帮我做一个课堂签到表，学生扫码签到。”"
+msgstr ""
+"\"Build me a class check-in sheet where students scan a QR code to sign "
+"in.\""
+
+msgid "AI 自动完成："
+msgstr "AI does:"
+
+msgid "创建数据任务、生成签到网页、绑定分享二维码。"
+msgstr "Creates a data task, builds the check-in page, binds a shareable QR code."
+
+msgid "你得到："
+msgstr "You get:"
+
+msgid "学生签到页 + 实时签到数据大屏。"
+msgstr "Student check-in page + live attendance dashboard."
+
+msgid "随堂练习"
+msgstr "Pop Quiz"
+
+msgid "“做一个三年级数学加减法随堂练习，5 道选择题。”"
+msgstr ""
+"\"Make a 5-question multiple-choice quiz on 3rd-grade math addition and "
+"subtraction.\""
+
+msgid "创建任务、生成在线答题页面、自动提交测试数据验证。"
+msgstr ""
+"Creates the task, builds the quiz page, auto-submits test data for "
+"validation."
+
+msgid "答题页 + 正确率统计图表。"
+msgstr "Quiz page + accuracy-rate charts."
+
+msgid "小组互评"
+msgstr "Peer Evaluation"
+
+msgid "“做一个小组互评投票，学生给各组作品打分。”"
+msgstr "\"Set up a peer-review vote where students score each group's project.\""
+
+msgid "创建任务、生成评分页面、生成可视化大屏。"
+msgstr ""
+"Creates the task, builds the scoring page, generates a visualization "
+"dashboard."
+
+msgid "评分页 + 得分排行与雷达图。"
+msgstr "Scoring page + score leaderboard and radar chart."
+
+msgid "不知道怎么说？点击下面任意一句试试（会自动复制）："
+msgstr "Not sure how to phrase it? Click any prompt below to copy:"
+
+msgid "帮我做一个课堂签到表，学生扫码签到，我要看实时签到人数"
+msgstr ""
+"Build a class check-in sheet, students scan a QR code to sign in, I want "
+"to see live attendance counts"
+
+msgid "做一个三年级数学随堂练习，5 道选择题，做完自动统计正确率"
+msgstr "Create a 5-question 3rd-grade math quiz with auto accuracy tracking"
+
+msgid "做一个小组互评投票工具，学生对各组作品打分，最后出排行榜"
+msgstr ""
+"Build a peer-evaluation voting tool where students score group projects "
+"and see a final leaderboard"
+
+msgid "用 QuickForm 做一个课堂抢答器，记录每个学生的抢答次数"
+msgstr ""
+"Use QuickForm to build a classroom buzzer that tracks each student's buzz"
+" count"
+
+msgid "你会得到："
+msgstr "You'll get:"
+
+msgid "交互式 HTML 页面"
+msgstr "Interactive HTML pages"
+
+msgid "一键分享链接 / 二维码"
+msgstr "One-click share links / QR codes"
+
+msgid "实时数据采集"
+msgstr "Real-time data collection"
+
+msgid "可视化分析大屏"
+msgstr "Visualization dashboards"
+
+msgid "自动验证测试数据"
+msgstr "Auto-validated test data"
+
+msgid "QuickForm CLI — 命令行工具"
+msgstr "QuickForm CLI — Command-Line Tool"
+
+msgid ""
+"CLI（quickform-cli，命令 "
+"qf）可以在终端中管理本系统的数据任务：创建任务、查看/导出数据、绑定任务页面、提交与查询表单数据。官方文档包含完整的命令参考、安装说明与示例："
+msgstr ""
+"The CLI (quickform-cli, command qf) lets you manage tasks from the "
+"terminal — create tasks, view/export data, bind task pages, submit and "
+"query form data. Official docs include the full command reference, "
+"installation guide, and examples:"
+
+msgid "QuickForm CLI 官方文档"
+msgstr "QuickForm CLI Official Docs"
+
+msgid "QFLink 授权码配置界面"
+msgstr "QFLink Authorization Configuration"
+
+msgid "已复制，去 AI 助手粘贴即可"
+msgstr "Copied — paste into your AI assistant"
+
