@@ -1,0 +1,32 @@
+services:
+  quickform:
+    image: ghcr.io/realkiro/quickform:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quickform
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?必须设置 SECRET_KEY，例如：export SECRET_KEY=$(openssl rand -hex 32)}
+      TZ: Asia/Shanghai
+    volumes:
+      - quickform-data:/app/data
+      - quickform-assets:/app/static/assets
+      - quickform-uploads:/app/static/uploads
+      - quickform-reports:/app/static/reports
+      - quickform-backups:/app/backups
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/login', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  quickform-data:
+  quickform-assets:
+  quickform-uploads:
+  quickform-reports:
+  quickform-backups:
