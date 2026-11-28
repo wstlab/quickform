@@ -2850,28 +2850,34 @@ def system_init():
                     if os.path.isfile(fpath) and fname not in keep_file_names:
                         os.remove(fpath)
             
-            import secrets
-            new_secret_key = secrets.token_hex(32)
-            
-            env_path = os.path.join(app.root_path, '.env')
-            if os.path.exists(env_path):
-                with open(env_path, 'r', encoding='utf-8') as f:
-                    env_content = f.read()
-                env_content = re.sub(
-                    r'SECRET_KEY\s*=\s*[^\n]*',
-                    f'SECRET_KEY={new_secret_key}',
-                    env_content
-                )
+            # 容器部署：密钥由环境变量管理，不回写 .env（镜像层可保持只读 / 无 .env 文件）
+            if cfg.IN_CONTAINER:
+                app.config['SECRET_KEY'] = cfg.SECRET_KEY
+                secret_message = 'SECRET_KEY 由环境变量管理（容器模式）'
             else:
-                env_content = f'SECRET_KEY={new_secret_key}\n'
-            
-            with open(env_path, 'w', encoding='utf-8') as f:
-                f.write(env_content)
-            
-            app.config['SECRET_KEY'] = new_secret_key
-            
+                import secrets
+                new_secret_key = secrets.token_hex(32)
+
+                env_path = os.path.join(app.root_path, '.env')
+                if os.path.exists(env_path):
+                    with open(env_path, 'r', encoding='utf-8') as f:
+                        env_content = f.read()
+                    env_content = re.sub(
+                        r'SECRET_KEY\s*=\s*[^\n]*',
+                        f'SECRET_KEY={new_secret_key}',
+                        env_content
+                    )
+                else:
+                    env_content = f'SECRET_KEY={new_secret_key}\n'
+
+                with open(env_path, 'w', encoding='utf-8') as f:
+                    f.write(env_content)
+
+                app.config['SECRET_KEY'] = new_secret_key
+                secret_message = 'SECRET_KEY 已更新'
+
             db.commit()
-            return jsonify({'success': True, 'message': '系统初始化成功，SECRET_KEY 已更新'})
+            return jsonify({'success': True, 'message': f'系统初始化成功，{secret_message}'})
         except Exception as e:
             db.rollback()
             return jsonify({'success': False, 'message': f'初始化失败: {str(e)}'})
@@ -3754,5 +3760,5 @@ if __name__ == '__main__':
     except ImportError:
         logger.error('缺少 eventlet，无法启动 WebSocket 实时推送。请执行：pip install -r requirements.txt')
         raise
-    logger.info('Starting QuickForm with eventlet on http://0.0.0.0:5001 (WebSocket enabled)')
-    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 5001)), app, log_output=False)
+    logger.info(f'Starting QuickForm with eventlet on http://0.0.0.0:{cfg.PORT} (WebSocket enabled)')
+    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', cfg.PORT)), app, log_output=False)

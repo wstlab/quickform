@@ -1,0 +1,22 @@
+services:
+  quickform:
+    image: ghcr.io/wstlab/quickform:latest
+    container_name: quickform
+    restart: unless-stopped
+    # 群晖 DSM 自身占用 5000/5001；容器内非 root 监听 8080，宿主机也映射 8080
+    ports:
+      - "8080:8080"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?必须设置 SECRET_KEY，例如：export SECRET_KEY=$(openssl rand -hex 32)}
+      TZ: Asia/Shanghai
+    volumes:
+      - quickform-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/login', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  quickform-data:

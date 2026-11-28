@@ -1,0 +1,27 @@
+# 密钥绝不进镜像层，运行时通过 -e SECRET_KEY 注入
+.env
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 版本控制与编辑器文件
+.git/
+.gitignore
+.DS_Store
+.idea/
+.vscode/
+
+# 用户实际提交的数据（含真实照片），绝不烘进公开镜像；运行时由卷接管
+backups/
+static/uploads/
+
+# SQLite 运行时副文件（WAL 模式产生）
+data/*.db-wal
+data/*.db-shm
+
+# 构建产物与临时文件
+*.log
+*.tmp
