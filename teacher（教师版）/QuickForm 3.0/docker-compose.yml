@@ -1,6 +1,6 @@
 services:
   quickform:
-    image: ghcr.io/realkiro/quickform:latest
+    image: ghcr.io/wstlab/quickform:latest
     container_name: quickform
     restart: unless-stopped
     ports:
