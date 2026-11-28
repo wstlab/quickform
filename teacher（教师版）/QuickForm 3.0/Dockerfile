@@ -18,22 +18,35 @@ RUN apk add --no-cache tzdata
 COPY requirements.txt .
 RUN pip install --only-binary=:all: -r requirements.txt
 
-# 应用源码。data/quickform.db 为初始数据库（含默认账号），必须随镜像提供；
-# 运行时通过卷挂载覆盖，首次挂载时 Docker 会自动把初始文件复制进空卷
+# 应用源码。data/quickform.db 为初始数据库（含默认账号），必须随镜像提供
 COPY . .
 
-# 非 root 运行；卷挂载后将由具名卷继承该目录的属主
+# 把所有运行时状态统一归拢到 /data，原路径改为符号链接。
+# 这样宿主机只需映射一个卷 /data，无需分别挂 5 个目录。
+# 首次挂载空卷时 Docker 会把镜像里 /data 的初始内容复制进去。
+RUN mkdir -p /data/data /data/assets /data/uploads /data/reports /data/backups \
+    && cp -a /app/data/. /data/data/ \
+    && cp -a /app/static/assets/. /data/assets/ \
+    && cp -a /app/static/reports/. /data/reports/ \
+    && rm -rf /app/data /app/static/assets /app/static/uploads /app/static/reports /app/backups \
+    && ln -s /data/data /app/data \
+    && ln -s /data/assets /app/static/assets \
+    && ln -s /data/uploads /app/static/uploads \
+    && ln -s /data/reports /app/static/reports \
+    && ln -s /data/backups /app/backups
+
+# 非 root 运行；/data 由具名卷继承该目录属主
 RUN addgroup -S appuser \
     && adduser -S -G appuser -H appuser \
-    && chown -R appuser:appuser /app
+    && chown -R appuser:appuser /app /data
 
 USER appuser
 
 # 端口在 app.py:3758 硬编码为 5001，暂不支持 PORT 环境变量
 EXPOSE 5001
 
-# 需要持久化的运行时状态；backups/ 由备份接口按需创建
-VOLUME ["/app/data", "/app/static/assets", "/app/static/uploads", "/app/static/reports", "/app/backups"]
+# 所有运行时状态集中在 /data，宿主机只需映射这一个路径
+VOLUME ["/data"]
 
 # 必须以 python app.py 启动：eventlet.monkey_patch() 需先于所有导入执行，
 # 换成 gunicorn/uwsgi 会破坏 WebSocket 实时推送
