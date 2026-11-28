@@ -3,9 +3,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# 容器部署标记：Dockerfile 注入 QUICKFORM_IN_CONTAINER=1
+# 开启后初始化接口不再回写 .env，密钥完全由 SECRET_KEY 环境变量管理
+IN_CONTAINER = os.getenv('QUICKFORM_IN_CONTAINER', '') == '1'
+
 # Flask 应用密钥，用于会话加密等安全功能
 # 生产环境建议通过环境变量设置，避免使用默认值
 SECRET_KEY = os.getenv('SECRET_KEY', 'dev_secret_key')
+if IN_CONTAINER and SECRET_KEY == 'dev_secret_key':
+    raise RuntimeError('容器部署必须设置 SECRET_KEY 环境变量，例如 -e SECRET_KEY=$(openssl rand -hex 32)')
 
 # SQLite 数据库连接地址
 # 格式: sqlite:///相对路径 或 sqlite:////绝对路径
