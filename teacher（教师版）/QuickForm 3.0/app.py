@@ -3760,5 +3760,5 @@ if __name__ == '__main__':
     except ImportError:
         logger.error('缺少 eventlet，无法启动 WebSocket 实时推送。请执行：pip install -r requirements.txt')
         raise
-    logger.info('Starting QuickForm with eventlet on http://0.0.0.0:5001 (WebSocket enabled)')
-    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 5001)), app, log_output=False)
+    logger.info(f'Starting QuickForm with eventlet on http://0.0.0.0:{cfg.PORT} (WebSocket enabled)')
+    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', cfg.PORT)), app, log_output=False)

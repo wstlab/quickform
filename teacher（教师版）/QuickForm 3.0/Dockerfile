@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     QUICKFORM_IN_CONTAINER=1 \
+    PORT=8080 \
     TZ=Asia/Shanghai
 
 WORKDIR /app
@@ -42,8 +43,8 @@ RUN addgroup -S appuser \
 
 USER appuser
 
-# 端口在 app.py:3758 硬编码为 5001，暂不支持 PORT 环境变量
-EXPOSE 5001
+# 容器内监听 8080（非 root 无法绑定 80 特权端口）；本地运行仍默认 5001
+EXPOSE 8080
 
 # 所有运行时状态集中在 /data，宿主机只需映射这一个路径
 VOLUME ["/data"]

@@ -13,6 +13,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_secret_key')
 if IN_CONTAINER and SECRET_KEY == 'dev_secret_key':
     raise RuntimeError('容器部署必须设置 SECRET_KEY 环境变量，例如 -e SECRET_KEY=$(openssl rand -hex 32)')
 
+# 服务监听端口。本地直接运行保持原端口 5001；
+# 容器部署由 Dockerfile 注入 PORT=8080（非 root 无法绑定 80 特权端口）
+PORT = int(os.getenv('PORT', '5001'))
+
 # SQLite 数据库连接地址
 # 格式: sqlite:///相对路径 或 sqlite:////绝对路径
 DATABASE_URL = 'sqlite:///data/quickform.db'
