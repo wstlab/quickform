@@ -1,9 +1,6 @@
 services:
   quickform:
     image: ghcr.io/realkiro/quickform:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
     container_name: quickform
     restart: unless-stopped
     ports:
